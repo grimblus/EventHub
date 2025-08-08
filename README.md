@@ -15,7 +15,7 @@
 
 ## Records
 
-* Github repository: https://github.com/xxx
+* Github repository: https://github.com/cosc2299-2025/team-project-group-p05-02
 * Github Project Board : https://xxxx
 
 See [Instructions](INSTRUCTIONS.md)
