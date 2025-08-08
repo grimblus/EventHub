@@ -7,7 +7,7 @@
 
 ## Members
 * Student Name 1 (sXXXXX)
-* Student Name 2 (sXXXXX)
+* Student Name 2 (s4040831)
 * Student Name 3 (sXXXXX)
 * Student Name 4 (sXXXXX)
 * Student Name 5 (sXXXXX)
