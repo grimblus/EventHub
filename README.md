@@ -3,10 +3,10 @@
 
 # Group Information
 
-## Group-PX-XX
+## Group-P05-02
 
 ## Members
-* Student Name 1 (sXXXXX)
+* Patrick Ly (s4092047)
 * Student Name 2 (s4040831)
 * Student Name 3 (sXXXXX)
 * Student Name 4 (sXXXXX)
