@@ -8,7 +8,7 @@
 ## Members
 * Patrick Ly (s4092047)
 * Student Name 2 (s4040831)
-* Student Name 3 (sXXXXX)
+* Aaron Lay (s4008286)
 * Student Name 4 (sXXXXX)
 * Student Name 5 (sXXXXX)
 * Andrew (s4095942)
