@@ -9,7 +9,7 @@
 * Patrick Ly (s4092047)
 * Student Name 2 (s4040831)
 * Aaron Lay (s4008286)
-* Student Name 4 (sXXXXX)
+* Aaron Tran (s4094187)
 * Student Name 5 (sXXXXX)
 * Andrew (s4095942)
 
