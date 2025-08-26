@@ -14,8 +14,10 @@ public class Event {
     private List<String> tags;
     private List<String> images;
 
+    // Default Constructor
     public Event() {}
 
+    // Full Constructor
     public Event(int id, String title, String description, LocalDateTime date,
                  String location, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
