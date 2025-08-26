@@ -30,4 +30,9 @@ public class PageController {
     public String login() {
         return "login/index";
     }
+
+    @GetMapping("/signUp")
+    public String signUp() {
+        return "signUp/index";
+    }
 }

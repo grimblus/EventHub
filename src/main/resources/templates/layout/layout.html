@@ -1,33 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <head>
+    <meta charset="utf-8" />
+    <title>Layout page</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <title>Layout page</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
+  <body>
+    <div class="page-container">
+      <!-- navbar -->
+      <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/events}">Events</a>
+        <a th:href="@{/create}">Create</a>
+        <a th:href="@{/account}">Account</a>
+        <a th:href="@{/login}">Log In</a>
+        <a th:href="@{/signUp}">Sign Up</a>
+      </nav>
 
-<body>
-  <div class="page-container">
-    <!-- navbar -->
-    <nav>
-      <a th:href="@{/}">Home</a>
-      <a th:href="@{/events}">Events</a>
-      <a th:href="@{/create}">Create</a>
-      <a th:href="@{/account}">Account</a>
-      <a th:href="@{/login}">Log In</a>
-    </nav>
-
-    <!-- child page content -->
-    <div layout:fragment="content">
-      <p>Page content goes here</p>
+      <!-- child page content -->
+      <div layout:fragment="content">
+        <p>Page content goes here</p>
+      </div>
     </div>
-  </div>
 
-  <!-- footer -->
-  <footer>
-    <p>&copy; 2025 EventHub. All rights reserved.</p>
-  </footer>
-
-</body>
+    <!-- footer -->
+    <footer>
+      <p>&copy; 2025 EventHub. All rights reserved.</p>
+    </footer>
+  </body>
 </html>
