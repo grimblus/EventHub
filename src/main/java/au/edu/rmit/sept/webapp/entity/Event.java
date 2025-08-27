@@ -1,6 +1,7 @@
 package au.edu.rmit.sept.webapp.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
@@ -27,6 +28,7 @@ public class Event {
         this.title = title;
         this.description = description;
         this.owner = owner;
+        participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
         this.category = category;
