@@ -10,7 +10,7 @@ public class User {
     public User() {}
 
     // Full Constructor
-    public User(String username, String password, String email) {
+    public User(int id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
