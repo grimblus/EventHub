@@ -7,6 +7,8 @@ public class Event {
     private int id;
     private String title;
     private String description;
+    private User owner;
+    private List<User> participants;
     private LocalDateTime date;
     private String location;
     private String category;
@@ -18,12 +20,13 @@ public class Event {
     public Event() {}
 
     // Full Constructor
-    public Event(int id, String title, String description, LocalDateTime date,
+    public Event(int id, String title, String description, User owner, LocalDateTime date,
                  String location, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.owner = owner;
         this.date = date;
         this.location = location;
         this.category = category;
@@ -54,6 +57,30 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public List<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
+    }
+
+    public void addParticipant(User participant) {
+        this.participants.add(participant);
+    }
+
+    public void removeParticipant(User participant) {
+        this.participants.remove(participant);
     }
 
     public LocalDateTime getDate() {
