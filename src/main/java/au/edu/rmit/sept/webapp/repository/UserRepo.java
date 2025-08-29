@@ -3,12 +3,7 @@ package au.edu.rmit.sept.webapp.repository;
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class UserRepo {
