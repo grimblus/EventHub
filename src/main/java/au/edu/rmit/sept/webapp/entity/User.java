@@ -5,6 +5,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private int permissions;
 
     // Default Constructor
     public User() {}
@@ -15,6 +16,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.permissions = 0;
     }
 
     public int getId() {
@@ -47,5 +49,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(int permissions) {
+        this.permissions = permissions;
     }
 }
