@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import au.edu.rmit.sept.webapp.entity.Event;
+import au.edu.rmit.sept.webapp.services.EventService;
 
 @Controller
 @RequestMapping("/events")
