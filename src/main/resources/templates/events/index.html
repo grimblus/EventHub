@@ -9,7 +9,35 @@
 <body>
     <div layout:fragment="content">
         <h1>Events</h1>
-        <p><a th:href="@{/event}">TEST EVENT</a></p>
+        <div>
+            <form>
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search" value="event name or event organiser"/>
+                <label for="tags1">Some tag 1</label>
+                <input type="checkbox" id="tags1" name="tags1" value="tags1"/>
+                <label for="tags2">Some tag 2</label>
+                <input type="checkbox" id="tags2" name="tags2" value="tags2"/>
+                <label for="tags3">Some tag 3</label>
+                <input type="checkbox" id="tags3" name="tags3" value="tags3"/>
+            </form>
+        </div>
+        <div>
+            <div>
+                <p> Some event with description and everything relevant 1</p>
+            </div>
+            <div>
+                <p> Some event with description and everything relevant 2</p>
+            </div>
+            <div>
+                <p> Some event with description and everything relevant 3</p>
+            </div>
+            <div>
+                <p> Some event with description and everything relevant 4</p>
+            </div>
+            <div>
+                <p> Some event with description and everything relevant 5</p>
+            </div>
+        </div>
     </div>
 </body>
 
