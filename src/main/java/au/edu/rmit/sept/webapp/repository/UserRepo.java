@@ -8,32 +8,34 @@ import java.util.List;
 
 public class UserRepo {
     static List<User> userList = List.of(
-            new User("aaron", "password123", "aaron@example.com", 0),
-            new User("bingus", "s3cur3pass", "bingus@example.com", 2),
-            new User("coolguy", "coolguy123", "coolguy@example.com", 0),
-            new User("johndev", "g0d0t0man", "johndev@example.com", 1),
-            new User("morgan", "b4yharb0r", "morgan@example.com", 1),
-            new User("deez", "n00ts", "deez@example.com", 0)
+            new User("Aaron", "Tran", "password123", "aaron@example.com", 0),
+            new User("Bingus", "Bongus", "s3cur3pass", "bingus@example.com", 2),
+            new User("Coolguy", "Joe", "coolguy123", "coolguy@example.com", 0),
+            new User("Johndev", "Programmer", "g0d0t0man", "johndev@example.com", 1),
+            new User("Dexter", "Morgan", "b4yharb0r", "morgan@example.com", 1),
+            new User("Deez", "Noots", "g0tt3m", "deez@example.com", 0)
     );
 
     public static void setUsers() {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                    "username VARCHAR(255), " +
+                    "firstName VARCHAR(255), " +
+                    "lastName VARCHAR(255), " +
                     "password VARCHAR(255), " +
                     "email VARCHAR(255), " +
                     "permissions INT)";
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
             createTableStatement.executeUpdate();
 
-            String insertSQL = "INSERT INTO users (username, password, email, permissions) VALUES (?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissions) VALUES (?, ?, ?, ?, ?)";
             for (User user : userList) {
                 try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
-                    ps.setString(1, user.getUsername());
-                    ps.setString(2, user.getPassword());
-                    ps.setString(3, user.getEmail());
-                    ps.setInt(4, user.getPermissions());
+                    ps.setString(1, user.getFirstName());
+                    ps.setString(2, user.getLastName());
+                    ps.setString(3, user.getPassword());
+                    ps.setString(4, user.getEmail());
+                    ps.setInt(5, user.getPermissions());
                     ps.executeUpdate();
                 }
             }
