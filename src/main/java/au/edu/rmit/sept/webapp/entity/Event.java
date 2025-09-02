@@ -8,7 +8,7 @@ public class Event {
     private int id;
     private String title;
     private String description;
-    private int owner_id;
+    private User owner;
     private List<User> participants;
     private LocalDateTime date;
     private String location;
@@ -20,42 +20,14 @@ public class Event {
     // Default Constructor
     public Event() {}
 
-    // Temp Testing Constructor
-    public Event(String title, String description, int owner, LocalDateTime date,
-                 String location, String category) {
-        this.title = title;
-        this.description = description;
-        this.owner_id = owner;
-        this.date = date;
-        this.location = location;
-        this.category = category;
-    }
-
-
-    // No ID Constructor
-    public Event(String title, String description, int owner, LocalDateTime date,
-                 String location, String category, List<String> keywords,
-                 List<String> tags, List<String> images) {
-        this.title = title;
-        this.description = description;
-        this.owner_id = owner;
-        participants = new ArrayList<User>();
-        this.date = date;
-        this.location = location;
-        this.category = category;
-        this.keywords = keywords;
-        this.tags = tags;
-        this.images = images;
-    }
-
     // Full Constructor
-    public Event(int id, String title, String description, int owner, LocalDateTime date,
+    public Event(int id, String title, String description, User owner, LocalDateTime date,
                  String location, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.owner_id = owner;
+        this.owner = owner;
         participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
@@ -89,12 +61,12 @@ public class Event {
         this.description = description;
     }
 
-    public int getOwner() {
-        return owner_id;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setOwner(int owner) {
-        this.owner_id = owner;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public List<User> getParticipants() {
