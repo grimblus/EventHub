@@ -1,7 +1,7 @@
 package au.edu.rmit.sept.webapp.entity;
 
 public class User {
-    private int id;
+    private Integer id;
     private String username;
     private String password;
     private String email;
@@ -10,8 +10,17 @@ public class User {
     // Default Constructor
     public User() {}
 
+    // No ID Constructor
+    public User(String username, String password, String email, int permissions) {
+        this.id = null;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.permissions = permissions;
+    }
+
     // Full Constructor
-    public User(int id, String username, String password, String email) {
+    public User(Integer id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
