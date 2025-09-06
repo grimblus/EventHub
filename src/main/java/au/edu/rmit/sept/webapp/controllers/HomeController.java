@@ -14,17 +14,12 @@ import au.edu.rmit.sept.webapp.services.UserService;
 @Controller
 public class HomeController {
 
-  @Autowired
-  private UserService userService;
+ 
 
   @GetMapping("/")
   public String index(Model model) {
-    model.addAttribute("message", "Super cool events here!");
-    model.addAttribute("today", new Date());
-    List<User> users = userService.getUsers();
-    model.addAttribute("users", users);
 
-    return "welcome/index.html";
+    return "welcome/index";
 
   }
 

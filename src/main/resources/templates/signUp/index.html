@@ -1,46 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout.html}">
-
-<head>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
     <title>Welcome to EventHub</title>
     <!-- <script src="content-script.js"></script> -->
     <style>
-        h1 {text-align: center;}
-        form {text-align: center;}
-        form {
-            background-color: rgb(236, 224, 224);
-            width: 300px;
-            border: 3px solid rgb(0, 0, 0);
-            padding: 50px;
-            margin: 0 auto;
-        }
-        form .signup {
-            display: block;
-            text-align: left;
-            margin-top: 10px;
-        }
+      h1 {
+        text-align: center;
+      }
+      form {
+        text-align: center;
+      }
+      form {
+        background-color: rgb(236, 224, 224);
+        width: 300px;
+        border: 3px solid rgb(0, 0, 0);
+        padding: 50px;
+        margin: 0 auto;
+      }
+      form .signup {
+        display: block;
+        text-align: left;
+        margin-top: 10px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-<div layout:fragment="content">
-    <h1>Sign Up To EventHub</h1>
-    <form>
-        <label for="firstname">First Name:</label><br>
-        <input type="text" id="firstname" name="firstname" ><br><br>
+  <body>
+    <div layout:fragment="content">
+      <h1>Sign Up To EventHub</h1>
+      <form th:object="${user}" action="/signUp" method="post">
+        <label for="firstname">First Name:</label><br />
+        <input type="text" th:field="*{firstName}" /><br /><br />
 
-        <label for="lastname">Last Name:</label><br>
-        <input type="text" id="lastname" name="lastname" ><br><br>
+        <label for="lastname">Last Name:</label><br />
+        <input type="text" th:field="*{lastName}" /><br /><br />
 
-        <label for="email">Email:</label><br>
-        <input type="text" id="email" name="email" ><br><br>
+        <label for="email">Email:</label><br />
+        <input type="text" th:field="*{email}" /><br /><br />
 
-        <label for="pw">Password:</label><br>
-        <input type="password" id="pw" name="pw" value="zingus"><br>
-        <input type="submit" value="Submit">
-    </form>
-</div>
-</body>
-
+        <label for="password">Password:</label><br />
+        <input type="password" th:field="*{password}" /><br />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </body>
 </html>
