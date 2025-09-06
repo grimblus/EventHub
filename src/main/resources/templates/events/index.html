@@ -22,20 +22,13 @@
             </form>
         </div>
         <div>
-            <div>
-                <p> <a th:href="@{/event}"> Some event with description and everything relevant </a> </p>
-            </div>
-            <div>
-                <p> Some event with description and everything relevant 2</p>
-            </div>
-            <div>
-                <p> Some event with description and everything relevant 3</p>
-            </div>
-            <div>
-                <p> Some event with description and everything relevant 4</p>
-            </div>
-            <div>
-                <p> Some event with description and everything relevant 5</p>
+            <div class="events-container">
+                <div class="event-box" th:each="event : ${events}">
+                    <h2 th:text="${event.title}">Event</h2>
+                    <p th:text="${event.description}">Description</p>
+                    <p th:text="${#temporals.format(event.date, 'dd/MM/yyyy')}">Date</p>
+                    <p th:text="${event.location}">Location</p>
+                </div>
             </div>
         </div>
     </div>
