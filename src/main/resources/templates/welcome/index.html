@@ -1,19 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout/layout.html}">
-
-<head>
-
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
     <title>Welcome to EventHub</title>
     <!-- <script src="content-script.js"></script> -->
-</head>
+  </head>
 
-<body>
+  <body>
     <div layout:fragment="content">
-        <h1>Welcome to EventHub</h1>
-        <h2>[[${message}]]</h2>
-        <h3>Today is <span th:text="${#dates.format(today,'dd MMMM yyyy' )}">09 January 2024</span> </h3>
+      <h1>Welcome to EventHub</h1>
+      <h2>[[${message}]]</h2>
+      <h3>
+        Today is
+        <span th:text="${#dates.format(today,'dd MMMM yyyy' )}"
+          >09 January 2024</span
+        >
+      </h3>
+      <h1>Users</h1>
+      <ul>
+        <li th:each="user : ${users}">
+          <span th:text="${user.firstName}">First Name</span>
+          <span th:text="${user.lastName}">Last Name</span>
+          <span th:text="${user.email}">Email</span>
+        </li>
+      </ul>
     </div>
-</body>
-
+  </body>
 </html>
