@@ -14,9 +14,9 @@ import org.springframework.stereotype.Repository;
 
         //add custom queries in here eg findByInterests or something. otherwise the basic crud operations are already
         // implemented by jparepository so we don't have to make them
-        
-        
+        User findByEmail(String email);
     }
+
 // public class UserRepo {
 //     static List<User> userList = List.of(
 //             new User("Aaron", "Tran", "password123", "aaron@example.com", 0),
