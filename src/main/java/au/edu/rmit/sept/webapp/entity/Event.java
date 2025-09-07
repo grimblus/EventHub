@@ -1,24 +1,14 @@
 package au.edu.rmit.sept.webapp.entity;
 
-import au.edu.rmit.sept.webapp.entity.User;
-
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "EVENTS")
 public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private String description;
     private int owner_id;
-
-    @ManyToMany(fetch = FetchType.EAGER)
     private List<User> participants;
     private LocalDateTime date;
     private String location;
