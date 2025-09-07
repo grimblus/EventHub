@@ -31,7 +31,11 @@ public class PageController {
         return "login/index";
     }
 
-   
+    @GetMapping("/signUp")
+    public String signUp() {
+        return "signUp/index";
+    }
+
     // specifci event page when user clicks on an event
     // will be loaded with event details
     @GetMapping("/event") 
