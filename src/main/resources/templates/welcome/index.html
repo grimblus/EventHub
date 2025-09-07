@@ -1,90 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
+    <title>Welcome to EventHub</title>
+    <!-- <script src="content-script.js"></script> -->
+  </head>
 
-<head>
-  <title>Home - EventHub</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-
-<body>
-<div layout:fragment="content">
-  <h1 class="welcome-title">Welcome to EventHub</h1>
-
-  <!-- uncomment for dynamic content (from database) -->
-  <!-- <h2 th:text="${message}"></h2> -->
-
-  <div class="carousel" id="welcomeCarousel">
-    <img src="/images/welcome/img1.jpg" class="active" alt="Hero 1">
-    <img src="/images/welcome/img2.jpg" alt="Hero 2">
-    <img src="/images/welcome/img3.png" alt="Hero 3">
-
-    <button class="prev" data-dir="prev" aria-label="Previous">&#10094;</button>
-    <button class="next" data-dir="next" aria-label="Next">&#10095;</button>
-  </div>
-
-  <div class="welcome-container">
-    <p class="welcome-intro">
-        Welcome to EventHub - your new all-in-one campus event management system! 
-        EventHub makes it easy for students to discover, RSVP, and keep track of upcoming events,
-        while giving clubs and organizers the tools to create, publish, and manage their activities. 
-        Whether you're looking for academic talks, music nights, sports competitions, or club fairs, 
-        EventHub brings the whole campus community together in one place.
-    </p>
-    <p class="welcome-intro">
-        With features like event search and filters, personalized recommendations, RSVP tracking,
-        and photo galleries, EventHub ensures you never miss out on what's happening around campus.
-    </p>
-  </div>
-
-  <div class="welcome-container">
-    <p class="welcome-action">
-        Sign up or log-in now!
-    </p>
-    <div class="welcome-buttons">
-        <a th:href="@{/signUp}" class="btn signup-btn">Sign Up</a>
-        <a th:href="@{/login}" class="btn login-btn">Log In</a>
+  <body>
+    <div layout:fragment="content">
+      <h1>Welcome to EventHub</h1>
+      <h2>[[${message}]]</h2>
+      <h3>
+        Today is
+        <span th:text="${#dates.format(today,'dd MMMM yyyy' )}"
+          >09 January 2024</span
+        >
+      </h3>
+      <h1>Users</h1>
+      <ul>
+        <li th:each="user : ${users}">
+          <span th:text="${user.firstName}">First Name</span>
+          <span th:text="${user.lastName}">Last Name</span>
+          <span th:text="${user.email}">Email</span>
+        </li>
+      </ul>
     </div>
-  </div>
-  
-  <!-- script for carousel buttons -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const carousel = document.getElementById('welcomeCarousel');
-      if (!carousel) return;
-
-      const images = carousel.querySelectorAll('img');
-      const prevBtn = carousel.querySelector('[data-dir="prev"]');
-      const nextBtn = carousel.querySelector('[data-dir="next"]');
-      let current = 0;
-
-      function showImage(index) {
-        images.forEach((img, i) => {
-          img.classList.toggle('active', i === index);
-        });
-      }
-
-      function go(delta) {
-        current = (current + delta + images.length) % images.length;
-        showImage(current);
-      }
-
-      prevBtn.addEventListener('click', () => go(-1));
-      nextBtn.addEventListener('click', () => go(1));
-
-      // keyboard support when buttons focused
-      [prevBtn, nextBtn].forEach(btn => {
-        btn.setAttribute('tabindex', '0');
-        btn.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            btn.click();
-          }
-        });
-      });
-    });
-  </script>
-</div>
-</body>
+  </body>
 </html>
