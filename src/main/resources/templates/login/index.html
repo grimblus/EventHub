@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html 
-    xmlns:th="http://www.thymeleaf.org" 
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout/layout.html}"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout.html}">
 
 <head>
     <title>Welcome to EventHub</title>
     <!-- <script src="content-script.js"></script> -->
     <style>
-        h1 {
-            text-align: center;
-        }
-        form {
-            text-align: center;
-        }
+        h1 {text-align: center;}
+        form {text-align: center;}
         form {
             background-color: rgb(236, 224, 224);
             width: 300px;
@@ -32,18 +25,14 @@
 
 <body>
     <div layout:fragment="content">
-        <h1>Log In to EventHub</h1>
-        <form th:action="@{/login}" method="post">
+        <h1>Log In</h1>
+        <form>
             <label for="email">Email:</label><br>
-            <input type="text" id="email" name="email"><br><br>
-
+            <input type="text" id="email" name="email" value="bingus@rmit.edu"><br><br>
             <label for="pw">Password:</label><br>
-            <input type="password" id="pw" name="pw"><br>
-
+            <input type="password" id="pw" name="pw" value="zingus"><br>
             <a href="/signUp" class="signup">Register here</a><br><br>
-            
             <input type="submit" value="Submit">
-            <p th:if="${error}" th:text="${error}" style="color:red;"></p>
         </form>
     </div>
 </body>
