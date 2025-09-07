@@ -21,7 +21,7 @@ public class WebappApplication {
 	}
 
 	@Bean
-    public CommandLineRunner dataLoader(UserService userService, UserRepo userRepo) { //initialises database
+    public CommandLineRunner dataLoader(UserService userService, UserRepo userRepo) {
         return args -> {
 			if (userRepo.count() == 0) {
 				List<User> userList = List.of(
@@ -31,7 +31,7 @@ public class WebappApplication {
 				);
 
 				for (User user : userList) {
-					userService.addUser(user);  
+					userService.addUser(user);  // Spring injects repo automatically
 				}
 			}
 
