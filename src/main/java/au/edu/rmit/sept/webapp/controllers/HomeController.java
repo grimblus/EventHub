@@ -13,7 +13,7 @@ public class HomeController {
   public String index(Model model) {
     model.addAttribute("message", "Super cool events here!");
     model.addAttribute("today", new Date());
-    return "welcome/index.html";
+    return "welcome/index";
 
   }
 
