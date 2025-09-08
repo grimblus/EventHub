@@ -22,13 +22,13 @@ public class User {
     }
 
     // Full Constructor
-    public User(Integer id, String firstName, String lastName, String password, String email) {
+    public User(Integer id, String firstName, String lastName, String password, String email, int permissions) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.permissions = 0;
+        this.permissions = permissions;
     }
 
     public int getId() {
