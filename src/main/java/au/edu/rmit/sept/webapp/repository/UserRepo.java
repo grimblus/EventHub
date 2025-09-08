@@ -16,6 +16,25 @@ public class UserRepo {
             new User("Deez", "Noots", "g0tt3m", "deez@example.com", 0)
     );
 
+    public static void addUser(User user) {
+
+                try (Connection connection = H2DatabaseConnection.getConnection()) {
+            
+            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissions) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
+                ps.setString(1, user.getFirstName());
+                ps.setString(2, user.getLastName());
+                ps.setString(3, user.getPassword());
+                ps.setString(4, user.getEmail());
+                ps.setInt(5, user.getPermissions());
+                ps.executeUpdate();
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void setUsers() {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +

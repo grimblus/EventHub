@@ -3,6 +3,9 @@ package au.edu.rmit.sept.webapp.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import au.edu.rmit.sept.webapp.entity.User;
+import org.springframework.ui.Model;
+
 @Controller
 public class PageController {
 
@@ -31,10 +34,12 @@ public class PageController {
         return "login/index";
     }
 
-    @GetMapping("/signUp")
-    public String signUp() {
-        return "signUp/index";
-    }
+    // @GetMapping("/signUp")
+    // public String signUp(Model model) {
+    //     model.addAttribute("user", new User());
+
+    //     return "signUp/index";
+    // }
 
     // specifci event page when user clicks on an event
     // will be loaded with event details
