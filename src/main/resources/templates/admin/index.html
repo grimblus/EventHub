@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout.html}"
+>
+<head>
+    <title>Admin</title>
+    <!-- <script src="content-script.js"></script> -->
+    <style>
+        h1 {
+            text-align: center;
+        }
+        form {
+            text-align: center;
+        }
+        form {
+            background-color: rgb(236, 224, 224);
+            width: 300px;
+            border: 3px solid rgb(0, 0, 0);
+            padding: 50px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <h1>Admin Display</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Permissions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.permissions}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

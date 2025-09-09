@@ -47,4 +47,7 @@ public class PageController {
     public String event() {
         return "event-page/index";
     }
+
+    @GetMapping("/admin")
+    public String admin() { return "admin/index"; }
 }
