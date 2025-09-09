@@ -145,3 +145,55 @@ footer {
 }
 .carousel .prev { left: .5rem; }
 .carousel .next { right: .5rem; }
+
+/* payment page layout */
+.page { max-width: 720px; margin: 2rem auto; padding: 1rem; }
+.group { display: grid; gap: .5rem; margin-bottom: 1rem; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+label { font-weight: 600; }
+input, select { padding: .6rem; border: 1px solid #ddd; border-radius: .5rem; }
+
+.payment-banner {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+}
+
+.payment-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* validation + notes */
+.error { color: #b00020; font-size: .9rem; }
+.note { font-size: .9rem; color: #666; }
+
+/* alerts */
+.alert {
+  padding: 1rem;
+  border-radius: .5rem;
+  border: 1px solid transparent;
+  margin-bottom: 1rem;
+}
+.alert-success {
+  background: #f1fff2;
+  border-color: #bde5bd;
+}
+.alert-error {
+  background: #fff5f5;
+  border-color: #f0c2c2;
+}
+
+/* button variant */
+.btn-dark {
+  padding: .7rem 1.1rem;
+  border-radius: .6rem;
+  border: 0;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+}
+.btn-dark:hover { filter: brightness(1.05); }
