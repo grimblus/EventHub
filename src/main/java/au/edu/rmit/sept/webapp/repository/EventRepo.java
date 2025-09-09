@@ -116,7 +116,7 @@ public class EventRepo {
                                 rs.getInt("id"),
                                 rs.getString("title"),
                                 rs.getString("description"),
-                                rs.getInt("owner"),
+                                rs.getInt("owner_id"),
                                 rs.getTimestamp("date").toLocalDateTime(),
                                 rs.getString("location"),
                                 rs.getString("category"),

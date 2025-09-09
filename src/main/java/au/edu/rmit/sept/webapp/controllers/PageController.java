@@ -14,10 +14,10 @@ public class PageController {
     //     return "home/index";
     // }
 
-    @GetMapping("/events")
-    public String events() {
-        return "events/index";
-    }
+//    @GetMapping("/events")
+//    public String events() {
+//        return "events/index";
+//    }
 
     @GetMapping("/create")
     public String create() {
