@@ -28,26 +28,68 @@
 <div layout:fragment="content">
     <h1>Admin Display</h1>
 
-    <table>
-        <thead>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a th:href="@{/admin/users}"
+           th:classappend="${activeTab == 'users'} ? 'active-tab' : ''">Users</a> |
+        <a th:href="@{/admin/events}"
+           th:classappend="${activeTab == 'events'} ? 'active-tab' : ''">Events</a>
+    </div>
+    <div th:if="${activeTab == 'users'}">
+        <h2>Users</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Permissions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.permissions}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${activeTab == 'events'}">
+        <h2>Events</h2>
+        <table>
+            <thead>
             <tr>
                 <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Permissions</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Keywords</th>
+                <th>Tags</th>
+                <th>Images</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <tr th:each="user : ${users}">
                 <td th:text="${user.id}"></td>
-                <td th:text="${user.firstName}"></td>
-                <td th:text="${user.lastName}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.permissions}"></td>
+                <td th:text="${user.title}"></td>
+                <td th:text="${user.description}"></td>
+                <td th:text="${user.owner}"></td>
+                <td th:text="${user.date}"></td>
+                <td th:text="${user.location}"></td>
+                <td th:text="${user.category}"></td>
+                <td th:text="${user.keywords}"></td>
+                <td th:text="${user.tags}"></td>
+                <td th:text="${user.images}"></td>
             </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

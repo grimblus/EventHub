@@ -17,15 +17,15 @@ public class AdminController {
 
     @GetMapping("/users")
     public String showUsers(Model model) {
-//        model.addAttribute("active", "users");
+        model.addAttribute("active", "users");
         model.addAttribute("users", UserRepo.getUsers());
         return "admin/index";
     }
-    /*
+
     @GetMapping("/events")
     public String showEvents(Model model) {
         model.addAttribute("active", "events");
         model.addAttribute("events", EventRepo.getEvents());
         return "admin/index";
     }
-*/}
+}
