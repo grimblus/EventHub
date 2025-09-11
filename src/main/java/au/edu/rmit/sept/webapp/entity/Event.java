@@ -1,6 +1,9 @@
 package au.edu.rmit.sept.webapp.entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,8 +120,15 @@ public class Event {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setDate(String date) {
+        // change input to a string that gets converted to a date
+        // so we can check if user inputs correct data easier
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy/HH:mm");
+        try {
+            this.date = LocalDateTime.parse(date, format);
+        } catch (DateTimeParseException e) {
+            System.out.println(e);
+        }
     }
 
     public String getLocation() {
