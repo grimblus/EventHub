@@ -29,10 +29,10 @@ public class PageController {
         return "account/index";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login/index";
-    }
+    // @GetMapping("/login")
+    // public String login() {
+    //     return "login/index";
+    // }
 
     // @GetMapping("/signUp")
     // public String signUp(Model model) {
