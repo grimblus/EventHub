@@ -38,20 +38,51 @@
     <div layout:fragment="content">
         <h1>Events</h1>
         <div>
-            <form>
+            <form action="/events" method="GET">
                 <label for="search">Search:</label>
-                <input type="text" id="search" name="search" value="event name or event organiser"/>
-                <label for="tags1">Some tag 1</label>
-                <input type="checkbox" id="tags1" name="tags1" value="tags1"/>
-                <label for="tags2">Some tag 2</label>
-                <input type="checkbox" id="tags2" name="tags2" value="tags2"/>
-                <label for="tags3">Some tag 3</label>
-                <input type="checkbox" id="tags3" name="tags3" value="tags3"/>
+                <input type="text" id="search" name="search" placeholder="Search..."/>
+                <div class="filters-container">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" placeholder="Location..."/>
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" placeholder="Category..."/>
+                    <div class="filter-tags">
+                        <label>
+                            <input type="checkbox" name="tags" value="education" /> Education
+                        </label>
+                        <label>
+                            <input type="checkbox" name="tags" value="beginner" /> Beginner
+                        </label>
+                        <label>
+                            <input type="checkbox" name="tags" value="competition" /> Competition
+                        </label>
+                        <label>
+                            <input type="checkbox" name="tags" value="teamwork" /> Teamwork
+                        </label>
+                    </div>
+                    <div class="filter-keywords">
+                        <label>
+                            <input type="checkbox" name="keywords" value="java" /> Java
+                        </label>
+                        <label>
+                            <input type="checkbox" name="keywords" value="workshop" /> Workshop
+                        </label>
+                        <label>
+                            <input type="checkbox" name="keywords" value="coding" /> Coding
+                        </label>
+                        <label>
+                            <input type="checkbox" name="keywords" value="challenge" /> Challenge
+                        </label>
+                    </div>
+                    <div>
+                        <button type="submit">Search</button>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="event-container">
             <div class="event-item" th:each="event : ${events}">
-                <h2 th:text="${'Some Image (Change to img tag later)'}">Event Image</h2>
+                <h2 th:text="${event.getImages()[0]}">Event Image</h2>
                 <div class="event-details">
                     <h2 th:text="${event.getTitle()}">Event Title</h2>
                     <p th:text="${event.getDescription()}">Event Description</p>

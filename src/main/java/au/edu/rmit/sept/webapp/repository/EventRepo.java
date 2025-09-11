@@ -133,4 +133,72 @@ public class EventRepo {
         }
         return events;
     }
+
+    public static List<Event> getEventsByFilter(String name, List<String> tags, String location, String category, List<String> keywords) {
+        StringBuilder searchSQL = new StringBuilder("SELECT * FROM events WHERE 1=1");
+        List<String> parameters = new ArrayList<>();
+
+        if (name != null && !name.isEmpty()) {
+            searchSQL.append(" AND LOWER(title) LIKE ?");
+            parameters.add("%" + name + "%");
+        }
+        if (tags != null && !tags.isEmpty()) {
+            StringBuilder addSQL = new StringBuilder("AND (");
+            for (int i = 0; i < tags.size(); i++) {
+                if (i > 0) { addSQL.append(" OR "); }
+                addSQL.append("LOWER(tags) LIKE ?");
+                parameters.add("%" + tags.get(i) + "%");
+            }
+            addSQL.append(")");
+            searchSQL.append(addSQL);
+        }
+        if (location != null && !location.isEmpty()) {
+            searchSQL.append(" AND LOWER(location) LIKE ?");
+            parameters.add("%" + location + "%");
+        }
+        if (category != null && !category.isEmpty()) {
+            searchSQL.append(" AND LOWER(category) LIKE ?");
+            parameters.add("%" + category + "%");
+        }
+        if (keywords != null && !keywords.isEmpty()) {
+            StringBuilder addSQL = new StringBuilder("AND (");
+            for (int i = 0; i < keywords.size(); i++) {
+                if (i > 0) { addSQL.append(" OR "); }
+                addSQL.append("LOWER(keywords) LIKE ?");
+                parameters.add("%" + keywords.get(i) + "%");
+            }
+            addSQL.append(")");
+            searchSQL.append(addSQL);
+        }
+
+        List<Event> events = new ArrayList<>();
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL.toString())) {
+                // Bind parameters
+                for (int i = 0; i < parameters.size(); i++) {
+                    ps.setString(i + 1, parameters.get(i));
+                }
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Event event = new Event(
+                                rs.getInt("id"),
+                                rs.getString("title"),
+                                rs.getString("description"),
+                                rs.getInt("owner_id"),
+                                rs.getTimestamp("date").toLocalDateTime(),
+                                rs.getString("location"),
+                                rs.getString("category"),
+                                stringList(rs.getString("keywords")),
+                                stringList(rs.getString("tags")),
+                                stringList(rs.getString("images"))
+                        );
+                        events.add(event);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
 }
