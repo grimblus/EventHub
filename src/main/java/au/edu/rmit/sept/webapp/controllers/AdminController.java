@@ -1,11 +1,8 @@
 package au.edu.rmit.sept.webapp.controllers;
-import au.edu.rmit.sept.webapp.entity.User;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import au.edu.rmit.sept.webapp.repository.UserRepo;
 import au.edu.rmit.sept.webapp.repository.EventRepo;
+import au.edu.rmit.sept.webapp.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private UserService userService;
+
+    @Autowired
+    public AdminController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/users")
     public String showUsers(Model model) {
         model.addAttribute("active", "users");
-        model.addAttribute("users", UserRepo.getUsers());
+        model.addAttribute("users", userService.getUsers());
         return "admin/index";
     }
 

@@ -34,16 +34,16 @@
       <h1>Sign Up To EventHub</h1>
       <form action="#" th:action="@{/signUp}" th:object="${user}" method="post" >
         <label for="firstname">First Name:</label><br />
-        <input type="text" th:field="*{firstName}" /><br /><br />
+        <input id="firstname" type="text" th:field="*{firstName}" /><br /><br />
 
         <label for="lastname">Last Name:</label><br />
-        <input type="text" th:field="*{lastName}" /><br /><br />
+        <input id="lastname" type="text" th:field="*{lastName}" /><br /><br />
 
         <label for="email">Email:</label><br />
-        <input type="text" th:field="*{email}" /><br /><br />
+        <input id="email" type="text" th:field="*{email}" /><br /><br />
 
         <label for="password">Password:</label><br />
-        <input type="password" th:field="*{password}" /><br />
+        <input id="password" type="password" th:field="*{password}" /><br />
         <input type="submit" value="Submit" />
       </form>
     </div>

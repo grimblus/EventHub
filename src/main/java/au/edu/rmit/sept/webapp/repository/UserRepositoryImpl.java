@@ -2,13 +2,16 @@ package au.edu.rmit.sept.webapp.repository;
 
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
+import org.springframework.stereotype.Repository;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepo {
+@Repository
+public class UserRepositoryImpl implements UserRepository {
     static List<User> userList = List.of(
             new User("Aaron", "Tran", "password123", "aaron@example.com", 0),
             new User("Bingus", "Bongus", "s3cur3pass", "bingus@example.com", 2),
@@ -18,7 +21,7 @@ public class UserRepo {
             new User("Deez", "Noots", "g0tt3m", "deez@example.com", 0)
     );
 
-    public static void setUsers() {
+    public void setUsers() {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
@@ -46,7 +49,7 @@ public class UserRepo {
         }
     }
 
-    public static void addUser(User user) {
+    public void addUser(User user) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissions) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
@@ -62,7 +65,7 @@ public class UserRepo {
         }
     }
 
-    public static List<User> getUsers() {
+    public  List<User> getUsers() {
         List<User> users = new ArrayList<>();
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM users";
@@ -87,7 +90,7 @@ public class UserRepo {
         return users;
     }
 
-    public static User findUserByID(Integer id) {
+    public  User findUserByID(Integer id) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM users WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
@@ -111,7 +114,7 @@ public class UserRepo {
         return null;
     }
 
-    public static User findUserByFirstName(String firstName) {
+    public  User findUserByFirstName(String firstName) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM users WHERE firstName = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
@@ -135,7 +138,7 @@ public class UserRepo {
         return null;
     }
 
-    public static User findUserByLastName(String lastName) {
+    public  User findUserByLastName(String lastName) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM users WHERE lastName = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
@@ -159,7 +162,7 @@ public class UserRepo {
         return null;
     }
 
-    public static User findUserByEmail(String email) {
+    public  User findUserByEmail(String email) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM users WHERE email = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
