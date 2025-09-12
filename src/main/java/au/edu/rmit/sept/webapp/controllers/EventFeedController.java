@@ -1,20 +1,18 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import au.edu.rmit.sept.webapp.entity.Event;
-import au.edu.rmit.sept.webapp.repository.EventRepo;
+import au.edu.rmit.sept.webapp.repository.EventRepositoryImpl;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import au.edu.rmit.sept.webapp.services.EventService;
 import java.util.List;
 
 @Controller
 public class EventFeedController {
+
+    private EventService eventService;
 
     @GetMapping("/events")
     public String events(
@@ -26,9 +24,9 @@ public class EventFeedController {
             Model model
     ) {
         // Find out how to do tags and stuff
-        model.addAttribute("events", EventRepo.getEventsByFilter(search, tags, location, category, keywords));
-        model.addAttribute("tags", EventRepo.getTags());
-        model.addAttribute("keywords", EventRepo.getKeywords());
+        model.addAttribute("events", eventService.getEventsByFilter(search, tags, location, category, keywords));
+        model.addAttribute("tags", eventService.getTags());
+        model.addAttribute("keywords", eventService.getKeywords());
 
         return "events/index";
     }
