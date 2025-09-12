@@ -27,6 +27,8 @@ public class EventFeedController {
     ) {
         // Find out how to do tags and stuff
         model.addAttribute("events", EventRepo.getEventsByFilter(search, tags, location, category, keywords));
+        model.addAttribute("tags", EventRepo.getTags());
+        model.addAttribute("keywords", EventRepo.getKeywords());
 
         return "events/index";
     }

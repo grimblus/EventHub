@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.*;
+
+import java.io.PrintStream;
 import java.util.List;
 
 public class EventRepo {
@@ -200,5 +202,39 @@ public class EventRepo {
             e.printStackTrace();
         }
         return events;
+    }
+
+    public static List<String> getTags() {
+        Set<String> tags = new  HashSet<String>();
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            String searchSQL = "SELECT tags FROM events";
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                try  (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        tags.addAll(Arrays.asList(rs.getString("tags").split(",")));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<String>(tags);
+    }
+
+    public static List<String> getKeywords() {
+        Set<String> keywords = new  HashSet<String>();
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            String searchSQL = "SELECT keywords FROM events";
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                try  (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        keywords.addAll(Arrays.asList(rs.getString("keywords").split(",")));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<String>(keywords);
     }
 }
