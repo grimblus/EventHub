@@ -1,6 +1,5 @@
 package au.edu.rmit.sept.webapp.services;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +29,16 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsers() {
         return repository.getUsers();
     }
-    public  User findUserByID(Integer id) {
+    public User findUserByID(Integer id) {
         return repository.findUserByID(id);
     }
-    public  User findUserByFirstName(String firstName) {
+    public User findUserByFirstName(String firstName) {
         return repository.findUserByFirstName(firstName);
     }
-    public  User findUserByLastName(String lastName) {
+    public User findUserByLastName(String lastName) {
         return repository.findUserByLastName(lastName);
     }
-    public  User findUserByEmail(String email) {
+    public User findUserByEmail(String email) {
         return repository.findUserByEmail(email);
     }
 }

@@ -11,7 +11,7 @@ public class Event {
     private int id;
     private String title;
     private String description;
-    private int owner_id;
+    private int ownerID;
     private List<User> participants;
     private LocalDateTime date;
     private String location;
@@ -24,11 +24,11 @@ public class Event {
     public Event() {}
 
     // Temp Testing Constructor
-    public Event(String title, String description, int owner, LocalDateTime date,
+    public Event(String title, String description, int ownerID, LocalDateTime date,
                  String location, String category) {
         this.title = title;
         this.description = description;
-        this.owner_id = owner;
+        this.ownerID = ownerID;
         this.date = date;
         this.location = location;
         this.category = category;
@@ -36,12 +36,12 @@ public class Event {
 
 
     // No ID Constructor
-    public Event(String title, String description, int owner, LocalDateTime date,
+    public Event(String title, String description, int ownerID, LocalDateTime date,
                  String location, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
         this.title = title;
         this.description = description;
-        this.owner_id = owner;
+        this.ownerID = ownerID;
         participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
@@ -52,13 +52,13 @@ public class Event {
     }
 
     // Full Constructor
-    public Event(int id, String title, String description, int owner, LocalDateTime date,
+    public Event(int id, String title, String description, int ownerID, LocalDateTime date,
                  String location, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.owner_id = owner;
+        this.ownerID = ownerID;
         participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
@@ -92,12 +92,12 @@ public class Event {
         this.description = description;
     }
 
-    public int getOwner() {
-        return owner_id;
+    public int getOwnerID() {
+        return ownerID;
     }
 
-    public void setOwner(int owner) {
-        this.owner_id = owner;
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
     }
 
     public List<User> getParticipants() {

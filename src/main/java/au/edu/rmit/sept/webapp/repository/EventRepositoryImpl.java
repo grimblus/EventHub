@@ -14,46 +14,45 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import java.io.PrintStream;
 import java.util.List;
 
 @Repository
-public class EventRepo {
+public class EventRepositoryImpl implements EventRepository {
     static List<Event> eventList = List.of(
             new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Melbourne", "General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
             new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "Melbourne", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
     );
 
-    public static List<String> stringList(String list) {
+    public List<String> stringList(String list) {
         List<String> finalList = new ArrayList<>();
         for (String s : list.split(","))
             finalList.add(s);
         return finalList;
     }
 
-    public static void setEvents() {
+    public void setEvents() {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS events (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "title VARCHAR(255), " +
                     "description VARCHAR(255), " +
-                    "owner_id INT, " +
+                    "ownerID INT, " +
                     "date TIMESTAMP," +
                     "location VARCHAR(255), " +
                     "category VARCHAR(255)," +
                     "keywords VARCHAR(1000)," +
                     "tags VARCHAR(1000)," +
                     "images VARCHAR(1000)," +
-                    "FOREIGN KEY(owner_id) REFERENCES users(id))";
+                    "FOREIGN KEY(ownerID) REFERENCES users(id))";
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
             createTableStatement.executeUpdate();
 
-            String insertSQL = "INSERT INTO events (title, description, owner_id, date, location, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             for (Event event : eventList) {
                 try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                     ps.setString(1, event.getTitle());
                     ps.setString(2, event.getDescription());
-                    ps.setInt(3, event.getOwner());
+                    ps.setInt(3, event.getOwnerID());
                     ps.setTimestamp(4, Timestamp.valueOf(event.getDate()));
                     ps.setString(5, event.getLocation());
                     ps.setString(6, event.getCategory());
@@ -92,13 +91,13 @@ public class EventRepo {
         }
     }
 
-    public static void addEvent(Event event) {
+    public void addEvent(Event event) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
-            String insertSQL = "INSERT INTO events (title, description, owner_id, date, location, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                 ps.setString(1, event.getTitle());
                 ps.setString(2, event.getDescription());
-                ps.setInt(3, event.getOwner());
+                ps.setInt(3, event.getOwnerID());
                 ps.setTimestamp(4, Timestamp.valueOf(event.getDate()));
                 ps.setString(5, event.getLocation());
                 ps.setString(6, event.getCategory());
@@ -112,7 +111,7 @@ public class EventRepo {
         }
     }
 
-    public static List<Event> getEvents() {
+    public List<Event> getEvents() {
         List<Event> events = new ArrayList<>();
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM events";
@@ -123,7 +122,7 @@ public class EventRepo {
                                 rs.getInt("id"),
                                 rs.getString("title"),
                                 rs.getString("description"),
-                                rs.getInt("owner_id"),
+                                rs.getInt("ownerID"),
                                 rs.getTimestamp("date").toLocalDateTime(),
                                 rs.getString("location"),
                                 rs.getString("category"),
@@ -143,7 +142,7 @@ public class EventRepo {
 
     // returns a single event (used for payment page, can be used for event details?)
     // we want to use id as well to stop pulling duplicates, but i dont think the database has them?
-    public static Event getEvent(int id, String name) {
+    public Event getEvent(int id, String name) {
         Event event = null; // start with a blank event
         StringBuilder searchSQL = new StringBuilder("SELECT * FROM events WHERE id = ? AND LOWER(title) = ?");
 
@@ -176,7 +175,7 @@ public class EventRepo {
         return event;
     }
 
-    public static List<Event> getEventsByFilter(String name, List<String> tags, String location, String category, List<String> keywords) {
+    public List<Event> getEventsByFilter(String name, List<String> tags, String location, String category, List<String> keywords) {
         StringBuilder searchSQL = new StringBuilder("SELECT * FROM events WHERE 1=1");
         List<String> parameters = new ArrayList<>();
 
@@ -226,7 +225,7 @@ public class EventRepo {
                                 rs.getInt("id"),
                                 rs.getString("title"),
                                 rs.getString("description"),
-                                rs.getInt("owner_id"),
+                                rs.getInt("ownerID"),
                                 rs.getTimestamp("date").toLocalDateTime(),
                                 rs.getString("location"),
                                 rs.getString("category"),
@@ -244,7 +243,7 @@ public class EventRepo {
         return events;
     }
 
-    public static List<String> getTags() {
+    public List<String> getTags() {
         Set<String> tags = new  HashSet<String>();
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT tags FROM events";
@@ -261,7 +260,7 @@ public class EventRepo {
         return new ArrayList<String>(tags);
     }
 
-    public static List<String> getKeywords() {
+    public List<String> getKeywords() {
         Set<String> keywords = new  HashSet<String>();
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT keywords FROM events";
