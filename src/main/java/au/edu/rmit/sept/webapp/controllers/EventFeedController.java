@@ -14,6 +14,8 @@ public class EventFeedController {
 
     private EventService eventService;
 
+    public EventFeedController(EventService eventService) {this.eventService = eventService;}
+
     @GetMapping("/events")
     public String events(
             @RequestParam(required = false) String search,
