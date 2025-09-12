@@ -3,6 +3,8 @@ package au.edu.rmit.sept.webapp.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import au.edu.rmit.sept.webapp.repository.EventRepositoryImpl;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +32,15 @@ public class EventFeedController {
         model.addAttribute("tags", eventService.getTags());
         model.addAttribute("keywords", eventService.getKeywords());
 
+        return "events/index";
+    }
+
+    @PostMapping("/events")
+    public String eventDetails(
+            Integer id, 
+            Model model
+    ) {
+        model.addAttribute("modal-content", EventRepositoryImpl.findEventbyID(id));
         return "events/index";
     }
 }

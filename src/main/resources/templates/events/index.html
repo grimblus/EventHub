@@ -46,7 +46,7 @@
         }
         .filter-tags-container label,
         .filter-keywords-container label {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
         .filter-tags-item,
         .filter-keywords-item {
@@ -86,6 +86,40 @@
         .event-meta {
             display: flex;
             justify-content: space-between;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -137,8 +171,31 @@
                         <span th:text="${event.getLocation()}">Event Location</span>
                     </div>
                 </div>
+                <button th:attr="onclick=|showModal('infoModal' + ${event.id})|">View Details</button>
+                    <div th:each="event : ${events}" th:attr="id=${'infoModal' + event.id}" class="modal">
+                    <div class="modal-content">
+                        <h3>Event</h3>
+                        <p><strong>ID:</strong> <span th:text="${event.getId()}"></span></p>
+                        <p><strong>Name:</strong> <span th:text="${event.getTitle()}"></span></p>
+                        <p><strong>Description:</strong> <span th:text="${event.getDescription()}"></span></p>
+                        <p><strong>Date:</strong> <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"></span></p>
+                        <p><strong>Location:</strong> <span th:text="${event.getLocation()}"></span></p>
+                        <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+    
+    <div layout:fragment="scripts">
+        <script>
+            function showModal(modalId) {
+                document.getElementById(modalId).style.display = 'block';
+            }
+            function hideModal(modalId) {
+                document.getElementById(modalId).style.display = 'none';
+            }
+        </script>
     </div>
 </body>
 
