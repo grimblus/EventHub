@@ -85,8 +85,7 @@
               <input id="cvc" inputmode="numeric" autocomplete="cc-csc" th:field="*{cvc}" maxlength="4" required>
               <div class="error" th:if="${#fields.hasErrors('cvc')}" th:errors="*{cvc}"></div>
             </div>
-
-
+              <button class="btn-dark" type="submit">pay</button>
           </form>
         </div>
       </div>
@@ -96,9 +95,9 @@
           <h1 th:text="${title}"></h1>
           <p><strong th:inline="text">Location: [[${location}]]</strong>
           <p><strong th:inline="text">When: [[${date}]]</strong></p>
-          <p><strong th:inline="text">[[${details}]]</strong></p>
+          <p><strong th:inline="text">Details: [[${details}]]</strong></p>
           <h1 th:inline="text">Price: $[[${price}]]</h1>
-          <button class="btn-dark" type="submit">Checkout</button>
+
         </div>
 
       </div>

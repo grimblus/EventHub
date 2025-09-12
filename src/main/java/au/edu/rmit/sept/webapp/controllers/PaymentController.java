@@ -1,7 +1,7 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.models.PaymentRequest;
-import au.edu.rmit.sept.webapp.repository.EventRepo;
+import au.edu.rmit.sept.webapp.repository.EventRepositoryImpl;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 public class PaymentController {
 
     private final SandboxPaymentGateway gateway;
+    
 
     public PaymentController(SandboxPaymentGateway gateway) {
         this.gateway = gateway;
@@ -39,7 +40,8 @@ public class PaymentController {
 
         //using built in but will change to get from page details
         // could we not just pass the event variable through instead of grabbing it?
-        Event curEvent = EventRepo.getEvent(1, "Workshop");
+        EventRepositoryImpl repo = new EventRepositoryImpl();
+        Event curEvent = repo.getEvent(1, "Workshop");
 
         String title =      curEvent.getTitle();
         String local =      curEvent.getLocation();
