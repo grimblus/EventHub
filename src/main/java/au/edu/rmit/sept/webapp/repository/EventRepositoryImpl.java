@@ -14,8 +14,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import java.util.List;
-
 @Repository
 public class EventRepositoryImpl implements EventRepository {
     static List<Event> eventList = List.of(
@@ -276,5 +274,34 @@ public class EventRepositoryImpl implements EventRepository {
             e.printStackTrace();
         }
         return new ArrayList<String>(keywords);
+    }
+
+    public static Event findEventbyID(Integer id) {
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            String searchSQL = "SELECT * FROM events WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                ps.setInt(1, id);
+                try  (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        EventRepositoryImpl eventrepo = new EventRepositoryImpl();
+                        return new Event(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getInt("owner_id"),
+                            rs.getTimestamp("date").toLocalDateTime(),
+                            rs.getString("location"),
+                            rs.getString("category"),
+                            eventrepo.stringList(rs.getString("keywords")),
+                            eventrepo.stringList(rs.getString("tags")),
+                            eventrepo.stringList(rs.getString("images"))
+                        );
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
