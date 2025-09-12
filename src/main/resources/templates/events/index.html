@@ -2,30 +2,86 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layout/layout.html}">
 <head>
-    <title>Welcome to EventHub</title>
+    <title>EventHub - Events</title>
     <!-- <script src="content-script.js"></script> -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
     <style>
-        .event-container {
+        .events-filter-container {
+            margin: 1rem;
+            border-radius: 10px;
+        }
+        .search-bar {
+            display: flex;
+        }
+        #search {
+            width: 100%;
+            display: inline-block;
+        }
+        #search-button {
+            margin-left: -1rem;
+        }
+        #filter-button {
+            margin-left: -0.1rem;
+        }
+        .filters-container {
+            margin-top: 1rem;
+            padding: 1rem 1.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+        }
+        .filters-container label {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        .filters-container input[type="text"] {
+            width: 100%;
+            padding: 0.45rem 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .filter-tags-container,
+        .filter-keywords-container {
+            margin-bottom: 1rem;
+        }
+        .filter-tags-container label,
+        .filter-keywords-container label {
+            margin-bottom: 0.5rem;
+        }
+        .filter-tags-item,
+        .filter-keywords-item {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 1rem;
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .filter-tags-item input[type="checkbox"],
+        .filter-keywords-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        .events-display-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 2em;
+            gap: 2rem;
             justify-content: flex-start;
         }
         .event-item {
             flex-direction: column;
-            width: 30em;
-            border: 0.2em solid white;
-            margin: 1em;
-            padding: 1em;
+            width: 30rem;
+            border: 0.2rem solid white;
+            margin: 1rem;
+            padding: 1rem;
         }
         .event-item img {
             /*  change img size later  */
         }
         .event-details {
-            padding: 0.5em;
+            padding: 0.5rem;
             display: flex;
             flex-direction: column;
-            gap: 0.25em
+            gap: 0.25rem
         }
         .event-meta {
             display: flex;
@@ -36,18 +92,23 @@
 
 <body>
     <div layout:fragment="content">
-        <h1>Events</h1>
-        <div>
+        <div class="events-filter-container">
             <form action="/events" method="GET">
-                <label for="search">Search:</label>
-                <input type="text" id="search" name="search" placeholder="Search..."/>
-                <div class="filters-container">
+                <div class="search-bar">
+                    <label for="search"></label>
+                    <input type="text" id="search" name="search" placeholder="Search..."/>
+                    <button id="search-button" type="submit">Search</button>
+                    <button id="filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#filters-container-collapsible" aria-expanded="false" aria-controls="filters-container-collapsible">
+                        Filters
+                    </button>
+                </div>
+                <div class="filters-container collapse" id="filters-container-collapsible">
                     <label for="location">Location</label>
-                    <input type="text" id="location" name="location" placeholder="Location..."/>
+                    <input type="text" id="location" name="location" placeholder="Melbourne..."/>
                     <label for="category">Category</label>
-                    <input type="text" id="category" name="category" placeholder="Category..."/>
+                    <input type="text" id="category" name="category" placeholder="Coding..."/>
                     <div class="filter-tags-container">
-                        <label>Tags</label>
+                        <label>Tags:</label>
                         <div class="filter-tags-item" th:each="tag: ${tags}">
                            <label>
                                <input type="checkbox" name="tags" value="${tag}" th:text="${tag.substring(0, 1).toUpperCase() + tag.substring(1)}" />
@@ -55,22 +116,19 @@
                         </div>
                     </div>
                     <div class="filter-keywords-container">
-                        <label>Keywords</label>
+                        <label>Keywords:</label>
                         <div class="filter-keywords-item" th:each="keyword : ${keywords}">
                             <label>
                                 <input type="checkbox" name="keywords" value="${keyword}" th:text="${keyword.substring(0, 1).toUpperCase() + keyword.substring(1)}" />
                             </label>
                         </div>
                     </div>
-                    <div>
-                        <button type="submit">Search</button>
-                    </div>
                 </div>
             </form>
         </div>
-        <div class="event-container">
+        <div class="events-display-container">
             <div class="event-item" th:each="event : ${events}">
-                <h2 th:text="${event.getImages()[0]}">Event Image</h2>
+                <img th:src="${event.getImages()[0]}" th:alt="${event.getImages()[0]}" />
                 <div class="event-details">
                     <h2 th:text="${event.getTitle()}">Event Title</h2>
                     <p th:text="${event.getDescription()}">Event Description</p>
