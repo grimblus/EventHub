@@ -20,7 +20,8 @@ public class HomeController {
     try {
       InetAddress addr = InetAddress.getLocalHost();
       String hostName = addr.getHostName();    
-      String hostLink = "THIS SHOULD CONTAIN A LINK (with your computers hostname) THAT LEADS YOU TO THIS PAGE: http://" + hostName + ".local:8080";
+      String redirect = "";
+      String hostLink = "THIS SHOULD CONTAIN A LINK (with your computers hostname) THAT LEADS YOU TO THIS PAGE: http://" + hostName + ".local:8080/" + redirect;
       model.addAttribute("hostLink", hostLink);
     } catch (UnknownHostException e) {
       e.printStackTrace();

@@ -19,74 +19,93 @@
       <img src="/images/welcome/img3.png" alt="Payment Banner">
     </div>
 
-    <div class="page">
-      <h1>Checkout</h1>
-      <p class="note">Note: Sandbox only. Use the test numbers below.</p>
+    <section class="page-split">
+      <div id="left">
+        <div class="page">
+          <h1>Checkout</h1>
+          <p class="note">Note: Sandbox only. Use the test numbers below.</p>
 
-      <div th:if="${param.success}" class="group alert alert-success">
-        <strong>Payment successful!</strong>
-        <div>Reference: <span th:text="${param.ref}">REF123</span></div>
-      </div>
-
-      <div th:if="${param.failed}" class="group alert alert-error">
-        <strong>Payment failed.</strong> <span th:text="${param.reason}">Card declined</span>
-      </div>
-
-      <form th:action="@{/pay}" th:object="${payment}" method="post" novalidate>
-        <div class="group">
-          <label for="name">Cardholder Name</label>
-          <input id="name" type="text" th:field="*{cardholderName}" placeholder="Adam Scrum" required>
-          <div class="error" th:if="${#fields.hasErrors('cardholderName')}" th:errors="*{cardholderName}"></div>
-        </div>
-
-        <div class="group">
-          <label for="email">Email (receipt)</label>
-          <input id="email" type="email" th:field="*{email}" placeholder="a.scrum@example.com" required>
-          <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-        </div>
-
-        <div class="group">
-          <label for="amount">Amount (AUD)</label>
-          <input id="amount" type="number" min="1" step="0.01" th:field="*{amount}" placeholder="10.00" required>
-          <div class="note">Note: Final number will be set by DB.</div>
-          <div class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
-        </div>
-
-        <div class="group">
-          <label for="cardNumber">Card Number</label>
-          <input id="cardNumber" inputmode="numeric" autocomplete="cc-number"
-                th:field="*{cardNumber}" maxlength="19" required>
-          <div class="note">Note: Use <strong>4242 4242 4242 4242</strong> to succeed, or <strong>4000 0000 0000 0002</strong> to simulate a decline.</div>
-          <div class="error" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}"></div>
-        </div>
-
-        <div class="row">
-          <div class="group">
-            <label for="expMonth">Expiry Month</label>
-            <select id="expMonth" th:field="*{expMonth}">
-              <option th:each="m : ${#numbers.sequence(1,12)}" th:value="${m}" th:text="${m}"></option>
-            </select>
-            <div class="error" th:if="${#fields.hasErrors('expMonth')}" th:errors="*{expMonth}"></div>
+          <div th:if="${param.success}" class="group alert alert-success">
+            <strong>Payment successful!</strong>
+            <div>Reference: <span th:text="${param.ref}">REF123</span></div>
           </div>
 
-          <div class="group">
-            <label for="expYear">Expiry Year</label>
-            <select id="expYear" th:field="*{expYear}">
-              <option th:each="y : ${years}" th:value="${y}" th:text="${y}"></option>
-            </select>
-            <div class="error" th:if="${#fields.hasErrors('expYear')}" th:errors="*{expYear}"></div>
+          <div th:if="${param.failed}" class="group alert alert-error">
+            <strong>Payment failed.</strong> <span th:text="${param.reason}">Card declined</span>
           </div>
+
+          <form th:action="@{/pay}" th:object="${payment}" method="post" novalidate>
+            <div class="group">
+              <label for="name">Cardholder Name</label>
+              <input id="name" type="text" th:field="*{cardholderName}" placeholder="Adam Scrum" required>
+              <div class="error" th:if="${#fields.hasErrors('cardholderName')}" th:errors="*{cardholderName}"></div>
+            </div>
+
+            <div class="group">
+              <label for="email">Email (receipt)</label>
+              <input id="email" type="email" th:field="*{email}" placeholder="a.scrum@example.com" required>
+              <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+
+            <div class="group">
+              <label for="amount">Amount (AUD)</label>
+              <input id="amount" type="number" min="1" step="0.01" th:field="*{amount}" placeholder="10.00" required>
+              <div class="note">Note: Final number will be set by DB.</div>
+              <div class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+            </div>
+
+            <div class="group">
+              <label for="cardNumber">Card Number</label>
+              <input id="cardNumber" inputmode="numeric" autocomplete="cc-number"
+                    th:field="*{cardNumber}" maxlength="19" required>
+              <div class="note">Note: Use <strong>4242 4242 4242 4242</strong> to succeed, or <strong>4000 0000 0000 0002</strong> to simulate a decline.</div>
+              <div class="error" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}"></div>
+            </div>
+
+            <div class="row">
+              <div class="group">
+                <label for="expMonth">Expiry Month</label>
+                <select id="expMonth" th:field="*{expMonth}">
+                  <option th:each="m : ${#numbers.sequence(1,12)}" th:value="${m}" th:text="${m}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('expMonth')}" th:errors="*{expMonth}"></div>
+              </div>
+
+              <div class="group">
+                <label for="expYear">Expiry Year</label>
+                <select id="expYear" th:field="*{expYear}">
+                  <option th:each="y : ${years}" th:value="${y}" th:text="${y}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('expYear')}" th:errors="*{expYear}"></div>
+              </div>
+            </div>
+
+            <div class="group">
+              <label for="cvc">CVC</label>
+              <input id="cvc" inputmode="numeric" autocomplete="cc-csc" th:field="*{cvc}" maxlength="4" required>
+              <div class="error" th:if="${#fields.hasErrors('cvc')}" th:errors="*{cvc}"></div>
+            </div>
+
+
+          </form>
+        </div>
+      </div>
+
+      <div id="right">
+        <div class="page">
+          <h1 th:text="${title}"></h1>
+          <p><strong th:inline="text">Location: [[${location}]]</strong>
+          <p><strong th:inline="text">When: [[${date}]]</strong></p>
+          <p><strong th:inline="text">[[${details}]]</strong></p>
+          <h1 th:inline="text">Price: $[[${price}]]</h1>
+          <button class="btn-dark" type="submit">Checkout</button>
         </div>
 
-        <div class="group">
-          <label for="cvc">CVC</label>
-          <input id="cvc" inputmode="numeric" autocomplete="cc-csc" th:field="*{cvc}" maxlength="4" required>
-          <div class="error" th:if="${#fields.hasErrors('cvc')}" th:errors="*{cvc}"></div>
-        </div>
+      </div>
 
-        <button class="btn-dark" type="submit">Pay</button>
-      </form>
-    </div>
+    </section>
+    
+
 
     <!-- helper formats spaces in card num -->
     <script>

@@ -3,6 +3,8 @@ package au.edu.rmit.sept.webapp.repository;
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
+import jakarta.validation.constraints.Null;
+
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -137,6 +139,41 @@ public class EventRepo {
             e.printStackTrace();
         }
         return events;
+    }
+
+    // returns a single event (used for payment page, can be used for event details?)
+    // we want to use id as well to stop pulling duplicates, but i dont think the database has them?
+    public static Event getEvent(int id, String name) {
+        Event event = null; // start with a blank event
+        StringBuilder searchSQL = new StringBuilder("SELECT * FROM events WHERE id = ? AND LOWER(title) = ?");
+
+        try( Connection connection = H2DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL.toString())) {
+                ps.setInt(1, id);
+                ps.setString(2, name.toLowerCase());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if(rs.next()) {
+                        event = new Event(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getInt("owner_id"),
+                            rs.getTimestamp("date").toLocalDateTime(),
+                            rs.getString("location"),
+                            rs.getString("category"),
+                            stringList(rs.getString("keywords")),
+                            stringList(rs.getString("tags")),
+                            stringList(rs.getString("images"))
+                        );
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return event;
     }
 
     public static List<Event> getEventsByFilter(String name, List<String> tags, String location, String category, List<String> keywords) {

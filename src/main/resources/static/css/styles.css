@@ -147,6 +147,19 @@ footer {
 .carousel .next { right: .5rem; }
 
 /* payment page layout */
+
+.page-split {
+  display: flex;
+}
+
+#left {
+  flex: 1;
+}
+
+#right {
+  flex: 1;
+}
+
 .page { max-width: 720px; margin: 2rem auto; padding: 1rem; }
 .group { display: grid; gap: .5rem; margin-bottom: 1rem; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }

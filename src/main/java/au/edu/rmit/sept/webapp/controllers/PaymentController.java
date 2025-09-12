@@ -1,6 +1,8 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.models.PaymentRequest;
+import au.edu.rmit.sept.webapp.repository.EventRepo;
+import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,30 @@ public class PaymentController {
 
         // see nextYears helper below
         model.addAttribute("years", nextYears(12));
+
+        // we need to pass in the event we clicked on to get the details for it...
+        // from that we get the specfic event from the database
+        // we shouldnt have to worry about it not existing, because we only get to this
+        // point from the event details page, which has to exist if the event exists
+
+        //using built in but will change to get from page details
+        // could we not just pass the event variable through instead of grabbing it?
+        Event curEvent = EventRepo.getEvent(1, "Workshop");
+
+        String title =      curEvent.getTitle();
+        String local =      curEvent.getLocation();
+        String details =    curEvent.getDescription();
+        String date =       curEvent.getDate().toString();
+
+        model.addAttribute("title", title);
+        model.addAttribute("date", date);   
+        model.addAttribute("location", local);
+        model.addAttribute("details", details);
+
+
+        // will add to event as a variable
+        model.addAttribute("price", 33);
+
         return "payment/checkout";
     }
 
@@ -56,4 +82,8 @@ public class PaymentController {
         int start = Year.now().getValue();
         return IntStream.range(0, count).map(i -> start + i).boxed().toList();
     }
+
+
+
+    
 }
