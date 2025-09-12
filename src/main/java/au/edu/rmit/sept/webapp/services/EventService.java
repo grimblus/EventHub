@@ -9,6 +9,7 @@ public interface EventService {
     public void setEvents();
     public void addEvent(Event event);
     public List<Event> getEvents();
+    public Event getEvent(int id, String name);
     public List<Event> getEventsByFilter(String name, List<String> tags, String location, String category, List<String> keywords);
     public List<String> getTags();
     public List<String> getKeywords();

@@ -1,8 +1,9 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.models.PaymentRequest;
-import au.edu.rmit.sept.webapp.repository.EventRepositoryImpl;
 import au.edu.rmit.sept.webapp.entity.Event;
+import au.edu.rmit.sept.webapp.services.EventService;
+
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,10 @@ import java.util.stream.IntStream;
 @Controller
 public class PaymentController {
 
+    // event service is NULLLLLL
+    private EventService eventService;
     private final SandboxPaymentGateway gateway;
     
-
     public PaymentController(SandboxPaymentGateway gateway) {
         this.gateway = gateway;
     }
@@ -40,18 +42,20 @@ public class PaymentController {
 
         //using built in but will change to get from page details
         // could we not just pass the event variable through instead of grabbing it?
-        EventRepositoryImpl repo = new EventRepositoryImpl();
-        Event curEvent = repo.getEvent(1, "Workshop");
 
-        String title =      curEvent.getTitle();
-        String local =      curEvent.getLocation();
-        String details =    curEvent.getDescription();
-        String date =       curEvent.getDate().toString();
+        // event service is static, need to set the variable    
 
-        model.addAttribute("title", title);
-        model.addAttribute("date", date);   
-        model.addAttribute("location", local);
-        model.addAttribute("details", details);
+        // Event curEvent = eventService.getEvent(1, "Workshop");
+
+        // String title =      curEvent.getTitle();
+        // String local =      curEvent.getLocation();
+        // String details =    curEvent.getDescription();
+        // String date =       curEvent.getDate().toString();
+
+        // model.addAttribute("title", title);
+        // model.addAttribute("date", date);   
+        // model.addAttribute("location", local);
+        // model.addAttribute("details", details);
 
 
         // will add to event as a variable
