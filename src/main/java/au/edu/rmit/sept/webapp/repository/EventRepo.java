@@ -3,6 +3,8 @@ package au.edu.rmit.sept.webapp.repository;
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
+import org.springframework.stereotype.Repository;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +15,7 @@ import java.util.*;
 import java.io.PrintStream;
 import java.util.List;
 
+@Repository
 public class EventRepo {
     static List<Event> eventList = List.of(
             new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Melbourne", "General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
