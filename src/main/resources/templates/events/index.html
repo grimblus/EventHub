@@ -180,6 +180,13 @@
                         <p><strong>Description:</strong> <span th:text="${event.getDescription()}"></span></p>
                         <p><strong>Date:</strong> <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"></span></p>
                         <p><strong>Location:</strong> <span th:text="${event.getLocation()}"></span></p>
+                        <iframe
+                            id="LocationEmbedd"
+                            width="250"
+                            height="250"
+                            loading="lazy"
+                            th:src="@{${'https://www.google.com/maps?q=' + event.getLocation() + '&output=embed'}}">
+                        </iframe>
                         <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|">Close</button>
                     </div>
                 </div>

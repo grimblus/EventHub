@@ -17,8 +17,8 @@ import java.util.*;
 @Repository
 public class EventRepositoryImpl implements EventRepository {
     static List<Event> eventList = List.of(
-            new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Melbourne", "General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
-            new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "Melbourne", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
+            new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
+            new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
     );
 
     public List<String> stringList(String list) {
