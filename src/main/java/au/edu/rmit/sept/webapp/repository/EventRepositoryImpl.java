@@ -148,19 +148,19 @@ public class EventRepositoryImpl implements EventRepository {
         Event event = null; // start with a blank event
         StringBuilder searchSQL = new StringBuilder("SELECT * FROM events WHERE id = ? AND LOWER(title) = ?");
 
-        
         try( Connection connection = H2DatabaseConnection.getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(searchSQL.toString())) {
                 ps.setInt(1, id);
                 ps.setString(2, name.toLowerCase());
 
                 try (ResultSet rs = ps.executeQuery()) {
+                    System.out.println("Getting");
                     if(rs.next()) {
                         event = new Event(
                             rs.getInt("id"),
                             rs.getString("title"),
                             rs.getString("description"),
-                            rs.getInt("owner_id"),
+                            rs.getInt("ownerID"),
                             rs.getTimestamp("date").toLocalDateTime(),
                             rs.getString("location"),
                             rs.getString("ticketPrice"),

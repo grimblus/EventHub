@@ -174,21 +174,29 @@
                 <button th:attr="onclick=|showModal('infoModal' + ${event.id})|">View Details</button>
                     <div th:each="event : ${events}" th:attr="id=${'infoModal' + event.id}" class="modal">
                     <div class="modal-content">
-                        <h3>Event</h3>
-                        <p><strong>ID:</strong> <span th:text="${event.getId()}"></span></p>
-                        <p><strong>Name:</strong> <span th:text="${event.getTitle()}"></span></p>
-                        <p><strong>Description:</strong> <span th:text="${event.getDescription()}"></span></p>
-                        <p><strong>Date:</strong> <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"></span></p>
-                        <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
-                        <p><strong>Location:</strong> <span th:text="${event.getLocation()}"></span></p>
-                        <iframe
-                            id="LocationEmbedd"
-                            width="250"
-                            height="250"
-                            loading="lazy"
-                            th:src="@{${'https://www.google.com/maps?q=' + event.getLocation() + '&output=embed'}}">
-                        </iframe>
-                        <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|">Close</button>
+                                    
+                        <section class="page-split">
+                            <div id="left">
+                                <h3>Event</h3>
+                                <p><strong>ID:</strong> <span th:text="${event.getId()}"></span></p>
+                                <p><strong>Name:</strong> <span th:text="${event.getTitle()}"></span></p>
+                                <p><strong>Description:</strong> <span th:text="${event.getDescription()}"></span></p>
+                                <p><strong>Date:</strong> <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"></span></p>
+                                <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
+                                <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
+                                <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|">Close</button>
+                            </div>
+                            <div id="right">
+                                    <p><strong>Location:</strong> <span th:text="${event.getLocation()}"></span></p>
+                                <iframe
+                                    id="LocationEmbedd"
+                                    width="400"
+                                    height="250"
+                                    loading="lazy"
+                                    th:src="@{${'https://www.google.com/maps?q=' + event.getLocation() + '&output=embed'}}">
+                                </iframe>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>

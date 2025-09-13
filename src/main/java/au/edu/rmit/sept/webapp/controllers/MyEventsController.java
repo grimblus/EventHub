@@ -11,9 +11,6 @@ public class MyEventsController {
 
     @GetMapping("/account/myEvents")
     public String account(Model model, HttpSession session) {
-
-
-
         return "account/myEvents/index";
     }
 }

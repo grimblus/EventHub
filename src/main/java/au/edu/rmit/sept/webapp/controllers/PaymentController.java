@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -23,43 +24,45 @@ public class PaymentController {
     private EventService eventService;
     private final SandboxPaymentGateway gateway;
     
-    public PaymentController(SandboxPaymentGateway gateway) {
+    public PaymentController(SandboxPaymentGateway gateway, EventService eventService) {
         this.gateway = gateway;
+        this.eventService = eventService;
     }
 
     // create empty payment model and next 12 years when you visit page
     @GetMapping("/checkout")
-    public String checkout(Model model) {
+    public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model) {
         model.addAttribute("payment", new PaymentRequest());
 
         // see nextYears helper below
         model.addAttribute("years", nextYears(12));
 
-        // we need to pass in the event we clicked on to get the details for it...
-        // from that we get the specfic event from the database
-        // we shouldnt have to worry about it not existing, because we only get to this
-        // point from the event details page, which has to exist if the event exists
+        String EventName =  "null";
+        String local =      "null";
+        String details =    "null";
+        String date =       "null";
+        String price =      "0";
 
-        //using built in but will change to get from page details
-        // could we not just pass the event variable through instead of grabbing it?
+        try {
+            Event curEvent = eventService.getEvent(id, title);
 
-        // event service is static, need to set the variable    
+            EventName = curEvent.getTitle();
+            local =     curEvent.getLocation();
+            details =   curEvent.getDescription();
+            DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
+            date =      curEvent.getDate().format(f).toString();
+            price =     curEvent.getTicketPrice();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
-        // Event curEvent = eventService.getEvent(1, "Workshop");
-
-        // String title =      curEvent.getTitle();
-        // String local =      curEvent.getLocation();
-        // String details =    curEvent.getDescription();
-        // String date =       curEvent.getDate().toString();
-
-        // model.addAttribute("title", title);
-        // model.addAttribute("date", date);   
-        // model.addAttribute("location", local);
-        // model.addAttribute("details", details);
-
+        model.addAttribute("title", EventName);
+        model.addAttribute("date", date);   
+        model.addAttribute("location", local);
+        model.addAttribute("details", details);
 
         // will add to event as a variable
-        model.addAttribute("price", 33);
+        model.addAttribute("price", price);
 
         return "payment/checkout";
     }
@@ -88,8 +91,5 @@ public class PaymentController {
         int start = Year.now().getValue();
         return IntStream.range(0, count).map(i -> start + i).boxed().toList();
     }
-
-
-
     
 }
