@@ -1,6 +1,7 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,9 +28,9 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String loginSubmit ( @RequestParam String email,
-                                @RequestParam("pw") String password,
-                                Model model) {
+    public String loginSubmit (@RequestParam String email,
+                               @RequestParam("pw") String password,
+                               Model model, HttpSession session) {
 
         User user = userService.findUserByEmail(email);
 
@@ -42,7 +43,8 @@ public class LoginController {
             model.addAttribute("error", "Invalid password.");
             return "login/index";
         }
-        
+        session.setAttribute("user", user);
+
         return "welcome/index";
     }
 }

@@ -24,10 +24,10 @@ public class PageController {
         return "create/index";
     }
 
-    @GetMapping("/account")
-    public String account() {
-        return "account/index";
-    }
+//    @GetMapping("/account")
+//    public String account() {
+//        return "account/index";
+//    }
 
     // @GetMapping("/login")
     // public String login() {
