@@ -1,34 +1,36 @@
 package au.edu.rmit.sept.webapp.entity;
 
 public class User {
+    public enum permissions {STUDENT, ORGANISER, ADMIN};
+
     private Integer id;
     private String firstName;
     private String lastName;
     private String password;
     private String email;
-    private int permissions;
+    private permissions permissionLevel;
 
     // Default Constructor
     public User() {}
 
     // No ID Constructor
-    public User(String firstName, String lastName, String password, String email, int permissions) {
+    public User(String firstName, String lastName, String password, String email, permissions permissionLevel) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.permissions = permissions;
+        this.permissionLevel = permissionLevel;
     }
 
     // Full Constructor
-    public User(Integer id, String firstName, String lastName, String password, String email, int permissions) {
+    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.permissions = permissions;
+        this.permissionLevel = permissionLevel;
     }
 
     public int getId() {
@@ -71,11 +73,11 @@ public class User {
         this.email = email;
     }
 
-    public int getPermissions() {
-        return permissions;
+    public permissions getPermissionLevel() {
+        return permissionLevel;
     }
 
-    public void setPermissions(int permissions) {
-        this.permissions = permissions;
+    public void setPermissionLevel(permissions permissionLevel) {
+        this.permissionLevel = permissionLevel;
     }
 }

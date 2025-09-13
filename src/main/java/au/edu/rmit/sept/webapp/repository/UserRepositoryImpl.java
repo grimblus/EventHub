@@ -13,12 +13,12 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
     static List<User> userList = List.of(
-            new User("Aaron", "Tran", "password123", "aaron@example.com", 0),
-            new User("Bingus", "Bongus", "s3cur3pass", "bingus@example.com", 2),
-            new User("Coolguy", "Joe", "coolguy123", "coolguy@example.com", 0),
-            new User("Johndev", "Programmer", "g0d0t0man", "johndev@example.com", 1),
-            new User("Dexter", "Morgan", "b4yharb0r", "morgan@example.com", 1),
-            new User("Deez", "Noots", "g0tt3m", "deez@example.com", 0)
+            new User("Aaron", "Tran", "password123", "aaron@example.com", User.permissions.STUDENT),
+            new User("Bingus", "Bongus", "s3cur3pass", "bingus@example.com", User.permissions.ADMIN),
+            new User("Coolguy", "Joe", "coolguy123", "coolguy@example.com", User.permissions.STUDENT),
+            new User("Johndev", "Programmer", "g0d0t0man", "johndev@example.com", User.permissions.ORGANISER),
+            new User("Dexter", "Morgan", "b4yharb0r", "morgan@example.com", User.permissions.STUDENT),
+            new User("Deez", "Noots", "g0tt3m", "deez@example.com", User.permissions.ORGANISER)
     );
 
     public void setUsers() {
@@ -29,18 +29,18 @@ public class UserRepositoryImpl implements UserRepository {
                     "lastName VARCHAR(255), " +
                     "password VARCHAR(255), " +
                     "email VARCHAR(255), " +
-                    "permissions INT)";
+                    "permissionLevel VARCHAR(255))";
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
             createTableStatement.executeUpdate();
 
-            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissions) VALUES (?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel) VALUES (?, ?, ?, ?, ?)";
             for (User user : userList) {
                 try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                     ps.setString(1, user.getFirstName());
                     ps.setString(2, user.getLastName());
                     ps.setString(3, user.getPassword());
                     ps.setString(4, user.getEmail());
-                    ps.setInt(5, user.getPermissions());
+                    ps.setString(5, user.getPermissionLevel().name());
                     ps.executeUpdate();
                 }
             }
@@ -51,13 +51,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     public void addUser(User user) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
-            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissions) VALUES (?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                 ps.setString(1, user.getFirstName());
                 ps.setString(2, user.getLastName());
                 ps.setString(3, user.getPassword());
                 ps.setString(4, user.getEmail());
-                ps.setInt(5, user.getPermissions());
+                ps.setString(5, user.getPermissionLevel().name());
                 ps.executeUpdate();
             }
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                rs.getInt("permissions")
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
                         );
                         users.add(user);
                     }
@@ -103,7 +103,7 @@ public class UserRepositoryImpl implements UserRepository {
                             rs.getString("lastName"),
                             rs.getString("password"),
                             rs.getString("email"),
-                            rs.getInt("permissions")
+                            User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
                         );
                     }
                 }
@@ -127,7 +127,7 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                rs.getInt("permissions")
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
                         );
                     }
                 }
@@ -151,7 +151,7 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                rs.getInt("permissions")
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
                         );
                     }
                 }
@@ -175,7 +175,7 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                rs.getInt("permissions")
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
                         );
                     }
                 }
