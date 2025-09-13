@@ -17,8 +17,8 @@ import java.util.*;
 @Repository
 public class EventRepositoryImpl implements EventRepository {
     static List<Event> eventList = List.of(
-            new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
-            new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
+            new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "6","General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
+            new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "9999999999", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
     );
 
     public List<String> stringList(String list) {
@@ -37,6 +37,7 @@ public class EventRepositoryImpl implements EventRepository {
                     "ownerID INT, " +
                     "date TIMESTAMP," +
                     "location VARCHAR(255), " +
+                    "ticketPrice VARCHAR(255)," +
                     "category VARCHAR(255)," +
                     "keywords VARCHAR(1000)," +
                     "tags VARCHAR(1000)," +
@@ -45,7 +46,7 @@ public class EventRepositoryImpl implements EventRepository {
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
             createTableStatement.executeUpdate();
 
-            String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, ticketPrice, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             for (Event event : eventList) {
                 try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                     ps.setString(1, event.getTitle());
@@ -53,10 +54,11 @@ public class EventRepositoryImpl implements EventRepository {
                     ps.setInt(3, event.getOwnerID());
                     ps.setTimestamp(4, Timestamp.valueOf(event.getDate()));
                     ps.setString(5, event.getLocation());
-                    ps.setString(6, event.getCategory());
-                    ps.setString(7, String.join(",", event.getKeywords()));
-                    ps.setString(8, String.join(",", event.getTags()));
-                    ps.setString(9, String.join(",", event.getImages()));
+                    ps.setString(6, event.getTicketPrice());
+                    ps.setString(7, event.getCategory());
+                    ps.setString(8, String.join(",", event.getKeywords()));
+                    ps.setString(9, String.join(",", event.getTags()));
+                    ps.setString(10, String.join(",", event.getImages()));
                     ps.executeUpdate();
                 }
             }
@@ -91,17 +93,18 @@ public class EventRepositoryImpl implements EventRepository {
 
     public void addEvent(Event event) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
-            String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, ticketPrice, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                 ps.setString(1, event.getTitle());
                 ps.setString(2, event.getDescription());
                 ps.setInt(3, event.getOwnerID());
                 ps.setTimestamp(4, Timestamp.valueOf(event.getDate()));
                 ps.setString(5, event.getLocation());
-                ps.setString(6, event.getCategory());
-                ps.setString(7, String.join(",", event.getKeywords()));
-                ps.setString(8, String.join(",", event.getTags()));
-                ps.setString(9, String.join(",", event.getImages()));
+                ps.setString(6, event.getTicketPrice());
+                ps.setString(7, event.getCategory());
+                ps.setString(8, String.join(",", event.getKeywords()));
+                ps.setString(9, String.join(",", event.getTags()));
+                ps.setString(10, String.join(",", event.getImages()));
                 ps.executeUpdate();
             }
         } catch (Exception e) {
@@ -123,6 +126,7 @@ public class EventRepositoryImpl implements EventRepository {
                                 rs.getInt("ownerID"),
                                 rs.getTimestamp("date").toLocalDateTime(),
                                 rs.getString("location"),
+                                rs.getString("ticketPrice"),
                                 rs.getString("category"),
                                 stringList(rs.getString("keywords")),
                                 stringList(rs.getString("tags")),
@@ -159,6 +163,7 @@ public class EventRepositoryImpl implements EventRepository {
                             rs.getInt("owner_id"),
                             rs.getTimestamp("date").toLocalDateTime(),
                             rs.getString("location"),
+                            rs.getString("ticketPrice"),
                             rs.getString("category"),
                             stringList(rs.getString("keywords")),
                             stringList(rs.getString("tags")),
@@ -227,6 +232,7 @@ public class EventRepositoryImpl implements EventRepository {
                                 rs.getInt("ownerID"),
                                 rs.getTimestamp("date").toLocalDateTime(),
                                 rs.getString("location"),
+                                rs.getString("ticketPrice"),
                                 rs.getString("category"),
                                 stringList(rs.getString("keywords")),
                                 stringList(rs.getString("tags")),
@@ -291,6 +297,7 @@ public class EventRepositoryImpl implements EventRepository {
                             rs.getInt("owner_id"),
                             rs.getTimestamp("date").toLocalDateTime(),
                             rs.getString("location"),
+                            rs.getString("ticketPrice"),
                             rs.getString("category"),
                             eventrepo.stringList(rs.getString("keywords")),
                             eventrepo.stringList(rs.getString("tags")),

@@ -16,6 +16,7 @@ public class Event {
     private LocalDateTime date;
     private String location;
     private String category;
+    private String ticketPrice;
     private List<String> keywords;
     private List<String> tags;
     private List<String> images;
@@ -25,19 +26,20 @@ public class Event {
 
     // Temp Testing Constructor
     public Event(String title, String description, int ownerID, LocalDateTime date,
-                 String location, String category) {
+                 String location, String ticketPrice, String category) {
         this.title = title;
         this.description = description;
         this.ownerID = ownerID;
         this.date = date;
         this.location = location;
+        this.ticketPrice = ticketPrice;
         this.category = category;
     }
 
 
     // No ID Constructor
     public Event(String title, String description, int ownerID, LocalDateTime date,
-                 String location, String category, List<String> keywords,
+                 String location, String ticketPrice, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
         this.title = title;
         this.description = description;
@@ -45,6 +47,7 @@ public class Event {
         participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
+        this.ticketPrice = ticketPrice;
         this.category = category;
         this.keywords = keywords;
         this.tags = tags;
@@ -53,7 +56,7 @@ public class Event {
 
     // Full Constructor
     public Event(int id, String title, String description, int ownerID, LocalDateTime date,
-                 String location, String category, List<String> keywords,
+                 String location, String ticketPrice, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
         this.id = id;
         this.title = title;
@@ -62,6 +65,7 @@ public class Event {
         participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
+        this.ticketPrice = ticketPrice;
         this.category = category;
         this.keywords = keywords;
         this.tags = tags;
@@ -137,6 +141,14 @@ public class Event {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(String ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 
     public String getCategory() {
