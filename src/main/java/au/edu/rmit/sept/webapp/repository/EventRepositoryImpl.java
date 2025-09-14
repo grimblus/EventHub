@@ -311,4 +311,18 @@ public class EventRepositoryImpl implements EventRepository {
         }
         return null;
     }
+
+    public boolean deleteEventbyID(Integer id) {
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            String deleteSQL = "DELETE FROM events WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(deleteSQL)) {
+                ps.setInt(1, id);
+                int rowsAffected = ps.executeUpdate();
+                return rowsAffected > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

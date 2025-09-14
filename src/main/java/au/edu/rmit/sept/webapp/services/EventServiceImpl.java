@@ -27,4 +27,5 @@ public class EventServiceImpl implements EventService {
     public List<String> getTags() {return repository.getTags();}
     public List<String> getKeywords() {return repository.getKeywords();}
     public Event findEventbyID(Integer id) {return repository.findEventbyID(id);}
+    public boolean deleteEventbyID(Integer id) {return repository.deleteEventbyID(id);}
 }
