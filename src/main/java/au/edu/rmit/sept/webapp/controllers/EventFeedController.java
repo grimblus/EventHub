@@ -1,7 +1,9 @@
 package au.edu.rmit.sept.webapp.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,5 +44,20 @@ public class EventFeedController {
     ) {
         model.addAttribute("modal-content", eventService.findEventbyID(id));
         return "events/index";
+    }
+
+    // delete images
+    @DeleteMapping("/events/{eventId}/images/{index}")
+    public ResponseEntity<Void> deleteImage(@PathVariable int eventId, @PathVariable int index) {
+        return eventService.deleteImageForEvent(eventId, index)
+            ? ResponseEntity.noContent().build()
+            : ResponseEntity.notFound().build();
+    }
+
+    // add images
+    @PostMapping("/events/{eventId}/images")
+    public ResponseEntity<Void> addImage(@PathVariable int eventId) {
+        boolean ok = eventService.addImageForEvent(eventId, "temp.png");
+        return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

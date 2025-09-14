@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.repository.EventRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,4 +29,25 @@ public class EventServiceImpl implements EventService {
     public List<String> getKeywords() {return repository.getKeywords();}
     public Event findEventbyID(Integer id) {return repository.findEventbyID(id);}
     public boolean deleteEventbyID(Integer id) {return repository.deleteEventbyID(id);}
+
+    @Override
+    public boolean deleteImageForEvent(int eventId, int index) {
+        var ev = repository.findEventbyID(eventId);
+        if (ev == null) return false;
+
+        var images = new ArrayList<>(ev.getImages());
+        if (index < 0 || index >= images.size()) return false;
+
+        images.remove(index);
+        return repository.updateEventImages(eventId, images);
+    }
+
+    @Override
+    public boolean addImageForEvent(int eventId, String filename) {
+        var ev = repository.findEventbyID(eventId);
+        if (ev == null) return false;
+        var imgs = new java.util.ArrayList<>(ev.getImages());
+        imgs.add(filename);
+        return repository.updateEventImages(eventId, imgs);
+    }
 }

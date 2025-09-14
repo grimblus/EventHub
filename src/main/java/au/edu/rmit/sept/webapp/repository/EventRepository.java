@@ -14,5 +14,6 @@ public interface EventRepository {
     public List<String> getTags();
     public List<String> getKeywords();
     public Event findEventbyID(Integer id);
+    public boolean updateEventImages(int id, List<String> images);
     public boolean deleteEventbyID(Integer id);
 }

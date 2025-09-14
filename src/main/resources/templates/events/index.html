@@ -128,43 +128,30 @@
         .gallery h4 { margin: 0 0 .5rem; }
 
         .gallery-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
 
         .gallery-item img {
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 4 / 3;
-        object-fit: cover;
-        border-radius: 8px;
-        display: block;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
         }
 
         .gallery-item { 
-        position: relative;
+            position: relative;
         }
 
         .delete-btn {
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        width: 28px;
-        height: 28px;
-        border: none;
-        border-radius: 50%;
-        background: #e53935;
-        color: #fff;
-        font-size: 18px;
-        line-height: 1;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,.2);
-        opacity: .95;
-        transition: transform .12s ease, opacity .12s ease;
+            position: absolute; top: 6px; right: 6px;
+            width: 28px; height: 28px; border: none; border-radius: 50%;
+            background: #e53935; color: #fff; font-size: 18px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,.2); cursor: pointer; opacity: .95;
         }
 
         .delete-btn:hover { transform: scale(1.06); opacity: 1; }
@@ -229,8 +216,8 @@
                     </div>
                 </div>
                 <button th:attr="onclick=|showModal('infoModal' + ${event.id})|">View Details</button>
-                    <div th:each="event : ${events}" th:attr="id=${'infoModal' + event.id}" class="modal">
-                    <div class="modal-content">
+                    <div th:attr="id=${'infoModal' + event.id}" class="modal">
+                        <div class="modal-content">
                                     
                         <section class="page-split">
                             <div id="left">
@@ -257,15 +244,19 @@
                         <hr class="divider"/>
                         
                         <!-- add image gallery to event details -->
-                        <section class="gallery">
-                        <h3>Event Gallery</he>
-                            <div class="gallery-grid">
-                                <div th:each="i : ${#numbers.sequence(1,9)}" class="gallery-item">
-                                    <button type="button"
-                                            class="delete-btn"
-                                            th:attr="aria-label=|Delete image ${i}|"
-                                            onclick="deleteTile(event, this)">×</button>
-                                    <img th:src="@{/images/welcome/img1.jpg}" alt="Event photo" loading="lazy">
+                         <section class="gallery">
+                            <div style="display:flex;align-items:center;justify-content:space-between;">
+                                <h4>Gallery</h4>
+                                <button type="button" class="btn btn-sm btn-primary"
+                                        onclick="addImage(this)">+ Add image</button>
+                            </div>
+
+                            <div class="gallery-grid" th:attr="data-event-id=${event.id}">
+                                <div class="gallery-item" th:each="img : ${event.images}">
+                                <button type="button" class="delete-btn"
+                                        onclick="deleteImage(this)">X</button>
+                                <img th:src="@{'/images/welcome/' + ${img}}"
+                                    alt="Event photo" loading="lazy">
                                 </div>
                             </div>
                         </section>
@@ -292,12 +283,44 @@
                 }
             });
 
-            // remove image tile on click delete button
-            function deleteTile(e, btn) {
-                e.preventDefault();
-                e.stopPropagation();
-                const tile = btn.closest('.gallery-item');
-                if (tile) tile.remove();
+            // find eventId and index from the clicked tile
+            function getTileContext(btnEl) {
+                const tile = btnEl.closest('.gallery-item');
+                const grid = tile?.parentElement;
+                const eventId = grid?.dataset.eventId;
+                const index = tile ? Array.from(grid.children).indexOf(tile) : -1;
+                return { tile, grid, eventId, index };
+            }
+
+            // DELETE the specific image tile
+            function deleteImage(btnEl) {
+                const { tile, grid, eventId, index } = getTileContext(btnEl);
+                if (!grid || !eventId || index < 0) return alert('Could not locate image tile.');
+
+                fetch(`/events/${eventId}/images/${index}`, { method: 'DELETE' })
+                .then(r => r.ok ? (tile.remove()) : r.text().then(t => Promise.reject(t || 'Delete failed')))
+                .catch(msg => alert(msg));
+            }
+
+            // POST a placeholder image "temp.png"
+            function addImage(btnEl) {
+                const modal = btnEl.closest('.modal-content');
+                const grid = modal?.querySelector('.gallery-grid');
+                const eventId = grid?.dataset.eventId;
+                if (!grid || !eventId) return alert('Could not find gallery.');
+
+                fetch(`/events/${eventId}/images`, { method: 'POST' })
+                .then(r => {
+                    if (!r.ok) return r.text().then(t => Promise.reject(t || 'Add failed'));
+                    const tile = document.createElement('div');
+                    tile.className = 'gallery-item';
+                    tile.innerHTML = `
+                    <button type="button" class="delete-btn" onclick="deleteImage(this)">×</button>
+                    <img src="/images/welcome/temp.png" alt="Event photo" loading="lazy">
+                    `;
+                    grid.appendChild(tile);
+                })
+                .catch(msg => alert(msg));
             }
         </script>
     </div>

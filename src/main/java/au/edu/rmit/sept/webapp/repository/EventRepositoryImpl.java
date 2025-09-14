@@ -294,7 +294,7 @@ public class EventRepositoryImpl implements EventRepository {
                             rs.getInt("id"),
                             rs.getString("title"),
                             rs.getString("description"),
-                            rs.getInt("owner_id"),
+                            rs.getInt("ownerID"),
                             rs.getTimestamp("date").toLocalDateTime(),
                             rs.getString("location"),
                             rs.getString("ticketPrice"),
@@ -325,4 +325,33 @@ public class EventRepositoryImpl implements EventRepository {
             return false;
         }
     }
+
+    // update event image list (delimited ,)
+    public boolean updateEventImages(int id, List<String> images) {
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            String sql = "UPDATE events SET images = ? WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, String.join(",", images));
+                ps.setInt(2, id);
+                return ps.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // delete image from list
+    public boolean deleteImageForEvent(int id, int index) {
+        // fetch current images
+        Event ev = findEventbyID(id);
+        if (ev == null) return false;
+        List<String> imgs = new ArrayList<>(ev.getImages());
+        if (index < 0 || index >= imgs.size()) return false;
+
+        // delete by index
+        imgs.remove(index); 
+        return updateEventImages(id, imgs);
+    }
+
 }
