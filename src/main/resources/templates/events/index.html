@@ -248,6 +248,14 @@
             function hideModal(modalId) {
                 document.getElementById(modalId).style.display = 'none';
             }
+            
+            // close modal when you click off it
+            document.addEventListener('click', (e) => {
+                const overlay = e.target.closest('.modal');
+                if (overlay && e.target === overlay) {
+                hideModal(overlay.id);
+                }
+            });
         </script>
     </div>
 </body>
