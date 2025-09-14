@@ -122,6 +122,14 @@
             cursor: pointer;
         }
 
+        .event-banner {
+            width: 100%;
+            height: clamp(160px, 22vw, 280px);
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+        }
+
         /* image gallery style */
         .modal-content .gallery { margin-top: 1rem; }
 
@@ -206,7 +214,10 @@
         </div>
         <div class="events-display-container">
             <div class="event-item" th:each="event : ${events}">
-                <img th:src="${event.getImages()[0]}" th:alt="${event.getImages()[0]}" />
+                <!-- !!! TODO: prepends to welcome folder, change as necessary -->
+                <img class="event-banner"
+                    th:src="@{/images/welcome/{f}(f=${event.images[0]})}"
+                    th:alt="${event.images[0]}" />
                 <div class="event-details">
                     <h2 th:text="${event.getTitle()}">Event Title</h2>
                     <p th:text="${event.getDescription()}">Event Description</p>
@@ -215,7 +226,7 @@
                         <span th:text="${event.getLocation()}">Event Location</span>
                     </div>
                 </div>
-                <button th:attr="onclick=|showModal('infoModal' + ${event.id})|">View Details</button>
+                <button th:attr="onclick=|showModal('infoModal' + ${event.id})|" class="btn btn-secondary">View Details</button>
                     <div th:attr="id=${'infoModal' + event.id}" class="modal">
                         <div class="modal-content">
                                     
@@ -244,7 +255,7 @@
                         <hr class="divider"/>
                         
                         <!-- add image gallery to event details -->
-                        <!-- TO DO!!!!!! show add and delete buttons only to organiser/admin  -->
+                        <!-- !!!! TODO: show add and delete buttons only to organiser/admin  -->
                          <section class="gallery">
                             <div style="display:flex;align-items:center;justify-content:space-between;">
                                 <h4>Gallery</h4>
@@ -256,6 +267,8 @@
                                 <div class="gallery-item" th:each="img : ${event.images}">
                                 <button type="button" class="delete-btn"
                                         onclick="deleteImage(this)">X</button>
+
+                                <!-- !!! TODO: prepends to welcome folder, change as necessary -->
                                 <img th:src="@{'/images/welcome/' + ${img}}"
                                     alt="Event photo" loading="lazy">
                                 </div>
