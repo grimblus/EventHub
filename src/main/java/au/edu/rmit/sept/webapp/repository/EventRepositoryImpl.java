@@ -282,7 +282,7 @@ public class EventRepositoryImpl implements EventRepository {
         return new ArrayList<String>(keywords);
     }
 
-    public static Event findEventbyID(Integer id) {
+    public Event findEventbyID(Integer id) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {

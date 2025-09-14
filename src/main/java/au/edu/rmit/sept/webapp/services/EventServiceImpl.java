@@ -26,4 +26,5 @@ public class EventServiceImpl implements EventService {
     public List<Event> getEventsByFilter(String name, List<String> tags, String location, String category, List<String> keywords) {return repository.getEventsByFilter(name, tags, location, category, keywords);}
     public List<String> getTags() {return repository.getTags();}
     public List<String> getKeywords() {return repository.getKeywords();}
+    public Event findEventbyID(Integer id) {return repository.findEventbyID(id);}
 }

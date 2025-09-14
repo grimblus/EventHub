@@ -13,4 +13,5 @@ public interface EventService {
     public List<Event> getEventsByFilter(String name, List<String> tags, String location, String category, List<String> keywords);
     public List<String> getTags();
     public List<String> getKeywords();
+    public Event findEventbyID(Integer id);
 }

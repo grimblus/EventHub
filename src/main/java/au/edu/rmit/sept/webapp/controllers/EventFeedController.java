@@ -40,7 +40,7 @@ public class EventFeedController {
             Integer id, 
             Model model
     ) {
-        model.addAttribute("modal-content", EventRepositoryImpl.findEventbyID(id));
+        model.addAttribute("modal-content", eventService.findEventbyID(id));
         return "events/index";
     }
 }
