@@ -34,6 +34,8 @@ public class PaymentRepositoryImpl implements PaymentRepository {
                     "time TIMESTAMP, " +                
                     "FOREIGN KEY(user_id) REFERENCES users(id))";
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
+            createTableStatement.executeUpdate();
+
             String insertPayment = "INSERT INTO payments (id, user_id, amount, time) VALUES (?, ?, ?, ?)";
             for(Payment p : paymentList) {
                 try(PreparedStatement ps = connection.prepareStatement(insertPayment)) {
