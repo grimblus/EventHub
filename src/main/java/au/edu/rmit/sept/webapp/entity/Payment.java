@@ -4,22 +4,24 @@ import java.time.LocalDateTime;
 
 public class Payment {
 
-    private String userEmail;
+    private String paymentRef;
+    private int userID;
     private String amount;
     private LocalDateTime time;
-    private String paymentRef;
+    // uuid make sure 
 
-    String getUser() { return userEmail; }
-    String getAmount() { return amount; }
-    LocalDateTime getPaymentTime() { return time; }
-    String getPaymentRef() { return paymentRef; }
+    public String getPaymentRef() { return paymentRef; }
+    public int getUser() { return userID; }
+    public String getAmount() { return amount; }
+    public LocalDateTime getPaymentTime() { return time; }
 
     public Payment() {}
 
-    public Payment(String userEmail, String amount, LocalDateTime time, String paymentRef) {
-        this.userEmail = userEmail;
+    public Payment(String paymentRef, int userID, String amount, LocalDateTime time) {
+        this.paymentRef = paymentRef;
+        this.userID = userID;
         this.amount = amount;
         this.time = time;
-        this.paymentRef = paymentRef;
+
     }
 }
