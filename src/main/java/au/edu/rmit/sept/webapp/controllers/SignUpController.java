@@ -115,6 +115,9 @@ public class SignUpController {
 
         return user;
     }
+    
+    
+    
     @PostMapping("/signUp") 
     public String submitForm(@ModelAttribute User user, HttpSession session, Model model) {
         System.out.println("ran controllerrrr");
@@ -123,6 +126,8 @@ public class SignUpController {
         
         if (validate(user, errors)) {
             model.addAttribute("errors", errors);
+            User.permissions[] perms = {User.permissions.ORGANISER, User.permissions.STUDENT};
+            model.addAttribute("permissions", perms);
             return "signUp/index";
         }
 
