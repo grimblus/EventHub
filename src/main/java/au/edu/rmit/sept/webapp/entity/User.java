@@ -9,6 +9,7 @@ public class User {
     private String password;
     private String email;
     private permissions permissionLevel;
+    private boolean banned;
 
     // Default Constructor
     public User() {}
@@ -21,16 +22,18 @@ public class User {
         this.password = password;
         this.email = email;
         this.permissionLevel = permissionLevel;
+        this.banned = false;
     }
 
     // Full Constructor
-    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel) {
+    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel, boolean banned) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.permissionLevel = permissionLevel;
+        this.banned = banned;
     }
 
     public int getId() {
@@ -79,5 +82,13 @@ public class User {
 
     public void setPermissionLevel(permissions permissionLevel) {
         this.permissionLevel = permissionLevel;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
     }
 }

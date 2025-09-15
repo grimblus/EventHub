@@ -29,11 +29,12 @@ public class UserRepositoryImpl implements UserRepository {
                     "lastName VARCHAR(255), " +
                     "password VARCHAR(255), " +
                     "email VARCHAR(255), " +
-                    "permissionLevel VARCHAR(255))";
+                    "permissionLevel VARCHAR(255)," +
+                    "banned BOOLEAN)";
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
             createTableStatement.executeUpdate();
 
-            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel) VALUES (?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel, banned) VALUES (?, ?, ?, ?, ?, ?)";
             for (User user : userList) {
                 try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                     ps.setString(1, user.getFirstName());
@@ -41,6 +42,7 @@ public class UserRepositoryImpl implements UserRepository {
                     ps.setString(3, user.getPassword());
                     ps.setString(4, user.getEmail());
                     ps.setString(5, user.getPermissionLevel().name());
+                    ps.setBoolean(6, user.isBanned());
                     ps.executeUpdate();
                 }
             }
@@ -51,13 +53,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     public void addUser(User user) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
-            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel) VALUES (?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel, banned) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                 ps.setString(1, user.getFirstName());
                 ps.setString(2, user.getLastName());
                 ps.setString(3, user.getPassword());
                 ps.setString(4, user.getEmail());
                 ps.setString(5, user.getPermissionLevel().name());
+                ps.setBoolean(6, user.isBanned());
                 ps.executeUpdate();
             }
         } catch (Exception e) {
@@ -78,7 +81,8 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase()),
+                                rs.getBoolean("banned")
                         );
                         users.add(user);
                     }
@@ -103,7 +107,8 @@ public class UserRepositoryImpl implements UserRepository {
                             rs.getString("lastName"),
                             rs.getString("password"),
                             rs.getString("email"),
-                            User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
+                            User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase()),
+                            rs.getBoolean("banned")
                         );
                     }
                 }
@@ -127,7 +132,8 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase()),
+                                rs.getBoolean("banned")
                         );
                     }
                 }
@@ -151,7 +157,8 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase()),
+                                rs.getBoolean("banned")
                         );
                     }
                 }
@@ -175,7 +182,8 @@ public class UserRepositoryImpl implements UserRepository {
                                 rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("email"),
-                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase())
+                                User.permissions.valueOf(rs.getString("permissionLevel").toUpperCase()),
+                                rs.getBoolean("banned")
                         );
                     }
                 }
