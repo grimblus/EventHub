@@ -21,7 +21,11 @@ public class LoginController {
     public LoginController(UserService userService) {
         this.userService = userService;
     }
-
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "login/index";
+    }
     @GetMapping("/login")
     public String showForm(Model model) {
         return "login/index"; 
@@ -45,6 +49,6 @@ public class LoginController {
         }
         session.setAttribute("user", user);
 
-        return "welcome/index";
+        return "redirect:/";
     }
 }
