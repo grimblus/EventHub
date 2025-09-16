@@ -2,15 +2,19 @@ package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.models.PaymentRequest;
 import au.edu.rmit.sept.webapp.entity.Event;
+import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventService;
 
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
+import au.edu.rmit.sept.webapp.services.UserService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
@@ -22,16 +26,26 @@ public class PaymentController {
 
     // event service is NULLLLLL
     private EventService eventService;
+    private UserService userService;
     private final SandboxPaymentGateway gateway;
-    
-    public PaymentController(SandboxPaymentGateway gateway, EventService eventService) {
+
+    public PaymentController(SandboxPaymentGateway gateway, EventService eventService, UserService userService) {
         this.gateway = gateway;
         this.eventService = eventService;
+        this.userService = userService;
     }
 
     // create empty payment model and next 12 years when you visit page
     @GetMapping("/checkout")
-    public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model) {
+    public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model, HttpSession session) {
+        System.out.println("Checking logged in");
+        if(session.getAttribute("user") == null)  { return "redirect:/login"; }
+        
+        // Getting user when id is not available even though it is?
+        String em = (((User)session.getAttribute("user")).getEmail());
+        User user = userService.findUserByEmail(em);
+        System.out.println(user.getId());
+
         model.addAttribute("payment", new PaymentRequest());
 
         // see nextYears helper below
@@ -39,7 +53,7 @@ public class PaymentController {
 
         String EventName =  "null";
         String local =      "null";
-        String details =    "null";
+        String details =    "null"; 
         String date =       "null";
         String price =      "0";
 
@@ -55,6 +69,7 @@ public class PaymentController {
         } catch(Exception e) {
             e.printStackTrace();
         }
+        
 
         model.addAttribute("title", EventName);
         model.addAttribute("date", date);   
@@ -72,6 +87,7 @@ public class PaymentController {
     public String pay(@Valid @ModelAttribute("payment") PaymentRequest req,
                       BindingResult errors,
                       Model model) {
+
         model.addAttribute("years", nextYears(12));
 
         if (errors.hasErrors()) {
