@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.UserService;
@@ -140,5 +141,16 @@ public class SignUpController {
         return "redirect:/";
     }
 
+      @GetMapping("/session")
+    @ResponseBody
+    public String debugSession(HttpSession session) {
+        StringBuilder sb = new StringBuilder("Session attributes:<br>");
+        session.getAttributeNames().asIterator()
+                .forEachRemaining(name -> {
+                    Object value = session.getAttribute(name);
+                    sb.append(name).append(" = ").append(value).append("<br>");
+                });
+        return sb.toString();
+    }
     
 }
