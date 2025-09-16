@@ -5,7 +5,9 @@ import au.edu.rmit.sept.webapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -33,5 +35,11 @@ public class AdminController {
         model.addAttribute("active", "events");
         model.addAttribute("events", eventService.getEvents());
         return "admin/index";
+    }
+
+    @PostMapping("/toggleBanned/{id}")
+    public String toggleBanned(@PathVariable Integer id) {
+        userService.toggleBanned(id);
+        return "redirect:/admin/users";
     }
 }

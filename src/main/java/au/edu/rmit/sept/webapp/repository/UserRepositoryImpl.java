@@ -193,4 +193,30 @@ public class UserRepositoryImpl implements UserRepository {
         }
         return null;
     }
+
+    public boolean toggleBanned(Integer id) {
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            String searchSQL = "SELECT banned FROM users WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                ps.setInt(1, id);
+                try  (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        boolean currentBanned = rs.getBoolean("banned");
+                        boolean newBanned = !currentBanned;
+
+                        String updateSQL = "UPDATE users SET banned = ? WHERE id = ?";
+                        try (PreparedStatement ps2 = connection.prepareStatement(updateSQL)) {
+                            ps2.setBoolean(1, newBanned);
+                            ps2.setInt(2, id);
+                            int rows = ps2.executeUpdate();
+                            return rows > 0;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
