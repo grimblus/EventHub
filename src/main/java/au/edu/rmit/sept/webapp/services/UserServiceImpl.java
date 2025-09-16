@@ -41,4 +41,5 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         return repository.findUserByEmail(email);
     }
+    public boolean toggleBanned(Integer id) {return repository.toggleBanned(id);}
 }
