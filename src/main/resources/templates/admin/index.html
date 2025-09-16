@@ -14,7 +14,7 @@
         form {
             text-align: center;
         }
-        .banButton {
+        .button {
             padding: 6px 14px;
             border: none;
             border-radius: 6px;
@@ -67,7 +67,7 @@
                     <td th:text="${user.banned}"></td>
                     <td>
                         <form th:action="@{/admin/toggleBanned/{id}(id=${user.id})}" method="post">
-                            <button type="submit" class="banButton"
+                            <button type="submit" class="button"
                                     th:classappend="${user.banned} ? 'unban ' : 'ban'"
                                 th:text="${user.banned} ? 'Unban' : 'Ban'">
 
@@ -94,6 +94,7 @@
                 <th>Keywords</th>
                 <th>Tags</th>
                 <th>Images</th>
+                <th>Remove</th>
             </tr>
             </thead>
             <tbody>
@@ -109,6 +110,13 @@
                 <td th:text="${event.keywords}"></td>
                 <td th:text="${event.tags}"></td>
                 <td th:text="${event.images}"></td>
+                <td>
+                    <form th:action="@{/admin/deleteEvent/{id}(id=${event.id})}" method="post">
+                        <button type="submit" class="button" th:classappend="ban"
+                                th:text="Delete">
+                        </button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

@@ -42,4 +42,10 @@ public class AdminController {
         userService.toggleBanned(id);
         return "redirect:/admin/users";
     }
+
+    @PostMapping("/deleteEvent/{id}")
+    public String deleteEvent(@PathVariable Integer id) {
+        eventService.deleteEventbyID(id);
+        return "redirect:/admin/events";
+    }
 }
