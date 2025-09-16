@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import java.util.Locale;
+import java.util.UUID;
+
 import au.edu.rmit.sept.webapp.entity.Payment;
 import org.springframework.stereotype.Repository;
 
@@ -17,10 +20,14 @@ import java.util.List;
 
 @Repository
 public class PaymentRepositoryImpl implements PaymentRepository {
+    static String randUUID() {
+        return "REF-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(Locale.ROOT);
+    }
+
     static List<Payment> paymentList = List.of(
-        new Payment("REF-152045CC", 1, "54", LocalDateTime.now()),
-        new Payment("REF-152045CA", 1, "43", LocalDateTime.now()),
-        new Payment("REF-11111111", 2, "999", LocalDateTime.now())
+        new Payment(randUUID(), 1, "54", LocalDateTime.now()),
+        new Payment(randUUID(), 1, "43", LocalDateTime.now()),
+        new Payment(randUUID(), 2, "999", LocalDateTime.now())
     );
 
 
