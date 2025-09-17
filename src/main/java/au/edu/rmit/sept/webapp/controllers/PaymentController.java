@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -41,7 +44,12 @@ public class PaymentController {
         System.out.println("Checking logged in");
         //if(session.getAttribute("user") == null)  { return "redirect:/login"; }
 
-        model.addAttribute("payment", new PaymentRequest());
+        Event curEvent = eventService.getEvent(id, title);
+        PaymentRequest req = new PaymentRequest();
+        req.setAmount(Double.parseDouble(curEvent.getTicketPrice()));
+        model.addAttribute("payment", req);
+
+
 
         // see nextYears helper below
         model.addAttribute("years", nextYears(12));
@@ -51,7 +59,6 @@ public class PaymentController {
         // User user = userService.findUserByEmail(em);
         // System.out.println(user.getId());
 
-        Event curEvent = eventService.getEvent(id, title);
 
         model.addAttribute("event", curEvent);
 
@@ -67,8 +74,17 @@ public class PaymentController {
     @PostMapping("/pay")
     public String pay(@Valid @ModelAttribute("payment") PaymentRequest req,
                       BindingResult errors,
+                      @RequestParam("eventId") int eventID,
+                      @RequestParam("eventTitle") String eventTitle,
                       Model model) {
+                        
+        Event event = eventService.getEvent(eventID, eventTitle);
+        model.addAttribute("event", event);
+        
+        req.setAmount(Double.parseDouble(event.getTicketPrice()));
 
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
+        model.addAttribute("date", event.getDate().format(f));
         model.addAttribute("years", nextYears(12));
 
         if (errors.hasErrors()) {
@@ -77,9 +93,9 @@ public class PaymentController {
 
         Result r = gateway.charge(req);
         if (r.success()) {
-            return "redirect:/checkout?success=1&ref=" + r.reference();
+            return "redirect:/checkout" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&success=1&ref=" + r.reference();
         } else {
-            return "redirect:/checkout?failed=1&reason=" + r.message();
+            return "redirect:/checkout" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&failed=1&reason=" + r.message();
         }
     }
 
