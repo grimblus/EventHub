@@ -43,16 +43,17 @@ public class PaymentRepositoryImpl implements PaymentRepository {
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
             createTableStatement.executeUpdate();
 
-            String insertPayment = "INSERT INTO payments (id, user_id, amount, time) VALUES (?, ?, ?, ?)";
-            for(Payment p : paymentList) {
-                try(PreparedStatement ps = connection.prepareStatement(insertPayment)) {
-                    ps.setString(1, p.getPaymentRef());
-                    ps.setInt(2, p.getUser());
-                    ps.setBigDecimal(3, new BigDecimal(p.getAmount()));
-                    ps.setTimestamp(4, Timestamp.valueOf(p.getPaymentTime()));
-                    ps.executeUpdate();
-                }
-            }
+            // for testing: fills with default values
+            // String insertPayment = "INSERT INTO payments (id, user_id, amount, time) VALUES (?, ?, ?, ?)";
+            // for(Payment p : paymentList) {
+            //     try(PreparedStatement ps = connection.prepareStatement(insertPayment)) {
+            //         ps.setString(1, p.getPaymentRef());
+            //         ps.setInt(2, p.getUser());
+            //         ps.setBigDecimal(3, new BigDecimal(p.getAmount()));
+            //         ps.setTimestamp(4, Timestamp.valueOf(p.getPaymentTime()));
+            //         ps.executeUpdate();
+            //     }
+            // }
             
 
         } catch(Exception e) {
