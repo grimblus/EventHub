@@ -1,5 +1,7 @@
 package au.edu.rmit.sept.webapp.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -13,6 +15,7 @@ public class Event {
     private String description;
     private int ownerID;
     private List<User> participants;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'TT'HH:mm")
     private LocalDateTime date;
     private String location;
     private String category;
@@ -124,16 +127,7 @@ public class Event {
         return date;
     }
 
-    public void setDate(String date) {
-        // change input to a string that gets converted to a date
-        // so we can check if user inputs correct data easier
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy/HH:mm");
-        try {
-            this.date = LocalDateTime.parse(date, format);
-        } catch (DateTimeParseException e) {
-            System.out.println(e);
-        }
-    }
+    public void setDate(LocalDateTime date) { this.date = date; }
 
     public String getLocation() {
         return location;
