@@ -39,45 +39,26 @@ public class PaymentController {
     @GetMapping("/checkout")
     public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model, HttpSession session) {
         System.out.println("Checking logged in");
-        if(session.getAttribute("user") == null)  { return "redirect:/login"; }
-        
-        // Getting user when id is not available even though it is?
-        String em = (((User)session.getAttribute("user")).getEmail());
-        User user = userService.findUserByEmail(em);
-        System.out.println(user.getId());
+        //if(session.getAttribute("user") == null)  { return "redirect:/login"; }
 
         model.addAttribute("payment", new PaymentRequest());
 
         // see nextYears helper below
         model.addAttribute("years", nextYears(12));
 
-        String EventName =  "null";
-        String local =      "null";
-        String details =    "null"; 
-        String date =       "null";
-        String price =      "0";
+        // Getting user when id is not available even though it is?
+        // String em = (((User)session.getAttribute("user")).getEmail());
+        // User user = userService.findUserByEmail(em);
+        // System.out.println(user.getId());
 
-        try {
-            Event curEvent = eventService.getEvent(id, title);
+        Event curEvent = eventService.getEvent(id, title);
 
-            EventName = curEvent.getTitle();
-            local =     curEvent.getLocation();
-            details =   curEvent.getDescription();
-            DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
-            date =      curEvent.getDate().format(f).toString();
-            price =     curEvent.getTicketPrice();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        
+        model.addAttribute("event", curEvent);
 
-        model.addAttribute("title", EventName);
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
+        String date = curEvent.getDate().format(f).toString();
+
         model.addAttribute("date", date);   
-        model.addAttribute("location", local);
-        model.addAttribute("details", details);
-
-        // will add to event as a variable
-        model.addAttribute("price", price);
 
         return "payment/checkout";
     }

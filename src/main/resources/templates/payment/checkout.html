@@ -92,11 +92,11 @@
 
       <div id="right">
         <div class="page">
-          <h1 th:text="${title}"></h1>
-          <p><strong th:inline="text">Location: [[${location}]]</strong>
+          <h1 th:text="${event.getTitle()}"></h1>
+          <p><strong th:inline="text">Location: [[${event.getLocation()}]]</strong>
           <p><strong th:inline="text">When: [[${date}]]</strong></p>
-          <p><strong th:inline="text">Details: [[${details}]]</strong></p>
-          <h1 th:inline="text">Price: $[[${price}]]</h1>
+          <p><strong th:inline="text">Details: [[${event.getDescription()}]]</strong></p>
+          <h1 th:inline="text">Price: $[[${event.getTicketPrice()}]]</h1>
 
         </div>
 
