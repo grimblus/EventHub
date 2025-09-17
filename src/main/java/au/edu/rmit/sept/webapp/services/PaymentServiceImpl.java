@@ -3,10 +3,12 @@ package au.edu.rmit.sept.webapp.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import au.edu.rmit.sept.webapp.entity.Payment;
 import au.edu.rmit.sept.webapp.repository.PaymentRepository;
 
+@Service
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository repository;

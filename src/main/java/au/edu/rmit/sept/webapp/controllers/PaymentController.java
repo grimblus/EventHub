@@ -2,16 +2,25 @@ package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.models.PaymentRequest;
 import au.edu.rmit.sept.webapp.entity.Event;
+import au.edu.rmit.sept.webapp.entity.Payment;
+import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventService;
-
+import au.edu.rmit.sept.webapp.services.PaymentService;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
+import au.edu.rmit.sept.webapp.services.UserService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,47 +31,45 @@ public class PaymentController {
 
     // event service is NULLLLLL
     private EventService eventService;
+    private UserService userService;
+    private PaymentService paymentService;
     private final SandboxPaymentGateway gateway;
-    
-    public PaymentController(SandboxPaymentGateway gateway, EventService eventService) {
+
+    DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
+
+    public PaymentController(SandboxPaymentGateway gateway, EventService eventService, UserService userService, PaymentService paymentService) {
         this.gateway = gateway;
         this.eventService = eventService;
+        this.userService = userService;
+        this.paymentService = paymentService;
     }
 
     // create empty payment model and next 12 years when you visit page
     @GetMapping("/checkout")
-    public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model) {
-        model.addAttribute("payment", new PaymentRequest());
+    public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model, HttpSession session) {
+        if(session.getAttribute("user") == null)  { return "redirect:/login"; }
+
+        Event curEvent = eventService.getEvent(id, title);
+        PaymentRequest req = new PaymentRequest();
+        req.setAmount(Double.parseDouble(curEvent.getTicketPrice()));
+        model.addAttribute("payment", req);
+
+
 
         // see nextYears helper below
         model.addAttribute("years", nextYears(12));
 
-        String EventName =  "null";
-        String local =      "null";
-        String details =    "null";
-        String date =       "null";
-        String price =      "0";
+        // Getting user when id is not available even though it is?
+        String em = (((User)session.getAttribute("user")).getEmail());
+        User user = userService.findUserByEmail(em);
+        //System.out.println(user.getId());
 
-        try {
-            Event curEvent = eventService.getEvent(id, title);
+        model.addAttribute("userId", user.getId());
 
-            EventName = curEvent.getTitle();
-            local =     curEvent.getLocation();
-            details =   curEvent.getDescription();
-            DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
-            date =      curEvent.getDate().format(f).toString();
-            price =     curEvent.getTicketPrice();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        model.addAttribute("event", curEvent);
 
-        model.addAttribute("title", EventName);
+        String date = curEvent.getDate().format(f).toString();
         model.addAttribute("date", date);   
-        model.addAttribute("location", local);
-        model.addAttribute("details", details);
-
-        // will add to event as a variable
-        model.addAttribute("price", price);
 
         return "payment/checkout";
     }
@@ -71,7 +78,18 @@ public class PaymentController {
     @PostMapping("/pay")
     public String pay(@Valid @ModelAttribute("payment") PaymentRequest req,
                       BindingResult errors,
+                      @RequestParam("eventId") int eventID,
+                      @RequestParam("eventTitle") String eventTitle,
+                      @RequestParam("userId") int userId,
                       Model model) {
+                        
+        Event event = eventService.getEvent(eventID, eventTitle);
+        model.addAttribute("event", event);
+        model.addAttribute("userId", userId);
+        
+        req.setAmount(Double.parseDouble(event.getTicketPrice()));
+
+        model.addAttribute("date", event.getDate().format(f));
         model.addAttribute("years", nextYears(12));
 
         if (errors.hasErrors()) {
@@ -80,11 +98,33 @@ public class PaymentController {
 
         Result r = gateway.charge(req);
         if (r.success()) {
-            return "redirect:/checkout?success=1&ref=" + r.reference();
+            // on succesful payment, redirect us to the reciept page
+            return "redirect:/receipt" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&ref=" + r.reference() + "&userId=" + userId;
         } else {
-            return "redirect:/checkout?failed=1&reason=" + r.message();
+            return "redirect:/checkout" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&failed=1&reason=" + r.message();
         }
     }
+
+    @GetMapping("/receipt")
+    public String Receipt(@RequestParam("id") int id, 
+                          @RequestParam("title") String title,
+                          @RequestParam("ref") String ref,
+                          @RequestParam("userId") int user_id,
+                          Model model) {
+
+        Event event = eventService.getEvent(id, title);
+        User user = userService.findUserByID(user_id);
+
+        model.addAttribute("event", event);
+        model.addAttribute("user", user);
+        model.addAttribute("time", event.getDate().format(f));
+        model.addAttribute("ref", ref);
+        
+        Payment payment = new Payment(ref, user_id, event.getTicketPrice(), LocalDateTime.now());
+        paymentService.AddPayment(payment);
+
+        return "receipt/receipt";
+}
 
     // helper that gets the next 12 years (e.g. 2025, 2026, 2027...2036) for the initial empty page
     private List<Integer> nextYears(int count) {

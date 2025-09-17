@@ -12,4 +12,5 @@ public interface UserService {
     public User findUserByFirstName(String firstName);
     public User findUserByLastName(String lastName);
     public User findUserByEmail(String email);
+    public boolean toggleBanned(Integer id);
 }
