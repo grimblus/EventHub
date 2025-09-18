@@ -74,6 +74,13 @@ public class PaymentController {
         return "payment/checkout";
     }
 
+    private void addToRsvpList(Event event, HttpSession session ) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            user.addRsvp(event);
+        }
+    } 
+
     // handles form submission validation check
     @PostMapping("/pay")
     public String pay(@Valid @ModelAttribute("payment") PaymentRequest req,
@@ -81,7 +88,7 @@ public class PaymentController {
                       @RequestParam("eventId") int eventID,
                       @RequestParam("eventTitle") String eventTitle,
                       @RequestParam("userId") int userId,
-                      Model model) {
+                      Model model, HttpSession session) {
                         
         Event event = eventService.getEvent(eventID, eventTitle);
         model.addAttribute("event", event);
@@ -98,6 +105,7 @@ public class PaymentController {
 
         Result r = gateway.charge(req);
         if (r.success()) {
+            addToRsvpList(event, session);
             // on succesful payment, redirect us to the reciept page
             return "redirect:/receipt" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&ref=" + r.reference() + "&userId=" + userId;
         } else {

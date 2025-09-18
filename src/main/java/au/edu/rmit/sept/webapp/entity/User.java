@@ -1,5 +1,7 @@
 package au.edu.rmit.sept.webapp.entity;
 
+import java.util.ArrayList;
+
 public class User {
     public enum permissions {STUDENT, ORGANISER, ADMIN};
 
@@ -10,6 +12,7 @@ public class User {
     private String email;
     private permissions permissionLevel;
     private boolean banned;
+    private ArrayList<Event> rsvpList;
 
     // Default Constructor
     public User() {}
@@ -23,6 +26,7 @@ public class User {
         this.email = email;
         this.permissionLevel = permissionLevel;
         this.banned = false;
+        this.rsvpList = new ArrayList<>();
     }
 
     // Full Constructor
@@ -34,6 +38,7 @@ public class User {
         this.email = email;
         this.permissionLevel = permissionLevel;
         this.banned = banned;
+        this.rsvpList = new ArrayList<>();
     }
 
     public int getId() {
@@ -68,6 +73,13 @@ public class User {
         this.password = password;
     }
 
+    public ArrayList<Event> getRsvpList() {
+        return rsvpList;
+    }
+
+    public void addRsvp(Event event) {
+        this.rsvpList.add(event);
+    }
     public String getEmail() {
         return email;
     }
