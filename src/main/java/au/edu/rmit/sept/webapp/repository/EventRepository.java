@@ -4,6 +4,7 @@ import au.edu.rmit.sept.webapp.entity.Event;
 
 import java.util.List;
 
+
 public interface EventRepository {
     public List<String> stringList(String list);
     public void setEvents();

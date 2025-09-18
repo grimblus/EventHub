@@ -118,6 +118,9 @@ public class EventFeedController {
     // delete event
     @DeleteMapping("/events/{eventId}")
     public ResponseEntity<Void> deleteEvent(@PathVariable int eventId) {
+
+        
+
         return eventService.deleteEventbyID(eventId)
             ? ResponseEntity.noContent().build()
             : ResponseEntity.notFound().build();
