@@ -354,4 +354,21 @@ public class EventRepositoryImpl implements EventRepository {
         return updateEventImages(id, imgs);
     }
 
+    public Integer getOwnerID(Integer eventId) {
+        try (Connection connection = H2DatabaseConnection.getConnection()) {
+            String sql = "SELECT ownerID FROM events WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, eventId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt("ownerID");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

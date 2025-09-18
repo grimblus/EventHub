@@ -226,7 +226,7 @@
                         <span th:text="${event.getLocation()}">Event Location</span>
                     </div>
                 </div>
-                <button th:attr="onclick=|showModal('infoModal' + ${event.id})|" class="btn btn-secondary">View Details</button>
+                <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
                     <div th:attr="id=${'infoModal' + event.id}" class="modal">
                         <div class="modal-content">
                                     
@@ -240,6 +240,9 @@
                                 <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
                                 <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
                                 <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                <div class="delete-btn-wrapper" style="display: none;">
+                                    <button class="btn btn-danger" th:onclick="|deleteEvent(${event.id}, this)|">Delete Event</button>
+                                </div>
                             </div>
                             <div id="right">
                                     <p><strong>Location:</strong> <span th:text="${event.getLocation()}"></span></p>
@@ -280,10 +283,22 @@
         </div>
     </div>
     
+                <!-- document.getElementById(modalId).style.display = 'block';
+                fetch('/events/modal?eventid=' + eventId); -->
+
     <div layout:fragment="scripts">
-        <script>
-            function showModal(modalId) {
-                document.getElementById(modalId).style.display = 'block';
+        <script th:inline="javascript">
+            function showModal(modalId, eventId) {
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'block';
+
+                fetch(`/events/modal/${eventId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const deleteWrapper = modal.querySelector('.delete-btn-wrapper');
+                            deleteWrapper.style.display = data.isOwner ? 'inline-block' : 'none';
+                    })
+                    .catch(err => console.error(err));
             }
             function hideModal(modalId) {
                 document.getElementById(modalId).style.display = 'none';
@@ -336,6 +351,27 @@
                 })
                 .catch(msg => alert(msg));
             }
+
+            function deleteEvent(eventId, btnEl) {
+                if (!confirm("Are you sure you want to delete this event?")) {
+                    return;
+                }
+
+                fetch(`/events/${eventId}`, { method: 'DELETE' })
+                    .then(r => {
+                        if (r.ok) {
+                            // close modal & refresh page
+                            btnEl.closest(".modal").style.display = "none";
+                            location.reload();
+                        } else {
+                            return r.text().then(msg => {
+                                throw new Error(msg || "Failed to delete event.");
+                            });
+                        }
+                    })
+                    .catch(err => alert(err.message));
+            }
+
         </script>
     </div>
 </body>

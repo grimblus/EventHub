@@ -15,6 +15,7 @@ public interface EventService {
     public List<String> getKeywords();
     public Event findEventbyID(Integer id);
     public boolean deleteEventbyID(Integer id);
+    public Integer getOwnerID(Integer eventId);
     public boolean deleteImageForEvent(int eventId, int index);
     public boolean addImageForEvent(int eventId, String filename);
 }
