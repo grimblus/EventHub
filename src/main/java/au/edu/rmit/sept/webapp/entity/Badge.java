@@ -47,7 +47,7 @@ public class Badge {
 
     public void setBadgeFlagCondition(String flagCondition, Boolean setFlag) { badge_flags.put(flagCondition, setFlag); }
     public void removeBadgeFlagCondition(String flagCondition) {
-        boolean removed = badge_flags.remove(flagCondition);
+        boolean removed = (badge_flags.remove(flagCondition) != null);
         if(!removed) { System.out.println("Error: Unable to remove flag (" + flagCondition + ")\n"); }
     }
     

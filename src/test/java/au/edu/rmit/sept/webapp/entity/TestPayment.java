@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 public class TestPayment {
     private Payment payment = new Payment();;
-    private String testPaymentRef = "abcd";
-    private int testUserID = 1;
-    private String testAmount = "$1234";
-    private LocalDateTime testTime = LocalDateTime.MAX;
+    final private String testPaymentRef = "abcd";
+    final private int testUserID = 1;
+    final private String testAmount = "$1234";
+    final private LocalDateTime testTime = LocalDateTime.MAX;
 
     @Test
     void testGettersAndSetters() {
@@ -19,20 +19,20 @@ public class TestPayment {
         payment.setPaymentTime(testTime);
 
         assertAll("Getters and Setters",
-                () -> assertEquals(payment.getPaymentRef(), testPaymentRef),
-                () -> assertEquals(payment.getUser(), testUserID),
-                () -> assertEquals(payment.getAmount(), testAmount),
-                () -> assertEquals(payment.getPaymentTime(), testTime)
+                () -> assertEquals(testPaymentRef, payment.getPaymentRef()),
+                () -> assertEquals(testUserID, payment.getUser()),
+                () -> assertEquals(testAmount, payment.getAmount()),
+                () -> assertEquals(testTime, payment.getPaymentTime())
         );
     }
 
     @Test
     void testDefaultConstructor() {
         assertAll("Default Constructor",
-                () -> assertEquals(payment.getPaymentRef(), ""),
-                () -> assertEquals(payment.getUser(), 0),
-                () -> assertEquals(payment.getAmount(), ""),
-                () -> assertEquals(payment.getPaymentTime(), LocalDateTime.MIN)
+                () -> assertEquals("", payment.getPaymentRef()),
+                () -> assertEquals(0, payment.getUser()),
+                () -> assertEquals("", payment.getAmount()),
+                () -> assertEquals(LocalDateTime.MIN, payment.getPaymentTime())
         );
     }
 
@@ -40,10 +40,10 @@ public class TestPayment {
     void testFullConstructor() {
         payment = new Payment(testPaymentRef, testUserID, testAmount, testTime);
         assertAll("Full Constructor",
-                () -> assertEquals(payment.getPaymentRef(), testPaymentRef),
-                () -> assertEquals(payment.getUser(), testUserID),
-                () -> assertEquals(payment.getAmount(), testAmount),
-                () -> assertEquals(payment.getPaymentTime(), testTime)
+                () -> assertEquals(testPaymentRef, payment.getPaymentRef()),
+                () -> assertEquals(testUserID, payment.getUser()),
+                () -> assertEquals(testAmount, payment.getAmount()),
+                () -> assertEquals(testTime, payment.getPaymentTime())
         );
     }
 }

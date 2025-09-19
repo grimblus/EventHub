@@ -7,26 +7,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUser {
     private User user = new User();
-    private Event testEvent = new Event();
-    private int testID = 0;
-    private String testFirstName = "Bingus";
-    private String testLastName = "Bongus";
-    private String testEmail = "bingus@example.com";
-    private String testPassword = "s3cur3pass";
-    private User.permissions testRole = User.permissions.ADMIN;
-    private boolean testBanned = true;
-    private ArrayList<Event> testRSVPList = new ArrayList<Event>();
+    final private Event testEvent = new Event();
+    final private int testID = 5;
+    final private String testFirstName = "Bingus";
+    final private String testLastName = "Bongus";
+    final private String testEmail = "bingus@example.com";
+    final private String testPassword = "s3cur3pass";
+    final private User.permissions testRole = User.permissions.ADMIN;
+    final private boolean testBanned = true;
+    final private ArrayList<Event> testRSVPList = new ArrayList<Event>();
 
     @Test
     void testDefaultConstructor() {
         assertAll("Default Constructor",
-            () -> assertEquals(user.getId(), 0),
-            () -> assertEquals(user.getFirstName(), ""),
-            () -> assertEquals(user.getLastName(), ""),
-            () -> assertEquals(user.getEmail(), ""),
-            () -> assertEquals(user.getPassword(), ""),
-            () -> assertEquals(user.getPermissionLevel(), User.permissions.STUDENT),
-            () -> assertTrue(!user.isBanned()),
+            () -> assertEquals(0, user.getId()),
+            () -> assertEquals("", user.getFirstName()),
+            () -> assertEquals("", user.getLastName()),
+            () -> assertEquals("", user.getEmail()),
+            () -> assertEquals("", user.getPassword()),
+            () -> assertEquals(User.permissions.STUDENT, user.getPermissionLevel()),
+            () -> assertFalse(user.isBanned()),
             () -> assertTrue(user.getRsvpList().isEmpty())
         );
     }
@@ -35,14 +35,14 @@ public class TestUser {
     void testNoIDConstructor() {
         user = new User(testFirstName, testLastName, testPassword, testEmail, testRole);
         assertAll("No ID Constructor",
-            () -> assertEquals(user.getId(), 0),
-            () -> assertEquals(user.getFirstName(), testFirstName),
-            () -> assertEquals(user.getLastName(), testLastName),
-            () -> assertEquals(user.getEmail(), testEmail),
-            () -> assertEquals(user.getPassword(), testPassword),
-            () -> assertEquals(user.getPermissionLevel(), testRole),
-            () -> assertTrue(!user.isBanned()),
-            () -> assertTrue(user.getRsvpList().isEmpty())
+                () -> assertEquals(0, user.getId()),
+                () -> assertEquals(testFirstName, user.getFirstName()),
+                () -> assertEquals(testLastName, user.getLastName()),
+                () -> assertEquals(testEmail, user.getEmail()),
+                () -> assertEquals(testPassword, user.getPassword()),
+                () -> assertEquals(testRole, user.getPermissionLevel()),
+                () -> assertFalse(user.isBanned()),
+                () -> assertTrue(user.getRsvpList().isEmpty())
         );
     }
 
@@ -50,13 +50,13 @@ public class TestUser {
     void testFullConstructor() {
         user = new User(testID, testFirstName, testLastName, testPassword, testEmail, testRole, testBanned);
         assertAll("Full Constructor",
-                () -> assertEquals(user.getId(), testID),
-                () -> assertEquals(user.getFirstName(), testFirstName),
-                () -> assertEquals(user.getLastName(), testLastName),
-                () -> assertEquals(user.getEmail(), testEmail),
-                () -> assertEquals(user.getPassword(), testPassword),
-                () -> assertEquals(user.getPermissionLevel(), testRole),
-                () -> assertEquals(user.isBanned(), testBanned),
+                () -> assertEquals(testID, user.getId()),
+                () -> assertEquals(testFirstName, user.getFirstName()),
+                () -> assertEquals(testLastName, user.getLastName()),
+                () -> assertEquals(testEmail, user.getEmail()),
+                () -> assertEquals(testPassword, user.getPassword()),
+                () -> assertEquals(testRole, user.getPermissionLevel()),
+                () -> assertTrue(user.isBanned()),
                 () -> assertTrue(user.getRsvpList().isEmpty())
         );
     }
@@ -73,14 +73,14 @@ public class TestUser {
         user.setRsvpList(testRSVPList);
 
         assertAll("Getters and Setters",
-                () -> assertEquals(user.getId(), testID),
-                () -> assertEquals(user.getFirstName(), testFirstName),
-                () -> assertEquals(user.getLastName(), testLastName),
-                () -> assertEquals(user.getEmail(), testEmail),
-                () -> assertEquals(user.getPassword(), testPassword),
-                () -> assertEquals(user.getPermissionLevel(), testRole),
-                () -> assertEquals(user.isBanned(), testBanned),
-                () -> assertEquals(user.getRsvpList(), testRSVPList)
+                () -> assertEquals(testID, user.getId()),
+                () -> assertEquals(testFirstName, user.getFirstName()),
+                () -> assertEquals(testLastName, user.getLastName()),
+                () -> assertEquals(testEmail, user.getEmail()),
+                () -> assertEquals(testPassword, user.getPassword()),
+                () -> assertEquals(testRole, user.getPermissionLevel()),
+                () -> assertTrue(user.isBanned()),
+                () -> assertTrue(user.getRsvpList().isEmpty())
         );
     }
 

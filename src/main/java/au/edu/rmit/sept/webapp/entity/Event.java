@@ -27,33 +27,25 @@ public class Event {
     private List<String> images;
     // Default Constructor
     public Event() {
-        this.id = -99;
+        this.id = 0;
         this.title = "";
         this.description = "";
-        this.ownerID = -99;
-        this.date = null;
+        this.ownerID = 0;
+        this.participants = new ArrayList<User>();
+        this.date = LocalDateTime.MIN;
         this.location = "";
         this.ticketPrice = "";
         this.category = "";
+        this.keywords = new ArrayList<String>();
+        this.tags = new ArrayList<String>();
+        this.images = new ArrayList<String>();
     }
-
-    // Temp Testing Constructor
-    public Event(String title, String description, int ownerID, LocalDateTime date,
-                 String location, String ticketPrice, String category) {
-        this.title = title;
-        this.description = description;
-        this.ownerID = ownerID;
-        this.date = date;
-        this.location = location;
-        this.ticketPrice = ticketPrice;
-        this.category = category;
-    }
-
 
     // No ID Constructor
     public Event(String title, String description, int ownerID, LocalDateTime date,
                  String location, String ticketPrice, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
+        this.id = 0;
         this.title = title;
         this.description = description;
         this.ownerID = ownerID;
@@ -65,7 +57,6 @@ public class Event {
         this.keywords = keywords;
         this.tags = tags;
         this.images = images;
-
     }
 
     // Full Constructor
@@ -172,6 +163,14 @@ public class Event {
         this.keywords = keywords;
     }
 
+    public void addKeyword(String keyword) {
+        this.keywords.add(keyword);
+    }
+
+    public void removeKeyword(String keyword) {
+        this.keywords.remove(keyword);
+    }
+
     public List<String> getTags() {
         return tags;
     }
@@ -180,11 +179,27 @@ public class Event {
         this.tags = tags;
     }
 
+    public void addTag(String tag) {
+        this.tags.add(tag);
+    }
+
+    public void removeTag(String tag) {
+        this.tags.remove(tag);
+    }
+
     public List<String> getImages() {
         return images;
     }
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public void addImage(String image) {
+        this.images.add(image);
+    }
+
+    public void removeImage(String image) {
+        this.images.remove(image);
     }
 }
