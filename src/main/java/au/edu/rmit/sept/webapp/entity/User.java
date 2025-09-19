@@ -15,7 +15,16 @@ public class User {
     private ArrayList<Event> rsvpList;
 
     // Default Constructor
-    public User() {}
+    public User() {
+        this.id = null;
+        this.firstName = "";
+        this.lastName = "";
+        this.password = "";
+        this.email = "";
+        this.permissionLevel = permissions.STUDENT;
+        this.banned = false;
+        this.rsvpList = new ArrayList<>();
+    }
 
     // No ID Constructor
     public User(String firstName, String lastName, String password, String email, permissions permissionLevel) {
