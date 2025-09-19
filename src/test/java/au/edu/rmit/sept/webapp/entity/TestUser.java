@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUser {
     private User user;
-    private Event event = new Event();
+    private Event testEvent = new Event();
     private int testID = -1;
     private String testFirstName = "Bingus";
     private String testLastName = "Bongus";
@@ -61,5 +61,37 @@ public class TestUser {
                 () -> assertEquals(user.isBanned(), testBanned),
                 () -> assertTrue(user.getRsvpList().isEmpty())
         );
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        user = new User();
+        user.setId(testID);
+        user.setFirstName(testFirstName);
+        user.setLastName(testLastName);
+        user.setPassword(testPassword);
+        user.setEmail(testEmail);
+        user.setPermissionLevel(testRole);
+        user.setBanned(testBanned);
+        user.setRsvpList(testRSVPList);
+
+        assertAll(
+                () -> assertEquals(user.getId(), testID),
+                () -> assertEquals(user.getFirstName(), testFirstName),
+                () -> assertEquals(user.getLastName(), testLastName),
+                () -> assertEquals(user.getEmail(), testEmail),
+                () -> assertEquals(user.getPassword(), testPassword),
+                () -> assertEquals(user.getPermissionLevel(), testRole),
+                () -> assertEquals(user.isBanned(), testBanned),
+                () -> assertEquals(user.getRsvpList(), testRSVPList)
+        );
+    }
+
+    @Test
+    void testAddRsvp() {
+        user = new User();
+        user.addRsvp(testEvent);
+
+        assertTrue(user.getRsvpList().contains(testEvent));
     }
 }
