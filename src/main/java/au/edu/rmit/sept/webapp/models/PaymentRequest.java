@@ -25,6 +25,26 @@ public class PaymentRequest {
     @NotBlank @Pattern(regexp = "^[0-9]{3,4}$", message = "3-4 digits")
     private String cvc;
 
+    public PaymentRequest() {
+        this.cardholderName = "";
+        this.email = "";
+        this.amount = 0.0;
+        this.cardNumber = "";
+        this.expMonth = 0;
+        this.expYear = 0;
+        this.cvc = "";
+    }
+
+    public PaymentRequest(String cardholderName, String email, Double amount, String cardNumber, int expMonth, int expYear, String cvc) {
+        this.cardholderName = cardholderName;
+        this.email = email;
+        this.amount = amount;
+        this.cardNumber = cardNumber;
+        this.expMonth = expMonth;
+        this.expYear = expYear;
+        this.cvc = cvc;
+    }
+
     // getters + setters
     public String getCardholderName() { return cardholderName; }
     public void setCardholderName(String cardholderName) { this.cardholderName = cardholderName; }
