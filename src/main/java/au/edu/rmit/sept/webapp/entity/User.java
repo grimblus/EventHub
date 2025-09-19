@@ -39,7 +39,7 @@ public class User {
     }
 
     // Full Constructor
-    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel, boolean banned) {
+    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel, boolean banned, ArrayList<Event> rsvpList) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,7 +47,7 @@ public class User {
         this.email = email;
         this.permissionLevel = permissionLevel;
         this.banned = banned;
-        this.rsvpList = new ArrayList<>();
+        this.rsvpList = rsvpList;
     }
 
     public int getId() {
@@ -82,6 +82,10 @@ public class User {
         this.password = password;
     }
 
+    public void setRsvpList(ArrayList<Event> rsvpList) {
+        this.rsvpList = rsvpList;
+    }
+
     public ArrayList<Event> getRsvpList() {
         return rsvpList;
     }
@@ -89,6 +93,7 @@ public class User {
     public void addRsvp(Event event) {
         this.rsvpList.add(event);
     }
+
     public String getEmail() {
         return email;
     }
