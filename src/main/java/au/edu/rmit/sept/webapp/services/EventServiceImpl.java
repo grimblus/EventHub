@@ -29,6 +29,7 @@ public class EventServiceImpl implements EventService {
     public List<String> getKeywords() {return repository.getKeywords();}
     public Event findEventbyID(Integer id) {return repository.findEventbyID(id);}
     public boolean deleteEventbyID(Integer id) {return repository.deleteEventbyID(id);}
+    public Integer getOwnerID(Integer eventId) {return repository.getOwnerID(eventId);}
 
     @Override
     public boolean deleteImageForEvent(int eventId, int index) {

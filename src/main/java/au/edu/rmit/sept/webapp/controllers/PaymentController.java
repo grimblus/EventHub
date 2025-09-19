@@ -4,6 +4,7 @@ import au.edu.rmit.sept.webapp.models.PaymentRequest;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.Payment;
 import au.edu.rmit.sept.webapp.entity.User;
+import au.edu.rmit.sept.webapp.services.EventParticipantsService;
 import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.services.PaymentService;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
@@ -34,14 +35,15 @@ public class PaymentController {
     private UserService userService;
     private PaymentService paymentService;
     private final SandboxPaymentGateway gateway;
-
+    private EventParticipantsService eventParticipantsService;
     DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
 
-    public PaymentController(SandboxPaymentGateway gateway, EventService eventService, UserService userService, PaymentService paymentService) {
+    public PaymentController(SandboxPaymentGateway gateway, EventService eventService, UserService userService, PaymentService paymentService, EventParticipantsService eventParticipantsService) {
         this.gateway = gateway;
         this.eventService = eventService;
         this.userService = userService;
         this.paymentService = paymentService;
+        this.eventParticipantsService = eventParticipantsService;
     }
 
     // create empty payment model and next 12 years when you visit page
@@ -74,6 +76,20 @@ public class PaymentController {
         return "payment/checkout";
     }
 
+    private void addToRsvpList(Event event, HttpSession session ) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            user.addRsvp(event);
+        }
+    } 
+
+    private void addToEventParticipants(Event event, HttpSession session ) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            event.addParticipant(user);
+        }
+    } 
+
     // handles form submission validation check
     @PostMapping("/pay")
     public String pay(@Valid @ModelAttribute("payment") PaymentRequest req,
@@ -81,7 +97,7 @@ public class PaymentController {
                       @RequestParam("eventId") int eventID,
                       @RequestParam("eventTitle") String eventTitle,
                       @RequestParam("userId") int userId,
-                      Model model) {
+                      Model model, HttpSession session) {
                         
         Event event = eventService.getEvent(eventID, eventTitle);
         model.addAttribute("event", event);
@@ -98,6 +114,8 @@ public class PaymentController {
 
         Result r = gateway.charge(req);
         if (r.success()) {
+            addToRsvpList(event, session);
+            addToEventParticipants(event, session);
             // on succesful payment, redirect us to the reciept page
             return "redirect:/receipt" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&ref=" + r.reference() + "&userId=" + userId;
         } else {
@@ -122,7 +140,8 @@ public class PaymentController {
         
         Payment payment = new Payment(ref, user_id, event.getTicketPrice(), LocalDateTime.now());
         paymentService.AddPayment(payment);
-
+        
+        eventParticipantsService.addEventParticipant(event.getId(), user.getId());
         return "receipt/receipt";
 }
 

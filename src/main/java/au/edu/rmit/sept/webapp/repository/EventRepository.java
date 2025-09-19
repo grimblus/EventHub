@@ -4,6 +4,7 @@ import au.edu.rmit.sept.webapp.entity.Event;
 
 import java.util.List;
 
+
 public interface EventRepository {
     public List<String> stringList(String list);
     public void setEvents();
@@ -16,4 +17,5 @@ public interface EventRepository {
     public Event findEventbyID(Integer id);
     public boolean updateEventImages(int id, List<String> images);
     public boolean deleteEventbyID(Integer id);
+    public Integer getOwnerID(Integer eventId);
 }

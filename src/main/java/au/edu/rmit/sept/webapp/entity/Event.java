@@ -23,7 +23,6 @@ public class Event {
     private List<String> keywords;
     private List<String> tags;
     private List<String> images;
-
     // Default Constructor
     public Event() {}
 
@@ -55,6 +54,7 @@ public class Event {
         this.keywords = keywords;
         this.tags = tags;
         this.images = images;
+
     }
 
     // Full Constructor
