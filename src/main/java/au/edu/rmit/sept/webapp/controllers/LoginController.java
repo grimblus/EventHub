@@ -29,6 +29,7 @@ public class LoginController {
         return "login/index"; 
     }
 
+    // Checks if the user logging in is valid
     @PostMapping("/login")
     public String loginSubmit (@RequestParam String email,
                                @RequestParam("pw") String password,
@@ -36,11 +37,13 @@ public class LoginController {
 
         User user = userService.findUserByEmail(email);
 
+        // Checks if user's email exists in the database
         if (user == null) {
             model.addAttribute("error", "No account found with that email.");
             return "login/index";
         }
 
+        // Checks if user's password matches the one in the database
         if (!user.getPassword().equals(password)) {
             model.addAttribute("error", "Invalid password.");
             return "login/index";
