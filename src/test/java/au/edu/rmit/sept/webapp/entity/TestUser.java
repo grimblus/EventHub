@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUser {
-    private User user;
+    private User user = new User();
     private Event testEvent = new Event();
     private int testID = 0;
     private String testFirstName = "Bingus";
@@ -19,8 +19,7 @@ public class TestUser {
 
     @Test
     void testDefaultConstructor() {
-        user = new User();
-        assertAll(
+        assertAll("Default Constructor",
             () -> assertEquals(user.getId(), 0),
             () -> assertEquals(user.getFirstName(), ""),
             () -> assertEquals(user.getLastName(), ""),
@@ -35,7 +34,7 @@ public class TestUser {
     @Test
     void testNoIDConstructor() {
         user = new User(testFirstName, testLastName, testPassword, testEmail, testRole);
-        assertAll(
+        assertAll("No ID Constructor",
             () -> assertEquals(user.getId(), 0),
             () -> assertEquals(user.getFirstName(), testFirstName),
             () -> assertEquals(user.getLastName(), testLastName),
@@ -50,7 +49,7 @@ public class TestUser {
     @Test
     void testFullConstructor() {
         user = new User(testID, testFirstName, testLastName, testPassword, testEmail, testRole, testBanned);
-        assertAll(
+        assertAll("Full Constructor",
                 () -> assertEquals(user.getId(), testID),
                 () -> assertEquals(user.getFirstName(), testFirstName),
                 () -> assertEquals(user.getLastName(), testLastName),
@@ -64,7 +63,6 @@ public class TestUser {
 
     @Test
     void testSettersAndGetters() {
-        user = new User();
         user.setId(testID);
         user.setFirstName(testFirstName);
         user.setLastName(testLastName);
@@ -74,7 +72,7 @@ public class TestUser {
         user.setBanned(testBanned);
         user.setRsvpList(testRSVPList);
 
-        assertAll(
+        assertAll("Getters and Setters",
                 () -> assertEquals(user.getId(), testID),
                 () -> assertEquals(user.getFirstName(), testFirstName),
                 () -> assertEquals(user.getLastName(), testLastName),
@@ -88,7 +86,6 @@ public class TestUser {
 
     @Test
     void testAddRsvp() {
-        user = new User();
         user.addRsvp(testEvent);
 
         assertTrue(user.getRsvpList().contains(testEvent));

@@ -5,16 +5,30 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class TestPayment {
-    private Payment payment;
+    private Payment payment = new Payment();;
     private String testPaymentRef = "abcd";
     private int testUserID = 1;
     private String testAmount = "$1234";
     private LocalDateTime testTime = LocalDateTime.MAX;
 
     @Test
+    void testGettersAndSetters() {
+        payment.setPaymentRef(testPaymentRef);
+        payment.setUser(testUserID);
+        payment.setAmount(testAmount);
+        payment.setPaymentTime(testTime);
+
+        assertAll("Getters and Setters",
+                () -> assertEquals(payment.getPaymentRef(), testPaymentRef),
+                () -> assertEquals(payment.getUser(), testUserID),
+                () -> assertEquals(payment.getAmount(), testAmount),
+                () -> assertEquals(payment.getPaymentTime(), testTime)
+        );
+    }
+
+    @Test
     void testDefaultConstructor() {
-        payment = new Payment();
-        assertAll(
+        assertAll("Default Constructor",
                 () -> assertEquals(payment.getPaymentRef(), ""),
                 () -> assertEquals(payment.getUser(), 0),
                 () -> assertEquals(payment.getAmount(), ""),
@@ -25,7 +39,7 @@ public class TestPayment {
     @Test
     void testFullConstructor() {
         payment = new Payment(testPaymentRef, testUserID, testAmount, testTime);
-        assertAll(
+        assertAll("Full Constructor",
                 () -> assertEquals(payment.getPaymentRef(), testPaymentRef),
                 () -> assertEquals(payment.getUser(), testUserID),
                 () -> assertEquals(payment.getAmount(), testAmount),

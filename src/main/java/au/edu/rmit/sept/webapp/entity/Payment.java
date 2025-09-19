@@ -10,6 +10,11 @@ public class Payment {
     private LocalDateTime time;
     // uuid make sure 
 
+    public void setPaymentRef(String paymentRef) { this.paymentRef = paymentRef; }
+    public void setUser(int userID) { this.userID = userID; }
+    public void setAmount(String amount) { this.amount = amount; }
+    public void setPaymentTime(LocalDateTime time) { this.time = time; }
+
     public String getPaymentRef() { return paymentRef; }
     public int getUser() { return userID; }
     public String getAmount() { return amount; }
