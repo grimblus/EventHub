@@ -10,18 +10,20 @@ import jakarta.servlet.http.HttpSession;
 @ControllerAdvice
 public class GlobalController {
     @ModelAttribute("loggedIn")
-    public boolean checkLoggedIn(HttpSession session) {
+    public boolean checkLoggedIn(Model model, HttpSession session) {
 
         if (session.getAttribute("user") == null) {
             return false;
         } 
         else {
+            model.addAttribute("user", session.getAttribute("user"));
             return true;
         }
     }
+
     @ModelAttribute("isOrganiser")
     public boolean isOrganiser(HttpSession session) {
-        if (checkLoggedIn(session)) {
+        if (session.getAttribute("user") != null) {
             User user =  (User) session.getAttribute("user");
 
             if (user.getPermissionLevel() == User.permissions.ORGANISER) {
