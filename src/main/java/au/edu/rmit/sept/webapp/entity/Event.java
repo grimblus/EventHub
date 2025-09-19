@@ -2,6 +2,8 @@ package au.edu.rmit.sept.webapp.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.validation.constraints.Null;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -24,7 +26,16 @@ public class Event {
     private List<String> tags;
     private List<String> images;
     // Default Constructor
-    public Event() {}
+    public Event() {
+        this.id = -99;
+        this.title = "";
+        this.description = "";
+        this.ownerID = -99;
+        this.date = null;
+        this.location = "";
+        this.ticketPrice = "";
+        this.category = "";
+    }
 
     // Temp Testing Constructor
     public Event(String title, String description, int ownerID, LocalDateTime date,

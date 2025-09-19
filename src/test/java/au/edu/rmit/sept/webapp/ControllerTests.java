@@ -3,8 +3,7 @@ package au.edu.rmit.sept.webapp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.apache.catalina.core.ApplicationContext;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import au.edu.rmit.sept.webapp.controllers.AccountController;
@@ -37,25 +36,23 @@ class ControllerTests {
     @Autowired private RSVPListController rsvpListController;
     @Autowired private SignUpController signUpController;
 
-    @Autowired
-    private ApplicationContext context;
-
 	@Test
 	void contextLoads() throws Exception {
-        assertThat(accController).isNotNull();
-        assertThat(adminController).isNotNull();
-        assertThat(createController).isNotNull();
-        assertThat(eventFeedController).isNotNull();
-        assertThat(globalController).isNotNull();
-        assertThat(homeController).isNotNull();
-        assertThat(loginController).isNotNull();
-        assertThat(myEventsController).isNotNull();
-        assertThat(myNotificationsController).isNotNull();
-        assertThat(pageController).isNotNull();
-        assertThat(paymentController).isNotNull();
-        assertThat(rsvpListController).isNotNull();
-        assertThat(signUpController).isNotNull();
+        assertAll("controllers",
+            () -> assertThat(accController).isNotNull(),
+            () -> assertThat(adminController).isNotNull(),
+            () -> assertThat(createController).isNotNull(),
+            () -> assertThat(eventFeedController).isNotNull(),
+            () -> assertThat(globalController).isNotNull(),
+            () -> assertThat(homeController).isNotNull(),
+            () -> assertThat(loginController).isNotNull(),
+            () -> assertThat(myEventsController).isNotNull(),
+            () -> assertThat(myNotificationsController).isNotNull(),
+            () -> assertThat(pageController).isNotNull(),
+            () -> assertThat(paymentController).isNotNull(),
+            () -> assertThat(rsvpListController).isNotNull(),
+            () -> assertThat(signUpController).isNotNull()
+        );
 	}
-
 }
 
