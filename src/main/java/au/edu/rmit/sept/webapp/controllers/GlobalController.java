@@ -20,9 +20,10 @@ public class GlobalController {
             return true;
         }
     }
+
     @ModelAttribute("isOrganiser")
     public boolean isOrganiser(HttpSession session) {
-        if (checkLoggedIn(session)) {
+        if (session.getAttribute("user") != null) {
             User user =  (User) session.getAttribute("user");
 
             if (user.getPermissionLevel() == User.permissions.ORGANISER) {
