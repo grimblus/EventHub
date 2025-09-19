@@ -196,16 +196,18 @@
                     <div class="filter-tags-container">
                         <label>Tags:</label>
                         <div class="filter-tags-item" th:each="tag: ${tags}">
-                           <label>
-                               <input type="checkbox" name="tags" value="${tag}" th:text="${tag.substring(0, 1).toUpperCase() + tag.substring(1)}" />
-                           </label>
+                            <label th:if="${#strings.length(tag) > 2}">
+                                <input type="checkbox" name="tags" value="${tag}" />
+                                <span th:text="${#strings.capitalize(tag)}"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="filter-keywords-container">
                         <label>Keywords:</label>
                         <div class="filter-keywords-item" th:each="keyword : ${keywords}">
-                            <label>
-                                <input type="checkbox" name="keywords" value="${keyword}" th:text="${keyword.substring(0, 1).toUpperCase() + keyword.substring(1)}" />
+                            <label th:if="${#strings.length(keyword) > 2}">
+                                <input type="checkbox" name="keywords" value="${keyword}" />
+                                <span th:text="${#strings.capitalize(keyword)}"></span>
                             </label>
                         </div>
                     </div>
