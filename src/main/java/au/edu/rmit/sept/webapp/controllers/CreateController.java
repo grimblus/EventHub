@@ -3,7 +3,6 @@ package au.edu.rmit.sept.webapp.controllers;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventService;
-import au.edu.rmit.sept.webapp.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +18,10 @@ import java.util.ArrayList;
 public class CreateController {
 
     private final EventService eventService;
-    private final UserService userService;
 
     @Autowired
-    public CreateController(EventService eventService, UserService userService) {
+    public CreateController(EventService eventService) {
         this.eventService = eventService;
-        this.userService = userService;
     }
 
     @GetMapping("/create")

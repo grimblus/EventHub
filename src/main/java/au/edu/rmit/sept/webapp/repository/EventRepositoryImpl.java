@@ -3,7 +3,6 @@ package au.edu.rmit.sept.webapp.repository;
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
-import jakarta.validation.constraints.Null;
 
 import org.springframework.stereotype.Repository;
 

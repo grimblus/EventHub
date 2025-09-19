@@ -6,8 +6,6 @@ import java.sql.PreparedStatement;
 import org.springframework.stereotype.Repository;
 
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
-import au.edu.rmit.sept.webapp.entity.Event;
-import au.edu.rmit.sept.webapp.entity.User;
 
 @Repository
 public class EventParticipantsRepositoryImpl implements EventParticipantsRepository {

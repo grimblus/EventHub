@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import au.edu.rmit.sept.webapp.entity.User;
-import au.edu.rmit.sept.webapp.repository.UserRepository;
 
 @Controller
 public class LoginController {
@@ -31,6 +29,7 @@ public class LoginController {
         return "login/index"; 
     }
 
+    // Checks if the user logging in is valid
     @PostMapping("/login")
     public String loginSubmit (@RequestParam String email,
                                @RequestParam("pw") String password,
@@ -38,11 +37,13 @@ public class LoginController {
 
         User user = userService.findUserByEmail(email);
 
+        // Checks if user's email exists in the database
         if (user == null) {
             model.addAttribute("error", "No account found with that email.");
             return "login/index";
         }
 
+        // Checks if user's password matches the one in the database
         if (!user.getPassword().equals(password)) {
             model.addAttribute("error", "Invalid password.");
             return "login/index";

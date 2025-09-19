@@ -228,6 +228,7 @@
                         <span th:text="${event.getLocation()}">Event Location</span>
                     </div>
                 </div>
+                <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->
                 <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
                     <div th:attr="id=${'infoModal' + event.id}" class="modal">
                         <div class="modal-content">
@@ -242,6 +243,7 @@
                                 <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
                                 <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
                                 <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                <!-- Delete event button which only shows if user is a club organiser and also is the owner of the event -->
                                 <div class="delete-btn-wrapper" style="display: none;">
                                     <button class="btn btn-danger" th:onclick="|deleteEvent(${event.id}, this)|">Delete Event</button>
                                 </div>
@@ -354,6 +356,7 @@
                 .catch(msg => alert(msg));
             }
 
+            // DELETE selected event from database
             function deleteEvent(eventId, btnEl) {
                 if (!confirm("Are you sure you want to delete this event?")) {
                     return;
@@ -366,6 +369,7 @@
                             btnEl.closest(".modal").style.display = "none";
                             location.reload();
                         } else {
+                            // if event didn't delete
                             return r.text().then(msg => {
                                 throw new Error(msg || "Failed to delete event.");
                             });
