@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import au.edu.rmit.sept.webapp.repository.EventParticipantsRepository;
-import au.edu.rmit.sept.webapp.repository.EventRepository;
 
 @Service
 public class EventParticipantsServiceImpl implements EventParticipantsService {
