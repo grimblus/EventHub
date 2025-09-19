@@ -24,6 +24,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         return "REF-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(Locale.ROOT);
     }
 
+    // created some dummy payments to test with
     static List<Payment> paymentList = List.of(
         new Payment(randUUID(), 1, "54", LocalDateTime.now()),
         new Payment(randUUID(), 1, "43", LocalDateTime.now()),
