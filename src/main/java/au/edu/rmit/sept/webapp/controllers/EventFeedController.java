@@ -73,12 +73,14 @@ public class EventFeedController {
     //     return "events/index";
     // }
 
+    //Checks if the user is the owner of the event when they click on the modal
     @GetMapping("/events/modal/{eventId}")
     @ResponseBody
     public Map<String, Object> checkOwner(@PathVariable Integer eventId, HttpSession session) {
         User user = (User) session.getAttribute("user");
         boolean isOwner = false;
 
+        //If the owner is an organiser and the user exists, checks if user id matches with the event's owner id
         if (user != null && user.getPermissionLevel() == User.permissions.ORGANISER) {
             Integer ownerId = eventService.getOwnerID(eventId);
             if (ownerId != null && ownerId.equals(user.getId())) {

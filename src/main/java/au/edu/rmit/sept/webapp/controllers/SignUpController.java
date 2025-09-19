@@ -28,11 +28,16 @@ public class SignUpController {
 
     @GetMapping("/signUp")
     public String signUp(Model model) {
+        //creates new user for details to be added to
         model.addAttribute("user", new User());
+
+        //passes the 2 choosable permissions to the sign up page
         User.permissions[] perms = {User.permissions.ORGANISER, User.permissions.STUDENT};
         model.addAttribute("permissions", perms);
+
         return "signUp/index";
     }
+
     private boolean validate(User user, ArrayList<String> errors) {
         boolean foundError = false;
         String firstName = user.getFirstName();
@@ -121,26 +126,28 @@ public class SignUpController {
     
     @PostMapping("/signUp") 
     public String submitForm(@ModelAttribute User user, HttpSession session, Model model) {
-        System.out.println("ran controllerrrr");
+        //errors arraylist that is added to if error is found
         ArrayList<String> errors = new ArrayList<>();
         
-        
+        //pass errors to the validate function which will add found errors to it
         if (validate(user, errors)) {
+            //add the errors if there are any
             model.addAttribute("errors", errors);
             User.permissions[] perms = {User.permissions.ORGANISER, User.permissions.STUDENT};
             model.addAttribute("permissions", perms);
             return "signUp/index";
         }
-
+        //sanitise input
         user = inputSanitisation(user);
 
-
+        //add the user to the database
         userService.addUser(user);
+        //set the logged in user
         session.setAttribute("user", user);
 
         return "redirect:/";
     }
-
+    //used for debugging, go to /session to see what is stored
       @GetMapping("/session")
     @ResponseBody
     public String debugSession(HttpSession session) {
