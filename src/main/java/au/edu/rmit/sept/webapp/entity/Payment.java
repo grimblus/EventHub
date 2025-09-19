@@ -15,7 +15,12 @@ public class Payment {
     public String getAmount() { return amount; }
     public LocalDateTime getPaymentTime() { return time; }
 
-    public Payment() {}
+    public Payment() {
+        paymentRef = "";
+        userID = 0;
+        amount = "";
+        time = LocalDateTime.MIN;
+    }
 
     public Payment(String paymentRef, int userID, String amount, LocalDateTime time) {
         this.paymentRef = paymentRef;

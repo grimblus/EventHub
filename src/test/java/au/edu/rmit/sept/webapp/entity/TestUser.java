@@ -1,5 +1,4 @@
 package au.edu.rmit.sept.webapp.entity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUser {
     private User user;
     private Event testEvent = new Event();
-    private int testID = -1;
+    private int testID = 0;
     private String testFirstName = "Bingus";
     private String testLastName = "Bongus";
     private String testEmail = "bingus@example.com";
