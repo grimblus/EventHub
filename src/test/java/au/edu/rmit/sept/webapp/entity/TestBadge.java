@@ -12,7 +12,8 @@ public class TestBadge {
     private String testBadgeDescription = "Congrats";
     private String testBadgeImage = "img.png";
     private HashMap<String, Boolean> testBadgeFlags = new HashMap<>();
-    private String testFlagCondition = "exists";
+    private String testFlagCondition1 = "exists";
+    private String testFlagCondition2 = "fails";
     private Boolean testSetFlag = true;
 
     @Test
@@ -56,16 +57,23 @@ public class TestBadge {
 
     @Test
     void testSetBadgeFlagCondition() {
-        badge.setBadgeFlagCondition(testFlagCondition, testSetFlag);
+        badge.setBadgeFlagCondition(testFlagCondition1, testSetFlag);
         assertAll("Set badge Flag Condition",
                 () -> assertEquals(badge.getBadgeFlags().size(), 1)
         );
     }
 
     @Test
-    void testRemoveBadgeFlagCondition() {
-        badge.setBadgeFlagCondition(testFlagCondition, testSetFlag);
-        badge.removeBadgeFlagCondition(testFlagCondition);
+    void testRemoveBadgeFlagConditionSuccess() {
+        badge.setBadgeFlagCondition(testFlagCondition1, testSetFlag);
+        badge.removeBadgeFlagCondition(testFlagCondition1);
         assertEquals(badge.getBadgeFlags().size(), 0);
+    }
+
+    @Test
+    void testRemoveBadgeFlagConditionFail() {
+        badge.setBadgeFlagCondition(testFlagCondition1, testSetFlag);
+        badge.removeBadgeFlagCondition(testFlagCondition2);
+        assertEquals(badge.getBadgeFlags().size(), 1);
     }
 }
