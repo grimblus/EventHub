@@ -16,7 +16,7 @@ public class User {
 
     // Default Constructor
     public User() {
-        this.id = null;
+        this.id = 0;
         this.firstName = "";
         this.lastName = "";
         this.password = "";
@@ -28,7 +28,7 @@ public class User {
 
     // No ID Constructor
     public User(String firstName, String lastName, String password, String email, permissions permissionLevel) {
-        this.id = null;
+        this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -39,7 +39,7 @@ public class User {
     }
 
     // Full Constructor
-    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel, boolean banned, ArrayList<Event> rsvpList) {
+    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel, boolean banned) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,7 +47,7 @@ public class User {
         this.email = email;
         this.permissionLevel = permissionLevel;
         this.banned = banned;
-        this.rsvpList = rsvpList;
+        this.rsvpList = new ArrayList<Event>();
     }
 
     public int getId() {
