@@ -9,12 +9,13 @@ import jakarta.servlet.http.HttpSession;
 @ControllerAdvice
 public class GlobalController {
     @ModelAttribute("loggedIn")
-    public boolean checkLoggedIn(HttpSession session) {
+    public boolean checkLoggedIn(Model model, HttpSession session) {
 
         if (session.getAttribute("user") == null) {
             return false;
         } 
         else {
+            model.addAttribute("user", session.getAttribute("user"));
             return true;
         }
     }
