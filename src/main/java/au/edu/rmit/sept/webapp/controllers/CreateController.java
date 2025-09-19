@@ -1,7 +1,10 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.Event;
+import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventService;
+import au.edu.rmit.sept.webapp.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,16 +13,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Controller
 public class CreateController {
 
-    private final EventService service;
+    private final EventService eventService;
+    private final UserService userService;
 
     @Autowired
-    public CreateController(EventService service) { this.service = service; }
+    public CreateController(EventService eventService, UserService userService) {
+        this.eventService = eventService;
+        this.userService = userService;
+    }
 
     @GetMapping("/create")
     public String create(Model model) {
@@ -29,12 +35,12 @@ public class CreateController {
     }
 
     @PostMapping("/create")
-    public String submitForm(@ModelAttribute Event event, Model model) {
+    public String submitForm(@ModelAttribute Event event, Model model, HttpSession session) {
         ArrayList<String> errors = new ArrayList<>();
         event.setImages(new ArrayList<>());
-        event.setOwnerID(1); // Change this to get Owner ID in create event
+        event.setOwnerID(((User) session.getAttribute("user")).getId());
         if (validate(event, errors)) {
-            service.addEvent(event);
+            eventService.addEvent(event);
             model.addAttribute("success", "Successfully Added Event!");
 
         }
@@ -82,7 +88,7 @@ public class CreateController {
         // Location Validation
 
         // Ticket Price Validation
-        if (!event.getTicketPrice().isEmpty() && Integer.parseInt(event.getTicketPrice()) < 0) {
+        if (!event.getTicketPrice().isEmpty() && (Integer.parseInt(event.getTicketPrice()) < 0 && Integer.parseInt(event.getTicketPrice()) > 1000)) {
             errors.add("Ticket price cannot be negative!");
             valid = false;
         }
