@@ -13,8 +13,11 @@
         <div>
           <a th:href="@{/}">Home</a>
           <a href="/events">Events</a>
-          <a th:href="@{/create}">Create</a>
+          <a th:if="${isOrganiser}" th:href="@{/create}">Create</a>
           <a th:if="${loggedIn}" href="/account">Account</a>
+          <div th:if="${loggedIn}">
+            <a th:if="${user.permissionLevel.name() == 'ADMIN'}" href="/admin">Admin</a>
+          </div>
         </div>
         <div th:if="${loggedIn}">
           <a th:href="@{/logout}">Sign Out</a>

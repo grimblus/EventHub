@@ -21,10 +21,10 @@ public class PageController {
 //        return "events/index";
 //    }
 
-    @GetMapping("/create")
-    public String create() {
-        return "create/index";
-    }
+//    @GetMapping("/create")
+//    public String create() {
+//        return "create/index";
+//    }
 
 //    @GetMapping("/account")
 //    public String account() {
