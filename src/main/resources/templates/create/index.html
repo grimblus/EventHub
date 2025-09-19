@@ -93,6 +93,31 @@
             font-size: 0.95rem;
             line-height: 1;
         }
+        .success-error-container {
+            margin-top: 0.45rem;
+        }
+        .error-container {
+            padding: 12px 16px;
+            border-left: 4px solid #d32f2f;
+            background: red;
+            color: #7a0b0b;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .error-container span {
+            display: block;
+        }
+
+        .success-container {
+            margin: 8px 0;
+            padding: 12px 16px;
+            border-left: 4px solid green;
+            background: green;
+            color: #1b5e20;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 
@@ -131,6 +156,14 @@
                     <button type="submit">
                         Submit
                     </button>
+                    <div class="success-error-container">
+                        <div class="error-container" th:each="error : ${errors}">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div class="success-container" th:each="s : ${success}">
+                            <span th:text="${s}"></span>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
