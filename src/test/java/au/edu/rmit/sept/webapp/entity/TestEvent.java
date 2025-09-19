@@ -23,7 +23,7 @@ public class TestEvent {
             () -> assertEquals(event.getOwnerID(), -99),
             () -> assertNull(event.getDate()),
             () -> assertEquals(event.getLocation(),""),
-            () -> assertEquals(event.getTicketPrice(),);
+            () -> assertEquals(event.getTicketPrice(),"")
         );
     }
 

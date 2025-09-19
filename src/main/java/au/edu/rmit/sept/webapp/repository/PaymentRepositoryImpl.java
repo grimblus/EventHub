@@ -24,6 +24,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         return "REF-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(Locale.ROOT);
     }
 
+    // created some dummy payments to test with
     static List<Payment> paymentList = List.of(
         new Payment(randUUID(), 1, "54", LocalDateTime.now()),
         new Payment(randUUID(), 1, "43", LocalDateTime.now()),
@@ -61,6 +62,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         }
     }
 
+    // get every payment from the payments table and add them to a list of Payments that is returned 
     public List<Payment> GetAllPayments() {
         List<Payment> payments = new ArrayList<>();
         try(Connection connection = H2DatabaseConnection.getConnection()) {

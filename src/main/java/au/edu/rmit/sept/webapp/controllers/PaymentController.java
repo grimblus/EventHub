@@ -30,7 +30,6 @@ import java.util.stream.IntStream;
 @Controller
 public class PaymentController {
 
-    // event service is NULLLLLL
     private EventService eventService;
     private UserService userService;
     private PaymentService paymentService;
@@ -53,21 +52,23 @@ public class PaymentController {
 
         Event curEvent = eventService.getEvent(id, title);
         PaymentRequest req = new PaymentRequest();
+
+        // we have to set the ticket price on loading so that 
+        // the payment request field is filled
         req.setAmount(Double.parseDouble(curEvent.getTicketPrice()));
         model.addAttribute("payment", req);
-
-
 
         // see nextYears helper below
         model.addAttribute("years", nextYears(12));
 
-        // Getting user when id is not available even though it is?
+        // Getting user when id through user email, stops weird issue
+        // where if user creates an account and immediatly goes to buy a ticket the page 
+        // crashes
         String em = (((User)session.getAttribute("user")).getEmail());
         User user = userService.findUserByEmail(em);
         //System.out.println(user.getId());
 
         model.addAttribute("userId", user.getId());
-
         model.addAttribute("event", curEvent);
 
         String date = curEvent.getDate().format(f).toString();
@@ -76,6 +77,7 @@ public class PaymentController {
         return "payment/checkout";
     }
 
+    // once the user has baught a ticket, add it to their rsvp list 
     private void addToRsvpList(Event event, HttpSession session ) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
@@ -83,6 +85,7 @@ public class PaymentController {
         }
     } 
 
+    // events also need to know that the user will be attending the event
     private void addToEventParticipants(Event event, HttpSession session ) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
@@ -98,7 +101,9 @@ public class PaymentController {
                       @RequestParam("eventTitle") String eventTitle,
                       @RequestParam("userId") int userId,
                       Model model, HttpSession session) {
-                        
+        
+        // Due to the form reloading the page, we have to reload the event and user objects
+        // to ensure the information in the page is filled out
         Event event = eventService.getEvent(eventID, eventTitle);
         model.addAttribute("event", event);
         model.addAttribute("userId", userId);
@@ -113,6 +118,8 @@ public class PaymentController {
         }
 
         Result r = gateway.charge(req);
+        // now we check if the user has input valid details, sending them to the receipt page if they have
+        // and returning an error message if they have not/
         if (r.success()) {
             addToRsvpList(event, session);
             addToEventParticipants(event, session);
@@ -129,7 +136,10 @@ public class PaymentController {
                           @RequestParam("ref") String ref,
                           @RequestParam("userId") int user_id,
                           Model model) {
-
+        
+        // upon succesful purchase of a ticket, we want to display a reciept for
+        // the user to confirm the payment, along with a reference number they can use
+        // to enquire about the payment
         Event event = eventService.getEvent(id, title);
         User user = userService.findUserByID(user_id);
 
