@@ -1,28 +1,28 @@
 package au.edu.rmit.sept.webapp.templates.events;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+@SpringBootTest
+@AutoConfigureMockMvc
+class TestIndex {
 
-// events page renders title and search bar
-public class TestIndex {
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void events_renders() throws Exception {
-        String html = Files.readString(
-                Paths.get("src/main/resources/templates/events/index.html")
-        );
-
-        Document doc = Jsoup.parse(html);
-
-        // simple checks for title, search bar
-        assertThat(doc.title()).isEqualTo("EventHub - Events");
-        assertThat(doc.select("form[action='/events']")).isNotEmpty();
-        assertThat(doc.select("input#search")).isNotEmpty();
+        mockMvc.perform(get("/events"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("events/index"))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("EventHub - Events")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("form")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("search")));
     }
 }
