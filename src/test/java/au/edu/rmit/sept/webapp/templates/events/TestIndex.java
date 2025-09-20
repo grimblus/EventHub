@@ -16,6 +16,7 @@ class TestIndex {
     @Autowired
     private MockMvc mockMvc;
 
+    // simple test looking for title, searchbar
     @Test
     void events_renders() throws Exception {
         mockMvc.perform(get("/events"))
