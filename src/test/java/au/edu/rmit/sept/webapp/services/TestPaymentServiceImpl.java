@@ -53,8 +53,9 @@ public class TestPaymentServiceImpl {
 
     @Test
     void testGetPayment() {
-        when(paymentRepository.GetPayment("abc")).thenReturn(payment);
-        Payment result = paymentService.GetPayment("abc");
+        String testRef = "abc";
+        when(paymentRepository.GetPayment(testRef)).thenReturn(payment);
+        Payment result = paymentService.GetPayment(testRef);
         assertEquals(payment, result);
     }
 }
