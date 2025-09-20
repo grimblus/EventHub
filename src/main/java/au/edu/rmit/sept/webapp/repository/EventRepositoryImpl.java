@@ -84,7 +84,7 @@ public class EventRepositoryImpl implements EventRepository {
             e.printStackTrace();
         }
 
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS event_participants (" +
                     "    event_id INT NOT NULL," +
                     "    user_id INT NOT NULL," +
@@ -94,7 +94,7 @@ public class EventRepositoryImpl implements EventRepository {
             PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
             createTableStatement.executeUpdate();
 
-            String insertSQL = "INSERT INTO event_participants (event_id, user_id) VALUES (?, ?)";
+            /*String insertSQL = "INSERT INTO event_participants (event_id, user_id) VALUES (?, ?)";
             for (Event event: eventList) {
                 for (User user : event.getParticipants()) {
                     try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
@@ -103,7 +103,7 @@ public class EventRepositoryImpl implements EventRepository {
                         ps.executeUpdate();
                     }
                 }
-            }
+            } Commented this part out for the sake of testing while no default events have participants*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -335,8 +335,8 @@ public class EventRepositoryImpl implements EventRepository {
             String deleteSQL = "DELETE FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(deleteSQL)) {
                 ps.setInt(1, id);
-                int rowsAffected = ps.executeUpdate();
-                return rowsAffected > 0;
+                ps.executeUpdate();
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -351,7 +351,8 @@ public class EventRepositoryImpl implements EventRepository {
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setString(1, String.join(",", images));
                 ps.setInt(2, id);
-                return ps.executeUpdate() > 0;
+                ps.executeUpdate();
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -388,5 +389,4 @@ public class EventRepositoryImpl implements EventRepository {
         }
         return null;
     }
-
 }

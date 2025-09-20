@@ -102,6 +102,15 @@ public class TestEventRepositoryImpl {
     }
 
     @Test
+    void testGetEventNotFound() {
+        int id = 0;
+        String title = "";
+
+        event = eventRepository.getEvent(id, title);
+        assertNull(event);
+    }
+
+    @Test
     void testGetEventsByFilter() {
         List<Event> nameSearch = eventRepository.getEventsByFilter("Workshop", null, null, null, null);
         List<Event> tagSearch = eventRepository.getEventsByFilter(null, List.of("education", "beginner"), null, null, null);
@@ -114,6 +123,16 @@ public class TestEventRepositoryImpl {
                 () -> assertEquals(1, locationSearch.get(0).getId()),
                 () -> assertEquals(1, categorySearch.get(0).getId()),
                 () -> assertEquals(1, keywordSearch.get(0).getId())
+        );
+    }
+
+    @Test
+    void testGetEventsByFilterNullOrEmpty() {
+        List<Event> searchNull = eventRepository.getEventsByFilter(null, null, null, null, null);
+        List<Event> searchEmpty = eventRepository.getEventsByFilter("", List.of(), "", "", List.of());
+        assertAll("Empty Search Results",
+                () -> assertEquals(eventRepository.getEvents().size(), searchNull.size()),
+                () -> assertEquals(eventRepository.getEvents().size(), searchEmpty.size())
         );
     }
 
@@ -146,6 +165,13 @@ public class TestEventRepositoryImpl {
     }
 
     @Test
+    void testFindEventByIDNotFound() {
+        event = eventRepository.findEventbyID(0);
+
+        assertNull(event);
+    }
+
+    @Test
     void testDeleteEventByID() {
         eventRepository.deleteEventbyID(1);
         List<Event> events = eventRepository.getEvents();
@@ -172,8 +198,21 @@ public class TestEventRepositoryImpl {
     }
 
     @Test
+    void testDeleteImageForEventNotFound() {
+        assertAll("Delete Event Image",
+                () -> assertFalse(eventRepository.deleteImageForEvent(1, -1)),
+                () -> assertFalse(eventRepository.deleteImageForEvent(1, Integer.MAX_VALUE))
+        );
+    }
+
+    @Test
     void testGetOwnerID() {
         assertEquals(5, eventRepository.getOwnerID(1));
+    }
+
+    @Test
+    void testGetOwnerIDNotFound() {
+        assertNull(eventRepository.getOwnerID(0));
     }
 
     @Test
