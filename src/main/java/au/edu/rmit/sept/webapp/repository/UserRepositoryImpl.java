@@ -9,9 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
+    final private Supplier<Connection> connectionSupplier;
+
     static List<User> userList = List.of(
             new User("Aaron", "Tran", "password123", "aaron@example.com", User.permissions.STUDENT),
             new User("Bingus", "Bongus", "s3cur3pass", "bingus@example.com", User.permissions.ADMIN),
@@ -21,8 +24,23 @@ public class UserRepositoryImpl implements UserRepository {
             new User("Deez", "Noots", "g0tt3m", "deez@example.com", User.permissions.ORGANISER)
     );
 
+    public UserRepositoryImpl() {
+        this.connectionSupplier = () -> {
+            try {
+                return H2DatabaseConnection.getConnection();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
+
+    //Constructor for mock connection
+    public UserRepositoryImpl(Supplier<Connection> connectionSupplier) {
+        this.connectionSupplier = connectionSupplier;
+    }
+
     public void setUsers() {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "firstName VARCHAR(255), " +
@@ -52,7 +70,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public void addUser(User user) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel, banned) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                 ps.setString(1, user.getFirstName());
@@ -70,7 +88,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     public  List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT * FROM users";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 try  (ResultSet rs = ps.executeQuery()) {
@@ -95,7 +113,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public  User findUserByID(Integer id) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT * FROM users WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setInt(1, id);
@@ -120,7 +138,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public  User findUserByFirstName(String firstName) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT * FROM users WHERE firstName = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setString(1, firstName);
@@ -145,7 +163,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public  User findUserByLastName(String lastName) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT * FROM users WHERE lastName = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setString(1, lastName);
@@ -169,8 +187,8 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
-    public  User findUserByEmail(String email) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+    public User findUserByEmail(String email) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT * FROM users WHERE email = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setString(1, email);
@@ -195,7 +213,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public boolean toggleBanned(Integer id) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT banned FROM users WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setInt(1, id);
@@ -209,7 +227,7 @@ public class UserRepositoryImpl implements UserRepository {
                             ps2.setBoolean(1, newBanned);
                             ps2.setInt(2, id);
                             int rows = ps2.executeUpdate();
-                            return rows > 0;
+                            return true;
                         }
                     }
                 }
