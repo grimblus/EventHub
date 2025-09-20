@@ -5,6 +5,6 @@ import au.edu.rmit.sept.webapp.entity.Event;
 import java.util.List;
 
 public interface EventParticipantsRepository {
-    
+    public List<Integer> getEventParticipants(Integer eventId);
     public void addEventParticipant(Integer eventId, Integer userId);
 }
