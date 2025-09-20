@@ -29,19 +29,12 @@ class TestIndex {
 
     Document doc = Jsoup.parse(res.getResponse().getContentAsString());
 
-    // Title (choose one of the assertions below)
+    // Title
     assertThat(doc.title()).isEqualTo("Home - EventHub");
-    // assertThat(doc.title()).contains("EventHub");
 
     // H1
     assertThat(doc.selectFirst("h1.welcome-title").text())
           .isEqualTo("Welcome to EventHub");
-
-    // Navbar links
-    assertThat(doc.select("nav a[href='/']")).isNotEmpty();
-    assertThat(doc.select("nav a[href='/events']")).isNotEmpty();
-    assertThat(doc.select("nav a[href='/login']")).isNotEmpty();
-    assertThat(doc.select("nav a[href='/signUp']")).isNotEmpty();
 
     // Carousel images
     assertThat(doc.select("#welcomeCarousel img.active")).hasSize(1);
@@ -56,9 +49,6 @@ class TestIndex {
     doc.select("#welcomeCarousel img").forEach(img ->
     assertThat(img.hasAttr("alt")).as("img should have alt").isTrue()
       );
-
-    // Footer present
-    assertThat(doc.select("footer")).isNotEmpty();
   }
 
   // Test layout parent shows elements (navbar, footer)

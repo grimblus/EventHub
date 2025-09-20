@@ -21,7 +21,7 @@ class TestIndex {
     // When logged in as ADMIN, the page should render
     @Test
     @WithMockUser(username = "bingus@example.com", roles = {"ADMIN"})
-    void adminPage_renders_for_admin_user() throws Exception {
+    void adminPage_renders() throws Exception {
         mockMvc.perform(get("/admin"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Admin Display")));

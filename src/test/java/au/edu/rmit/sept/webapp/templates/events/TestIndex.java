@@ -14,14 +14,13 @@ public class TestIndex {
 
     @Test
     void events_renders() throws Exception {
-        // Load raw HTML file (skip Thymeleaf processing)
         String html = Files.readString(
                 Paths.get("src/main/resources/templates/events/index.html")
         );
 
         Document doc = Jsoup.parse(html);
 
-        // simple checks
+        // simple checks for title, search bar
         assertThat(doc.title()).isEqualTo("EventHub - Events");
         assertThat(doc.select("form[action='/events']")).isNotEmpty();
         assertThat(doc.select("input#search")).isNotEmpty();
