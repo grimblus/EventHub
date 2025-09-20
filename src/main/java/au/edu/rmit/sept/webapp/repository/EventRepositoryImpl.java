@@ -13,9 +13,12 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Supplier;
 
 @Repository
 public class EventRepositoryImpl implements EventRepository {
+    final private Supplier<Connection> connectionSupplier;
+
     static List<Event> eventList = List.of(
             new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "6","General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
             new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "9999999999", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
@@ -28,8 +31,23 @@ public class EventRepositoryImpl implements EventRepository {
         return finalList;
     }
 
+    public EventRepositoryImpl() {
+        this.connectionSupplier = () -> {
+            try {
+                return H2DatabaseConnection.getConnection();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
+
+    //Constructor for mock connection
+    public EventRepositoryImpl(Supplier<Connection> connectionSupplier) {
+        this.connectionSupplier = connectionSupplier;
+    }
+
     public void setEvents() {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS events (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "title VARCHAR(255), " +
@@ -92,7 +110,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public void addEvent(Event event) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, ticketPrice, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                 ps.setString(1, event.getTitle());
@@ -114,7 +132,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     public List<Event> getEvents() {
         List<Event> events = new ArrayList<>();
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT * FROM events";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 try  (ResultSet rs = ps.executeQuery()) {
@@ -148,7 +166,7 @@ public class EventRepositoryImpl implements EventRepository {
         Event event = null; // start with a blank event
         StringBuilder searchSQL = new StringBuilder("SELECT * FROM events WHERE id = ? AND LOWER(title) = ?");
 
-        try( Connection connection = H2DatabaseConnection.getConnection()) {
+        try( Connection connection = connectionSupplier.get()) {
             try (PreparedStatement ps = connection.prepareStatement(searchSQL.toString())) {
                 ps.setInt(1, id);
                 ps.setString(2, name.toLowerCase());
@@ -185,39 +203,39 @@ public class EventRepositoryImpl implements EventRepository {
 
         if (name != null && !name.isEmpty()) {
             searchSQL.append(" AND LOWER(title) LIKE ?");
-            parameters.add("%" + name + "%");
+            parameters.add("%" + name.toLowerCase() + "%");
         }
         if (tags != null && !tags.isEmpty()) {
             StringBuilder addSQL = new StringBuilder("AND (");
             for (int i = 0; i < tags.size(); i++) {
                 if (i > 0) { addSQL.append(" OR "); }
                 addSQL.append("LOWER(tags) LIKE ?");
-                parameters.add("%" + tags.get(i) + "%");
+                parameters.add("%" + tags.get(i).toLowerCase() + "%");
             }
             addSQL.append(")");
             searchSQL.append(addSQL);
         }
         if (location != null && !location.isEmpty()) {
             searchSQL.append(" AND LOWER(location) LIKE ?");
-            parameters.add("%" + location + "%");
+            parameters.add("%" + location.toLowerCase() + "%");
         }
         if (category != null && !category.isEmpty()) {
             searchSQL.append(" AND LOWER(category) LIKE ?");
-            parameters.add("%" + category + "%");
+            parameters.add("%" + category.toLowerCase() + "%");
         }
         if (keywords != null && !keywords.isEmpty()) {
             StringBuilder addSQL = new StringBuilder("AND (");
             for (int i = 0; i < keywords.size(); i++) {
                 if (i > 0) { addSQL.append(" OR "); }
                 addSQL.append("LOWER(keywords) LIKE ?");
-                parameters.add("%" + keywords.get(i) + "%");
+                parameters.add("%" + keywords.get(i).toLowerCase() + "%");
             }
             addSQL.append(")");
             searchSQL.append(addSQL);
         }
 
         List<Event> events = new ArrayList<>();
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             try (PreparedStatement ps = connection.prepareStatement(searchSQL.toString())) {
                 // Bind parameters
                 for (int i = 0; i < parameters.size(); i++) {
@@ -250,7 +268,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     public List<String> getTags() {
         Set<String> tags = new  HashSet<String>();
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT tags FROM events";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 try  (ResultSet rs = ps.executeQuery()) {
@@ -266,8 +284,8 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public List<String> getKeywords() {
-        Set<String> keywords = new  HashSet<String>();
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        Set<String> keywords = new HashSet<String>();
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT keywords FROM events";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 try  (ResultSet rs = ps.executeQuery()) {
@@ -283,7 +301,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public Event findEventbyID(Integer id) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String searchSQL = "SELECT * FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setInt(1, id);
@@ -313,7 +331,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public boolean deleteEventbyID(Integer id) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String deleteSQL = "DELETE FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(deleteSQL)) {
                 ps.setInt(1, id);
@@ -328,7 +346,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     // update event image list (delimited ,)
     public boolean updateEventImages(int id, List<String> images) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String sql = "UPDATE events SET images = ? WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setString(1, String.join(",", images));
@@ -355,7 +373,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public Integer getOwnerID(Integer eventId) {
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
+        try (Connection connection = connectionSupplier.get()) {
             String sql = "SELECT ownerID FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, eventId);

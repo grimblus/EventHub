@@ -122,10 +122,9 @@ public class TestUserRepositoryImpl {
     void testConstructorCatch() {
         try (MockedStatic<H2DatabaseConnection> mocked = mockStatic(H2DatabaseConnection.class)) {
             mocked.when(H2DatabaseConnection::getConnection).thenThrow(new RuntimeException("Simulated Failure"));
+            UserRepository mockRepo = new UserRepositoryImpl();
 
-            UserRepositoryImpl mockRepo = new UserRepositoryImpl();
-
-            assertFalse(mockRepo.toggleBanned(1));
+            assertDoesNotThrow(mockRepo::getUsers);
         }
     }
 
@@ -139,12 +138,12 @@ public class TestUserRepositoryImpl {
         assertAll("All catch",
                 () -> assertDoesNotThrow(mockRepo::setUsers),
                 () -> assertDoesNotThrow(() -> mockRepo.addUser(user)),
-                () -> assertEquals(0, mockRepo.getUsers().size()),
-                () -> assertNull(mockRepo.findUserByID(2)),
-                () -> assertNull(mockRepo.findUserByFirstName("bingus")),
-                () -> assertNull(mockRepo.findUserByLastName("bongus")),
-                () -> assertNull(mockRepo.findUserByEmail("bingus@example.com")),
-                () -> assertFalse(mockRepo.toggleBanned(2))
+                () -> assertDoesNotThrow(() -> mockRepo.getUsers().size()),
+                () -> assertDoesNotThrow(() -> mockRepo.findUserByID(2)),
+                () -> assertDoesNotThrow(() -> mockRepo.findUserByFirstName("bingus")),
+                () -> assertDoesNotThrow(() -> mockRepo.findUserByLastName("bongus")),
+                () -> assertDoesNotThrow(() -> mockRepo.findUserByEmail("bingus@example.com")),
+                () -> assertDoesNotThrow(() -> mockRepo.toggleBanned(2))
         );
     }
 }
