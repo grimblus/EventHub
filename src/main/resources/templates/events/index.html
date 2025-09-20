@@ -96,7 +96,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto; 
+            overflow: auto;
             background-color: rgba(0,0,0,0.4);
         }
 
@@ -149,7 +149,7 @@
             display: block;
         }
 
-        .gallery-item { 
+        .gallery-item {
             position: relative;
         }
 
@@ -228,7 +228,7 @@
                 <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
                     <div th:attr="id=${'infoModal' + event.id}" class="modal">
                         <div class="modal-content">
-                                    
+
                         <section class="page-split">
                             <div id="left">
                                 <h3>Event Details</h3>
@@ -255,7 +255,7 @@
                             </div>
                         </section>
                         <hr class="divider"/>
-                        
+
                         <!-- add image gallery to event details -->
                         <!-- !!!! TODO: show add and delete buttons only to organiser/admin  -->
                          <section class="gallery">
@@ -281,7 +281,7 @@
             </div>
         </div>
     </div>
-    
+
                 <!-- document.getElementById(modalId).style.display = 'block';
                 fetch('/events/modal?eventid=' + eventId); -->
 
@@ -302,7 +302,7 @@
             function hideModal(modalId) {
                 document.getElementById(modalId).style.display = 'none';
             }
-            
+
             // close modal when you click off it
             document.addEventListener('click', (e) => {
                 const overlay = e.target.closest('.modal');
