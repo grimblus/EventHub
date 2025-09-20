@@ -21,7 +21,7 @@ public class TestUserRepositoryImpl {
     @BeforeEach
     void setUp() throws Exception{
         try (Connection connection = H2DatabaseConnection.getConnection()) {
-            String cleanSlate = "DROP TABLE IF EXISTS users";
+            String cleanSlate = "DROP TABLE IF EXISTS users CASCADE";
             PreparedStatement createTableStatement = connection.prepareStatement(cleanSlate);
             createTableStatement.executeUpdate();
         }
