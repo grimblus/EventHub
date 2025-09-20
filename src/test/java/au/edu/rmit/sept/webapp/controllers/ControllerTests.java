@@ -1,24 +1,10 @@
-package au.edu.rmit.sept.webapp;
+package au.edu.rmit.sept.webapp.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import au.edu.rmit.sept.webapp.controllers.AccountController;
-import au.edu.rmit.sept.webapp.controllers.AdminController;
-import au.edu.rmit.sept.webapp.controllers.CreateController;
-import au.edu.rmit.sept.webapp.controllers.EventFeedController;
-import au.edu.rmit.sept.webapp.controllers.GlobalController;
-import au.edu.rmit.sept.webapp.controllers.HomeController;
-import au.edu.rmit.sept.webapp.controllers.LoginController;
-import au.edu.rmit.sept.webapp.controllers.MyEventsController;
-import au.edu.rmit.sept.webapp.controllers.MyNotificationsController;
-import au.edu.rmit.sept.webapp.controllers.PageController;
-import au.edu.rmit.sept.webapp.controllers.PaymentController;
-import au.edu.rmit.sept.webapp.controllers.RSVPListController;
-import au.edu.rmit.sept.webapp.controllers.SignUpController;
 
 @SpringBootTest
 class ControllerTests {
