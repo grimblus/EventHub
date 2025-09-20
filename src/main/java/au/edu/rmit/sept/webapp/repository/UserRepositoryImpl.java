@@ -169,7 +169,7 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
-    public  User findUserByEmail(String email) {
+    public User findUserByEmail(String email) {
         try (Connection connection = H2DatabaseConnection.getConnection()) {
             String searchSQL = "SELECT * FROM users WHERE email = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
