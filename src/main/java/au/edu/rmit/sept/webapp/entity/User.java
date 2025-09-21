@@ -15,11 +15,20 @@ public class User {
     private ArrayList<Event> rsvpList;
 
     // Default Constructor
-    public User() {}
+    public User() {
+        this.id = 0;
+        this.firstName = "";
+        this.lastName = "";
+        this.password = "";
+        this.email = "";
+        this.permissionLevel = permissions.STUDENT;
+        this.banned = false;
+        this.rsvpList = new ArrayList<>();
+    }
 
     // No ID Constructor
     public User(String firstName, String lastName, String password, String email, permissions permissionLevel) {
-        this.id = null;
+        this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -38,7 +47,7 @@ public class User {
         this.email = email;
         this.permissionLevel = permissionLevel;
         this.banned = banned;
-        this.rsvpList = new ArrayList<>();
+        this.rsvpList = new ArrayList<Event>();
     }
 
     public int getId() {
@@ -73,6 +82,10 @@ public class User {
         this.password = password;
     }
 
+    public void setRsvpList(ArrayList<Event> rsvpList) {
+        this.rsvpList = rsvpList;
+    }
+
     public ArrayList<Event> getRsvpList() {
         return rsvpList;
     }
@@ -80,6 +93,7 @@ public class User {
     public void addRsvp(Event event) {
         this.rsvpList.add(event);
     }
+
     public String getEmail() {
         return email;
     }

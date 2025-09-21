@@ -33,22 +33,24 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public boolean deleteImageForEvent(int eventId, int index) {
-        var ev = repository.findEventbyID(eventId);
+        /*var ev = repository.findEventbyID(eventId);
         if (ev == null) return false;
 
         var images = new ArrayList<>(ev.getImages());
         if (index < 0 || index >= images.size()) return false;
 
         images.remove(index);
-        return repository.updateEventImages(eventId, images);
+        return repository.updateEventImages(eventId, images);*/
+        return repository.deleteImageForEvent(eventId, index);
     }
 
     @Override
     public boolean addImageForEvent(int eventId, String filename) {
-        var ev = repository.findEventbyID(eventId);
+        /*var ev = repository.findEventbyID(eventId);
         if (ev == null) return false;
         var imgs = new java.util.ArrayList<>(ev.getImages());
         imgs.add(filename);
-        return repository.updateEventImages(eventId, imgs);
+        return repository.updateEventImages(eventId, imgs);*/
+        return repository.addImageForEvent(eventId, filename);
     }
 }

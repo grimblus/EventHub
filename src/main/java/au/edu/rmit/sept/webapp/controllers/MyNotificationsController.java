@@ -10,9 +10,6 @@ public class MyNotificationsController {
 
     @GetMapping("/account/myNotifications")
     public String account(Model model, HttpSession session) {
-
-
-
         return "account/myNotifications/index";
     }
 }

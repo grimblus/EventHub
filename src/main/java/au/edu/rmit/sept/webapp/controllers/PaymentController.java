@@ -29,7 +29,7 @@ import java.util.stream.IntStream;
 
 @Controller
 public class PaymentController {
-    
+
     private EventService eventService;
     private UserService userService;
     private PaymentService paymentService;
@@ -118,6 +118,8 @@ public class PaymentController {
         }
 
         Result r = gateway.charge(req);
+        // now we check if the user has input valid details, sending them to the receipt page if they have
+        // and returning an error message if they have not/
         if (r.success()) {
             addToRsvpList(event, session);
             addToEventParticipants(event, session);
