@@ -108,10 +108,10 @@ public class TestEventServiceImpl {
     @Test
     void testDeleteEventbyID() {
         int testId = 1;
-        boolean testBan = false;
-        when(eventRepository.deleteEventbyID(testId)).thenReturn(testBan);
+        boolean testDelete = false;
+        when(eventRepository.deleteEventbyID(testId)).thenReturn(testDelete);
         boolean result = eventService.deleteEventbyID(testId);
-        assertEquals(testBan, result);
+        assertEquals(testDelete, result);
     }
 
     @Test
@@ -121,5 +121,25 @@ public class TestEventServiceImpl {
         when(eventRepository.getOwnerID(testId)).thenReturn(testOwnerId);
         Integer result = eventService.getOwnerID(testId);
         assertEquals(testOwnerId, result);
+    }
+
+    @Test
+    void testDeleteImageForEvent() {
+        int testId = 1;
+        int index = 1;
+        boolean testDelete = false;
+        when(eventRepository.deleteImageForEvent(testId, index)).thenReturn(testDelete);
+        boolean result = eventService.deleteImageForEvent(testId, index);
+        assertEquals(testDelete, result);
+    }
+
+    @Test
+    void testAddImageForEvent() {
+        int testId = 1;
+        String testString = "test.png";
+        boolean testAdd = false;
+        when(eventRepository.addImageForEvent(testId, testString)).thenReturn(testAdd);
+        boolean result = eventService.addImageForEvent(testId, testString);
+        assertEquals(testAdd, result);
     }
 }

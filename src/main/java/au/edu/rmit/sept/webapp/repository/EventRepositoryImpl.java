@@ -389,4 +389,12 @@ public class EventRepositoryImpl implements EventRepository {
         }
         return null;
     }
+
+    public boolean addImageForEvent(int eventId, String filename) {
+        Event ev = findEventbyID(eventId);
+        if (ev == null) return false;
+        List<String> imgs = new java.util.ArrayList<>(ev.getImages());
+        imgs.add(filename);
+        return updateEventImages(eventId, imgs);
+    }
 }

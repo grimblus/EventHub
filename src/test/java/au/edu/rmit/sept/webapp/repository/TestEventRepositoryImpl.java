@@ -199,7 +199,7 @@ public class TestEventRepositoryImpl {
 
     @Test
     void testDeleteImageForEventNotFound() {
-        assertAll("Delete Event Image",
+        assertAll("Delete Event Image Event Not Found",
                 () -> assertFalse(eventRepository.deleteImageForEvent(1, -1)),
                 () -> assertFalse(eventRepository.deleteImageForEvent(1, Integer.MAX_VALUE))
         );
@@ -213,6 +213,22 @@ public class TestEventRepositoryImpl {
     @Test
     void testGetOwnerIDNotFound() {
         assertNull(eventRepository.getOwnerID(0));
+    }
+
+    @Test
+    void testAddImageForEvent() {
+        int testId = 1;
+        String testImage = "test.img";
+        eventRepository.addImageForEvent(testId, testImage);
+        event = eventRepository.getEvents().get(0);
+        List<String> imageList = event.getImages();
+        assertEquals(3, imageList.size());
+    }
+
+    @Test
+    void testAddImageForEventNotFound() {
+        String testImage = "test.img";
+        assertFalse(eventRepository.addImageForEvent(-1, testImage));
     }
 
     @Test
