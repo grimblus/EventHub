@@ -31,6 +31,7 @@ public class HomeControllerTest {
 
         assertAll(
                 ()-> assertTrue(pageContent.contains("Welcome to EventHub")),
+                ()-> assertTrue(pageContent.contains("Welcome to EventHub - your new all-in-one campus event management system!" )),
                 ()-> assertTrue(pageContent.contains("Sign up or log-in now!"))
         );
 

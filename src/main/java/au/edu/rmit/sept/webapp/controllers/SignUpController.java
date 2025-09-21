@@ -121,7 +121,6 @@ public class SignUpController {
     
     @PostMapping("/signUp") 
     public String submitForm(@ModelAttribute User user, HttpSession session, Model model) {
-        System.out.println("ran controllerrrr");
         ArrayList<String> errors = new ArrayList<>();
         
         
