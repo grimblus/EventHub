@@ -88,7 +88,7 @@ public class CreateController {
         // Location Validation
 
         // Ticket Price Validation
-        if (!event.getTicketPrice().isEmpty() && (Integer.parseInt(event.getTicketPrice()) < 0 && Integer.parseInt(event.getTicketPrice()) > 1000)) {
+        if (!event.getTicketPrice().isEmpty() && (Integer.parseInt(event.getTicketPrice()) < 0 || Integer.parseInt(event.getTicketPrice()) > 1000)) {
             errors.add("Ticket price cannot be negative!");
             valid = false;
         }

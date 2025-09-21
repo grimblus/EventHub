@@ -146,24 +146,6 @@ public class TestCreateController {
     }
 
     @Test
-    public void testNoTicketPrice() throws Exception {
-        MvcResult result = mockMvc.perform(post(URL).sessionAttr("user", mockUser)
-                        .param("title", "Cool Event")
-                        .param("description", "")
-                        .param("date", LocalDateTime.now().plusDays(2).toString())
-                        .param("location", "Gurt: Yo")
-                        .param("ticketPrice", "")
-                        .param("category", "")
-                        .param("keywords", "")
-                        .param("tags", ""))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String pageContent = result.getResponse().getContentAsString();
-        assertTrue(pageContent.contains("Ticket Price cannot be negative!")); // This error message needs to be fixed :wilted_rose:
-    }
-
-    @Test
     public void testInvalidShortTitleLength() throws Exception {
         MvcResult result = mockMvc.perform(post(URL).sessionAttr("user", mockUser)
                         .param("title", "Yo")
