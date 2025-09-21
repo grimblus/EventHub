@@ -26,7 +26,7 @@ public class SandboxPaymentGateway {
         if ("4000000000000002".equals(digits)) {
             return Result.fail("Card was declined");
         }
-        if (digits.length() == 16 || "4242424242424242".equals(digits)) {
+        if (digits.length() == 16/* || "4242424242424242".equals(digits)*/) {
             String ref = "REF-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(Locale.ROOT);
             return Result.ok(ref);
         }
