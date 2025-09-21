@@ -46,33 +46,7 @@ public class EventFeedController {
         return "events/index";
     }
 
-    // @GetMapping("/events/modal")
-    // public String deleteButton(Model model, 
-    //                             HttpSession session,
-    //                             @RequestParam Integer eventid) {
-
-    //     //Hide delete event button unless club organiser, MUST CHANGE LATER TO CHECK WHICH ORGANISER MADE WHICH EVENT ONCE CREATE EVENT IS DONE
-    //     User user = (User) session.getAttribute("user");
-    //     boolean isOwner = false;
-    //     // Integer inteventid = Integer.parseInt(eventid);
-    //     if ((user != null) && (user.getPermissionLevel() == User.permissions.ORGANISER)) {
-    //         Integer id = user.getId();
-    //         Integer ownerId = eventService.getOwnerID(eventid);
-    //             // System.out.println("Owner ID from EventService: " + ownerId);
-    //             // System.out.println("user ID: " + id);
-    //             // System.out.println("role " + user.getPermissionLevel());
-    //         if (ownerId != null && (ownerId.equals(id))) {
-    //             isOwner = true;
-    //             // System.out.println("isOwner = " + isOwner);
-    //             if (isOwner) {
-    //                 model.addAttribute("loggedOrganiser", true);
-    //                 System.out.println("loggedOrganiser");
-    //             }
-    //         }
-    //     }
-    //     return "events/index";
-    // }
-
+    // checks if the user is the owner of the event
     @GetMapping("/events/modal/{eventId}")
     @ResponseBody
     public Map<String, Object> checkOwner(@PathVariable Integer eventId, HttpSession session) {
@@ -91,6 +65,7 @@ public class EventFeedController {
         return resp;
     }
 
+    // event details for modal
     @PostMapping("/events")
     public String eventDetails(
             Integer id, 
