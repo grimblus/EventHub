@@ -19,26 +19,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    //adds user to db
     public void addUser(User user) {
          repository.addUser(user);
     }
+
+
     @Override
+    //initialises repository
     public void setUsers() {
         repository.setUsers();
     }
+
+    //gets all users
     public List<User> getUsers() {
         return repository.getUsers();
     }
+
+    //finds user using id
     public User findUserByID(Integer id) {
         return repository.findUserByID(id);
     }
+
+    //finds user using firstname
     public User findUserByFirstName(String firstName) {
         return repository.findUserByFirstName(firstName);
     }
+
+    //finds user using last name
     public User findUserByLastName(String lastName) {
         return repository.findUserByLastName(lastName);
     }
+
+    //finds user using email
     public User findUserByEmail(String email) {
         return repository.findUserByEmail(email);
     }
+
+    //sets the ban state of a user
+    public boolean toggleBanned(Integer id) {return repository.toggleBanned(id);}
 }

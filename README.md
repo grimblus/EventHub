@@ -19,3 +19,14 @@
 - Github Project Board : https://github.com/orgs/cosc2299-2025/projects/147
 - Microsoft Teams : https://teams.microsoft.com/l/channel/19%3AKahmTSQCpnJvqlvxgW0AIInQh8ysFV5Jeabjc3TCPMQ1%40thread.tacv2/General?groupId=f8cb2711-ff53-4229-bcfc-35ca8dfeaa89&tenantId=d1323671-cdbe-4417-b4d4-bdb24b51316b
   See [Instructions](INSTRUCTIONS.md)
+
+## Test Accounts
+
+- aaron@example.com password123 STUDENT
+- johndev@example.com g0d0t0man ORGANISER
+- bingus@example.com s3cur3pass ADMIN
+
+
+## Sprint 2 status
+We have planned to push some tasks to sprint 2 due to a lack of time.
+These tasks can be viewed in the github project board in the Todo section.

@@ -13,11 +13,16 @@
         <div>
           <a th:href="@{/}">Home</a>
           <a href="/events">Events</a>
-          <a th:href="@{/create}">Create</a>
-          <a th:href="@{/account}">Account</a>
-          <a th:href="@{/checkout}">Checkout</a>
+          <a th:if="${isOrganiser}" th:href="@{/create}">Create</a>
+          <a th:if="${loggedIn}" href="/account">Account</a>
+          <div th:if="${loggedIn}">
+            <a th:if="${user.permissionLevel.name() == 'ADMIN'}" href="/admin">Admin</a>
+          </div>
         </div>
-        <div>
+        <div th:if="${loggedIn}">
+          <a th:href="@{/logout}">Sign Out</a>
+        </div>
+        <div th:if="${!loggedIn}">
           <a href="/login">Log In</a>
           <a href="/signUp">Sign Up</a>
         </div>
@@ -35,9 +40,10 @@
     </footer>
 
     <!--  Bootstrap  -->
-    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+    <script
+      th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"
+    ></script>
 
-    
     <div layout:fragment="scripts"></div>
   </body>
 </html>

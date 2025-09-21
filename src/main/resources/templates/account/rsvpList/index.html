@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
+    <title>Sign up to EventHub</title>
+    <!-- <script src="content-script.js"></script> -->
+    <style>
+      .events-filter-container {
+        margin: 1rem;
+        border-radius: 10px;
+      }
+
+      .events-display-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: flex-start;
+      }
+      .rsvp-list {
+        flex-direction: column;
+        width: 30rem;
+        border: 0.2rem solid white;
+        margin: 1rem;
+        padding: 1rem;
+      }
+      .rsvp-list img {
+        /*  change img size later  */
+      }
+      .event-meta {
+        display: flex;
+        justify-content: space-between;
+      }
+      .event-details {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        border: 2px solid #111111;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <h2>Your RSVP List</h2>
+      <div class="events-display-container">
+        <div class="rsvp-list" th:each="rsvp : ${rsvpList}">
+          <div class="event-details">
+            <h2 th:text="${rsvp.getTitle()}">Event Title</h2>
+            <p th:text="${rsvp.getDescription()}">Event Description</p>
+            <div class="event-meta">
+              <span th:text="${#temporals.format(rsvp.getDate(), 'dd/MM/yyyy')}"
+                >Event Start Time</span
+              >
+              <span th:text="${rsvp.getLocation()}">Event Location</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

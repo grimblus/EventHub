@@ -11,20 +11,13 @@
       h1 {
         text-align: center;
       }
+
       form {
-        text-align: center;
-      }
-      form {
-        background-color: rgb(236, 224, 224);
+        background-color: rgb(223, 223, 223);
         width: 300px;
         border: 3px solid rgb(0, 0, 0);
-        padding: 50px;
+        padding: 30px;
         margin: 0 auto;
-      }
-      form .signup {
-        display: block;
-        text-align: left;
-        margin-top: 10px;
       }
     </style>
   </head>
@@ -32,18 +25,44 @@
   <body>
     <div layout:fragment="content">
       <h1>Sign Up To EventHub</h1>
-      <form action="#" th:action="@{/signUp}" th:object="${user}" method="post" >
-        <label for="firstname">First Name:</label><br />
-        <input id="firstname" type="text" th:field="*{firstName}" /><br /><br />
+      <form action="#" th:action="@{/signUp}" th:object="${user}" method="post">
+        <div class="group">
+          <label for="firstname">First Name:</label><br />
+          <input
+            id="firstname"
+            type="text"
+            th:field="*{firstName}"
+          /><br /><br />
+        </div>
+        <div class="group">
+          <label for="lastname">Last Name:</label><br />
+          <input id="lastname" type="text" th:field="*{lastName}" /><br /><br />
+        </div>
+        <div class="group">
+          <label for="email">Email:</label><br />
+          <input id="email" type="text" th:field="*{email}" /><br /><br />
+        </div>
+        <div class="group">
+          <label for="password">Password:</label><br />
+          <input id="password" type="password" th:field="*{password}" /><br />
+        </div>
+        <div class="permissionRadios">
+          <label>Sign up as a:</label><br />
 
-        <label for="lastname">Last Name:</label><br />
-        <input id="lastname" type="text" th:field="*{lastName}" /><br /><br />
-
-        <label for="email">Email:</label><br />
-        <input id="email" type="text" th:field="*{email}" /><br /><br />
-
-        <label for="password">Password:</label><br />
-        <input id="password" type="password" th:field="*{password}" /><br />
+          <div class="radios" th:each="perm : ${permissions}">
+            <label>
+              <input
+                type="radio"
+                th:field="*{permissionLevel}"
+                th:value="${perm}"
+              />
+              <span th:text="${perm}">Sign up as a:</span>
+            </label>
+          </div>
+        </div>
+        <div class="errors" th:each="error : ${errors}">
+          <p th:if="${error}" th:text="${error}" style="color: red"></p>
+        </div>
         <input type="submit" value="Submit" />
       </form>
     </div>

@@ -1,9 +1,9 @@
 package au.edu.rmit.sept.webapp.entity;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import org.springframework.format.annotation.DateTimeFormat;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,38 +13,42 @@ public class Event {
     private String description;
     private int ownerID;
     private List<User> participants;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'TT'HH:mm")
     private LocalDateTime date;
     private String location;
     private String category;
+    private String ticketPrice;
     private List<String> keywords;
     private List<String> tags;
     private List<String> images;
-
     // Default Constructor
-    public Event() {}
-
-    // Temp Testing Constructor
-    public Event(String title, String description, int ownerID, LocalDateTime date,
-                 String location, String category) {
-        this.title = title;
-        this.description = description;
-        this.ownerID = ownerID;
-        this.date = date;
-        this.location = location;
-        this.category = category;
+    public Event() {
+        this.id = 0;
+        this.title = "";
+        this.description = "";
+        this.ownerID = 0;
+        this.participants = new ArrayList<User>();
+        this.date = LocalDateTime.MIN;
+        this.location = "";
+        this.ticketPrice = "";
+        this.category = "";
+        this.keywords = new ArrayList<String>();
+        this.tags = new ArrayList<String>();
+        this.images = new ArrayList<String>();
     }
-
 
     // No ID Constructor
     public Event(String title, String description, int ownerID, LocalDateTime date,
-                 String location, String category, List<String> keywords,
+                 String location, String ticketPrice, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
+        this.id = 0;
         this.title = title;
         this.description = description;
         this.ownerID = ownerID;
         participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
+        this.ticketPrice = ticketPrice;
         this.category = category;
         this.keywords = keywords;
         this.tags = tags;
@@ -53,7 +57,7 @@ public class Event {
 
     // Full Constructor
     public Event(int id, String title, String description, int ownerID, LocalDateTime date,
-                 String location, String category, List<String> keywords,
+                 String location, String ticketPrice, String category, List<String> keywords,
                  List<String> tags, List<String> images) {
         this.id = id;
         this.title = title;
@@ -62,6 +66,7 @@ public class Event {
         participants = new ArrayList<User>();
         this.date = date;
         this.location = location;
+        this.ticketPrice = ticketPrice;
         this.category = category;
         this.keywords = keywords;
         this.tags = tags;
@@ -120,16 +125,7 @@ public class Event {
         return date;
     }
 
-    public void setDate(String date) {
-        // change input to a string that gets converted to a date
-        // so we can check if user inputs correct data easier
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy/HH:mm");
-        try {
-            this.date = LocalDateTime.parse(date, format);
-        } catch (DateTimeParseException e) {
-            System.out.println(e);
-        }
-    }
+    public void setDate(LocalDateTime date) { this.date = date; }
 
     public String getLocation() {
         return location;
@@ -137,6 +133,14 @@ public class Event {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(String ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 
     public String getCategory() {
@@ -155,6 +159,14 @@ public class Event {
         this.keywords = keywords;
     }
 
+    public void addKeyword(String keyword) {
+        this.keywords.add(keyword);
+    }
+
+    public void removeKeyword(String keyword) {
+        this.keywords.remove(keyword);
+    }
+
     public List<String> getTags() {
         return tags;
     }
@@ -163,11 +175,27 @@ public class Event {
         this.tags = tags;
     }
 
+    public void addTag(String tag) {
+        this.tags.add(tag);
+    }
+
+    public void removeTag(String tag) {
+        this.tags.remove(tag);
+    }
+
     public List<String> getImages() {
         return images;
     }
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public void addImage(String image) {
+        this.images.add(image);
+    }
+
+    public void removeImage(String image) {
+        this.images.remove(image);
     }
 }

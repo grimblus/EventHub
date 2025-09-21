@@ -10,4 +10,5 @@ public interface UserRepository {
     public  User findUserByLastName(String lastName);
     public  User findUserByEmail(String email);
     public void addUser(User user);
+    public boolean toggleBanned(Integer id);
 }

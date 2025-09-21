@@ -35,6 +35,9 @@
           </div>
 
           <form th:action="@{/pay}" th:object="${payment}" method="post" novalidate>
+            <input type="hidden" name="eventId" th:value="${event.getId()}">
+            <input type="hidden" name="eventTitle" th:value="${event.getTitle()}">
+            <input type="hidden" name="userId" th:value="${userId}">
             <div class="group">
               <label for="name">Cardholder Name</label>
               <input id="name" type="text" th:field="*{cardholderName}" placeholder="Adam Scrum" required>
@@ -48,10 +51,7 @@
             </div>
 
             <div class="group">
-              <label for="amount">Amount (AUD)</label>
-              <input id="amount" type="number" min="1" step="0.01" th:field="*{amount}" placeholder="10.00" required>
-              <div class="note">Note: Final number will be set by DB.</div>
-              <div class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+              <input id="amount" type="hidden" min="1" step="0.01" th:field="*{amount}" th:value="1.0" readonly>
             </div>
 
             <div class="group">
@@ -92,11 +92,11 @@
 
       <div id="right">
         <div class="page">
-          <h1 th:text="${title}"></h1>
-          <p><strong th:inline="text">Location: [[${location}]]</strong>
+          <h1 th:text="${event.getTitle()}"></h1>
+          <p><strong th:inline="text">Location: [[${event.getLocation()}]]</strong>
           <p><strong th:inline="text">When: [[${date}]]</strong></p>
-          <p><strong th:inline="text">Details: [[${details}]]</strong></p>
-          <h1 th:inline="text">Price: $[[${price}]]</h1>
+          <p><strong th:inline="text">Details: [[${event.getDescription()}]]</strong></p>
+          <h1 th:inline="text">Price: $[[${event.getTicketPrice()}]]</h1>
 
         </div>
 

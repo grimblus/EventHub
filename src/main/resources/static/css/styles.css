@@ -1,5 +1,6 @@
 /* general */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -115,12 +116,12 @@ footer {
 
 /* carousel styles  */
 .carousel {
-    position: relative;
-    width: 1300px;
-    height: 600px;
-    margin: 2rem auto;
-    overflow: hidden;
-    border-radius: 12px;
+  position: relative;
+  width: 1300px;
+  height: 600px;
+  margin: 2rem auto;
+  overflow: hidden;
+  border-radius: 12px;
 }
 .carousel img {
   width: auto;
@@ -128,23 +129,29 @@ footer {
   display: none;
 }
 
-.carousel img.active { display: block; }
+.carousel img.active {
+  display: block;
+}
 
 .carousel button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border: 0;
-  padding: .6rem .9rem;
+  padding: 0.6rem 0.9rem;
   cursor: pointer;
   font-size: 1.25rem;
   border-radius: 8px;
   z-index: 5;
 }
-.carousel .prev { left: .5rem; }
-.carousel .next { right: .5rem; }
+.carousel .prev {
+  left: 0.5rem;
+}
+.carousel .next {
+  right: 0.5rem;
+}
 
 /* payment page layout */
 
@@ -160,12 +167,31 @@ footer {
   flex: 1;
 }
 
-.page { max-width: 720px; margin: 2rem auto; padding: 1rem; }
-.group { display: grid; gap: .5rem; margin-bottom: 1rem; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.page {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.group {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
 
-label { font-weight: 600; }
-input, select { padding: .6rem; border: 1px solid #ddd; border-radius: .5rem; }
+label {
+  font-weight: 600;
+}
+input,
+select {
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
 
 .payment-banner {
   width: 100%;
@@ -181,13 +207,19 @@ input, select { padding: .6rem; border: 1px solid #ddd; border-radius: .5rem; }
 }
 
 /* validation + notes */
-.error { color: #b00020; font-size: .9rem; }
-.note { font-size: .9rem; color: #666; }
+.error {
+  color: #b00020;
+  font-size: 0.9rem;
+}
+.note {
+  font-size: 0.9rem;
+  color: #666;
+}
 
 /* alerts */
 .alert {
   padding: 1rem;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   border: 1px solid transparent;
   margin-bottom: 1rem;
 }
@@ -202,11 +234,64 @@ input, select { padding: .6rem; border: 1px solid #ddd; border-radius: .5rem; }
 
 /* button variant */
 .btn-dark {
-  padding: .7rem 1.1rem;
-  border-radius: .6rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 0.6rem;
   border: 0;
   background: #111;
   color: #fff;
   cursor: pointer;
 }
-.btn-dark:hover { filter: brightness(1.05); }
+.btn-dark:hover {
+  filter: brightness(1.05);
+}
+
+/* accountpage */
+
+.account-box {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}
+
+.badges-box {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #111111;
+  align-items: center;
+}
+
+.my-things {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 30px;
+}
+
+.account-buttons {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #111111;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.account-buttons:hover {
+  background-color: #aaaaaa;
+}
+
+/*sign up page */
+.permissionRadios {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 0px;
+}
+
+.radios {
+  margin-top: 5px;
+}

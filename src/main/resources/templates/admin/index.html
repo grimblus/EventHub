@@ -14,12 +14,22 @@
         form {
             text-align: center;
         }
-        form {
-            background-color: rgb(236, 224, 224);
-            width: 300px;
-            border: 3px solid rgb(0, 0, 0);
-            padding: 50px;
-            margin: 0 auto;
+        .button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+        .ban {
+            background-color: #e74c3c;
+        }
+        .unban {
+            background-color: #2ecc71;
+        }
+        .banButton:hover {
+            opacity: 0.85;
         }
     </style>
 </head>
@@ -44,6 +54,7 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Permissions</th>
+                    <th>Banned</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,6 +64,16 @@
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.permissionLevel.name()}"></td>
+                    <td th:text="${user.banned}"></td>
+                    <td>
+                        <form th:action="@{/admin/toggleBanned/{id}(id=${user.id})}" method="post">
+                            <button type="submit" class="button"
+                                    th:classappend="${user.banned} ? 'unban ' : 'ban'"
+                                th:text="${user.banned} ? 'Unban' : 'Ban'">
+
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -69,9 +90,11 @@
                 <th>Date</th>
                 <th>Location</th>
                 <th>Category</th>
+                <th>Ticket Price</th>
                 <th>Keywords</th>
                 <th>Tags</th>
                 <th>Images</th>
+                <th>Remove</th>
             </tr>
             </thead>
             <tbody>
@@ -83,9 +106,17 @@
                 <td th:text="${event.date}"></td>
                 <td th:text="${event.location}"></td>
                 <td th:text="${event.category}"></td>
+                <td th:text="${event.ticketPrice}"></td>
                 <td th:text="${event.keywords}"></td>
                 <td th:text="${event.tags}"></td>
                 <td th:text="${event.images}"></td>
+                <td>
+                    <form th:action="@{/admin/deleteEvent/{id}(id=${event.id})}" method="post">
+                        <button type="submit" class="button" th:classappend="ban"
+                                th:text="Delete">
+                        </button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

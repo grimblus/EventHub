@@ -1,5 +1,7 @@
 package au.edu.rmit.sept.webapp.entity;
 
+import java.util.ArrayList;
+
 public class User {
     public enum permissions {STUDENT, ORGANISER, ADMIN};
 
@@ -9,28 +11,43 @@ public class User {
     private String password;
     private String email;
     private permissions permissionLevel;
+    private boolean banned;
+    private ArrayList<Event> rsvpList;
 
     // Default Constructor
-    public User() {}
+    public User() {
+        this.id = 0;
+        this.firstName = "";
+        this.lastName = "";
+        this.password = "";
+        this.email = "";
+        this.permissionLevel = permissions.STUDENT;
+        this.banned = false;
+        this.rsvpList = new ArrayList<>();
+    }
 
     // No ID Constructor
     public User(String firstName, String lastName, String password, String email, permissions permissionLevel) {
-        this.id = null;
+        this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.permissionLevel = permissionLevel;
+        this.banned = false;
+        this.rsvpList = new ArrayList<>();
     }
 
     // Full Constructor
-    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel) {
+    public User(Integer id, String firstName, String lastName, String password, String email, permissions permissionLevel, boolean banned) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.permissionLevel = permissionLevel;
+        this.banned = banned;
+        this.rsvpList = new ArrayList<Event>();
     }
 
     public int getId() {
@@ -65,6 +82,18 @@ public class User {
         this.password = password;
     }
 
+    public void setRsvpList(ArrayList<Event> rsvpList) {
+        this.rsvpList = rsvpList;
+    }
+
+    public ArrayList<Event> getRsvpList() {
+        return rsvpList;
+    }
+
+    public void addRsvp(Event event) {
+        this.rsvpList.add(event);
+    }
+
     public String getEmail() {
         return email;
     }
@@ -79,5 +108,13 @@ public class User {
 
     public void setPermissionLevel(permissions permissionLevel) {
         this.permissionLevel = permissionLevel;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
     }
 }
