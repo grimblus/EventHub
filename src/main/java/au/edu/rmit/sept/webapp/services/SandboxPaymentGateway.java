@@ -10,10 +10,13 @@ import java.util.UUID;
 
 @Service
 public class SandboxPaymentGateway {
-
     // 4242 4242 4242 4242 = success
     // 4000 0000 0000 0002 = decline
     // anything else with 16 digits = success
+
+    public SandboxPaymentGateway() {
+
+    }
 
     public Result charge(PaymentRequest req) {
         String digits = req.getCardNumber().replaceAll("\\D", "");
