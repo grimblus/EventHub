@@ -19,4 +19,5 @@ public interface EventRepository {
     public boolean deleteEventbyID(Integer id);
     public boolean deleteImageForEvent(int id, int index);
     public Integer getOwnerID(Integer eventId);
+    public boolean addImageForEvent(int eventId, String filename);
 }
