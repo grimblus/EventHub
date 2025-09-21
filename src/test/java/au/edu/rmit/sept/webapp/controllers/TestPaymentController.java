@@ -51,6 +51,7 @@ public class TestPaymentController {
     void setUp() throws Exception{
         when(eventService.getEvent(1, "Test")).thenReturn(event);
         when(userService.findUserByEmail("TestEmail@example.com")).thenReturn(user);
+        when(userService.findUserByID(1)).thenReturn(user);
 
         session = new MockHttpSession();
         session.setAttribute("user", user);
@@ -98,6 +99,20 @@ public class TestPaymentController {
 
     @Test
     void testReceipt() throws Exception {
+        String ref = "REF-12345678";
 
+        mockMvc.perform(get("/receipt")
+                        .param("id", "1")
+                        .param("title", "Test")
+                        .param("ref", ref)
+                        .param("userId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("event", event))
+                .andExpect(model().attribute("user", user))
+                .andExpect(model().attribute("ref", ref))
+                .andExpect(model().attributeExists("time"));
+
+        verify(paymentService).AddPayment(any(Payment.class));
+        verify(eventParticipantsService).addEventParticipant(event.getId(), user.getId());
     }
 }
