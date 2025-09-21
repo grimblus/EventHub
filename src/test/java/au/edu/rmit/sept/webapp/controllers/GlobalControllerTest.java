@@ -30,8 +30,7 @@ public class GlobalControllerTest {
                         .sessionAttr("user", testUser))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("loggedIn"))
-                .andExpect(model().attribute("loggedIn", true))
-                .andReturn();
+                .andExpect(model().attribute("loggedIn", true));
     }
 
     @Test
@@ -40,8 +39,7 @@ public class GlobalControllerTest {
         mvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("loggedIn"))
-                .andExpect(model().attribute("loggedIn", false))
-                .andReturn();
+                .andExpect(model().attribute("loggedIn", false));
     }
 
     @Test
@@ -52,8 +50,7 @@ public class GlobalControllerTest {
                         .sessionAttr("user", testUser))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("isOrganiser"))
-                .andExpect(model().attribute("isOrganiser", true))
-                .andReturn();
+                .andExpect(model().attribute("isOrganiser", true));
     }
 
     @Test
@@ -64,8 +61,7 @@ public class GlobalControllerTest {
                         .sessionAttr("user", testUser))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("isOrganiser"))
-                .andExpect(model().attribute("isOrganiser", false))
-                .andReturn();
+                .andExpect(model().attribute("isOrganiser", false));
     }
 
     @Test
@@ -74,7 +70,6 @@ public class GlobalControllerTest {
         mvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("isOrganiser"))
-                .andExpect(model().attribute("isOrganiser", false))
-                .andReturn();
+                .andExpect(model().attribute("isOrganiser", false));
     }
 }

@@ -1,10 +1,13 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.User;
+import au.edu.rmit.sept.webapp.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -22,6 +26,9 @@ public class SignUpControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     void shouldDisplaySignUpContent() throws Exception {
@@ -223,6 +230,131 @@ public class SignUpControllerTest {
 
     }
 
+    @Test
+    void invalidEmailEmptyStart() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "Nolan")
+                        .param("lastName", "Grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "@email.com")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Email must follow the format: x@x.com"));
+
+    }
+
+    @Test
+    void invalidEmailSymbolStart() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "Nolan")
+                        .param("lastName", "Grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "*@&(@email.com")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Email must follow the format: x@x.com"));
+
+    }
+
+    @Test
+    void invalidEmailNoAtSign() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "Nolan")
+                        .param("lastName", "Grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "omnimanemail.com")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Email must follow the format: x@x.com"));
+
+    }
+
+    @Test
+    void invalidEmailNoMiddle() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "Nolan")
+                        .param("lastName", "Grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "omniman@.com")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Email must follow the format: x@x.com"));
+
+    }
+
+    @Test
+    void invalidEmailSymbolMiddle() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "Nolan")
+                        .param("lastName", "Grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "omniman@*@&#(.com")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Email must follow the format: x@x.com"));
+
+    }
+
+    @Test
+    void invalidEmailNoPeriod() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "Nolan")
+                        .param("lastName", "Grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "omniman@emailcom")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Email must follow the format: x@x.com"));
+
+    }
+
+    @Test
+    void invalidEmailNoCom() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "Nolan")
+                        .param("lastName", "Grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "omniman@email.")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Email must follow the format: x@x.com"));
+
+    }
 
     @Test
     void invalidPasswordLength() throws Exception {
@@ -293,6 +425,36 @@ public class SignUpControllerTest {
         String pageContent = result.getResponse().getContentAsString();
 
         assertTrue(pageContent.contains("Password must contain at least 1 symbol, number and uppercase letter"));
+
+    }
+
+
+    @Test
+    void inputSanitisation() throws Exception {
+
+        MvcResult result = mvc.perform(post("/signUp")
+                        .param("firstName", "nolan")
+                        .param("lastName", "grayson")
+                        .param("password", "Invincible53@")
+                        .param("email", "omniman@email.com")
+                        .param("permissionLevel", "STUDENT"))
+                .andExpect(status().is3xxRedirection())
+                .andReturn();
+
+        HttpSession session = result.getRequest().getSession(false);
+        assertNotNull(session);
+
+        User user = (User)  session.getAttribute("user");
+        assertAll(
+                //checks it is capitalised
+                () -> assertEquals("Nolan", user.getFirstName()),
+                () -> assertEquals("Grayson", user.getLastName())
+
+        );
+
+
+
+
 
     }
 }
