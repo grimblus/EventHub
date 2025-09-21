@@ -1,4 +1,4 @@
-package au.edu.rmit.sept.webapp.templates.signUp;
+package au.edu.rmit.sept.webapp.templates.login;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +12,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class IndexTest {
+class TestIndex {
 
     @Autowired
     private MockMvc mockMvc;
 
-    // test that signup renders form with required inputs
+    // simple render test for log in form
     @Test
-    void signup_page_renders() throws Exception {
-        mockMvc.perform(get("/signUp"))
+    void login_page_renders() throws Exception {
+        mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("<title>Welcome to EventHub</title>")))
-                .andExpect(content().string(containsString("<h1>Sign Up To EventHub</h1>")))
-                .andExpect(content().string(containsString("<form action=\"/signUp\" method=\"post\">")))
-                .andExpect(content().string(containsString("id=\"firstname\"")))
-                .andExpect(content().string(containsString("id=\"lastname\"")))
+                .andExpect(content().string(containsString("<h1>Log In to EventHub</h1>")))
+                // Thymeleaf has rendered th:action="@{/login}" into action="/login"
+                .andExpect(content().string(containsString("<form action=\"/login\" method=\"post\">")))
                 .andExpect(content().string(containsString("id=\"email\"")))
-                .andExpect(content().string(containsString("id=\"password\"")));
+                .andExpect(content().string(containsString("id=\"pw\"")))
+                .andExpect(content().string(containsString("type=\"submit\"")))
+                .andExpect(content().string(containsString("href=\"/signUp\""))); // “Register here” link
     }
 }
