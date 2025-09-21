@@ -1,7 +1,6 @@
 package au.edu.rmit.sept.webapp.services;
 
 import au.edu.rmit.sept.webapp.entity.Event;
-import au.edu.rmit.sept.webapp.entity.Payment;
 import au.edu.rmit.sept.webapp.repository.EventRepository;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

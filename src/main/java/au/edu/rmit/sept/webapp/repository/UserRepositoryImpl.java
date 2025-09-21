@@ -226,7 +226,7 @@ public class UserRepositoryImpl implements UserRepository {
                         try (PreparedStatement ps2 = connection.prepareStatement(updateSQL)) {
                             ps2.setBoolean(1, newBanned);
                             ps2.setInt(2, id);
-                            int rows = ps2.executeUpdate();
+                            int rows = ps2.executeUpdate(); //used by tests 
                             return true;
                         }
                     }

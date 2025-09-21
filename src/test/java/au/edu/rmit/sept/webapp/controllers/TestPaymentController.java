@@ -1,19 +1,15 @@
 package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.*;
-import au.edu.rmit.sept.webapp.repository.*;
 import au.edu.rmit.sept.webapp.services.*;
 import au.edu.rmit.sept.webapp.models.PaymentRequest;
-import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpSession;
 

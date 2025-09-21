@@ -17,7 +17,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
 import java.util.function.Supplier;
 
 @Repository

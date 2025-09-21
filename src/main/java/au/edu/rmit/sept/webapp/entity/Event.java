@@ -2,7 +2,6 @@ package au.edu.rmit.sept.webapp.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.validation.constraints.Null;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

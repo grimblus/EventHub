@@ -1,6 +1,5 @@
 package au.edu.rmit.sept.webapp.models;
 
-import jakarta.validation.constraints.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

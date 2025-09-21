@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;

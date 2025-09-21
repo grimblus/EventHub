@@ -1,7 +1,6 @@
 package au.edu.rmit.sept.webapp.repository;
 
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
-import jakarta.validation.constraints.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

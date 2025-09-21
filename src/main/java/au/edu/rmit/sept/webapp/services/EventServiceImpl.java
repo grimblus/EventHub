@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.repository.EventRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

@@ -1,8 +1,6 @@
 package au.edu.rmit.sept.webapp.services;
 
-import au.edu.rmit.sept.webapp.entity.Payment;
 import au.edu.rmit.sept.webapp.entity.User;
-import au.edu.rmit.sept.webapp.repository.PaymentRepository;
 import au.edu.rmit.sept.webapp.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
