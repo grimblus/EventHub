@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html 
-    xmlns:th="http://www.thymeleaf.org" 
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    >
-<head>
-  <title>Checkout - Receipt</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  >
 
-<body>
+  <head>
+    <title>Checkout - Receipt</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  </head>
+
+  <body>
     <div layout:fragment="content">
-        <div class="payment-banner">
-        <img src="/images/welcome/img3.png" alt="Payment Banner">
-        </div>
+      <div class="payment-banner">
+        <img src="/images/welcome/img3.png" alt="Payment Banner" />
+      </div>
 
-        <div class="page">
-            <h1>Thanks for Purchasing!</h1>
-            <h2 th:inline="text">Event: [[${event.getTitle()}]]</h2>
-            <h2 th:inline="text">For: [[${user.getFirstName()}]]</h2>
-            <h2 th:inline="text">At: [[${time}]]</h2>
-            <h2 th:inline="text">Total: $[[${event.getTicketPrice()}]]</h2>
-            <h2 th:inline="text">Reference Number: [[${ref}]]</h2>
-            <a th:href="@{/}" class="btn btn-primary">Return to Main Page</a>
-
-        </div>
+      <div class="page">
+        <h1>Thanks for Purchasing!</h1>
+        <h2 th:inline="text">Event: [[${event.getTitle()}]]</h2>
+        <h2 th:inline="text">For: [[${user.getFirstName()}]]</h2>
+        <h2 th:inline="text">At: [[${time}]]</h2>
+        <h2 th:inline="text">Total: $[[${event.getTicketPrice()}]]</h2>
+        <h2 th:inline="text">Reference Number: [[${ref}]]</h2>
+        <a th:href="@{/}" class="btn btn-primary">Return to Main Page</a>
+      </div>
     </div>
-
-</body>
+  </body>
 </html>
