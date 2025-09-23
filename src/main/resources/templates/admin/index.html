@@ -7,31 +7,7 @@
 <head>
     <title>Admin</title>
     <!-- <script src="content-script.js"></script> -->
-    <style>
-        h1 {
-            text-align: center;
-        }
-        form {
-            text-align: center;
-        }
-        .button {
-            padding: 6px 14px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
-        }
-        .ban {
-            background-color: #e74c3c;
-        }
-        .unban {
-            background-color: #2ecc71;
-        }
-        .banButton:hover {
-            opacity: 0.85;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -44,7 +20,7 @@
         <a th:href="@{/admin/events}"
            th:classappend="${active == 'events'} ? 'active-tab' : ''">Events</a>
     </div>
-    <div th:if="${active == 'users'}">
+    <div th:if="${active == 'users'}" class="table-container">
         <h2>Users</h2>
         <table>
             <thead>
@@ -55,6 +31,7 @@
                     <th>Email</th>
                     <th>Permissions</th>
                     <th>Banned</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +44,7 @@
                     <td th:text="${user.banned}"></td>
                     <td>
                         <form th:action="@{/admin/toggleBanned/{id}(id=${user.id})}" method="post">
-                            <button type="submit" class="button"
+                            <button type="submit" class="button" style="min-width: 70px"
                                     th:classappend="${user.banned} ? 'unban ' : 'ban'"
                                 th:text="${user.banned} ? 'Unban' : 'Ban'">
 
@@ -78,7 +55,7 @@
             </tbody>
         </table>
     </div>
-    <div th:if="${active == 'events'}">
+    <div th:if="${active == 'events'}" class="table-container">
         <h2>Events</h2>
         <table>
             <thead>
