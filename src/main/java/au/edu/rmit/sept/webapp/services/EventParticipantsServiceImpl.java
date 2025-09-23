@@ -18,5 +18,11 @@ public class EventParticipantsServiceImpl implements EventParticipantsService {
     public void addEventParticipant(Integer eventId, Integer userId) {
       repository.addEventParticipant(eventId, userId);
     }
-    
+    @Override
+    public List<Integer> getRSVPList(Integer userId) {
+        return repository.getRSVPList(userId);
+    }
+
+
+
 }
