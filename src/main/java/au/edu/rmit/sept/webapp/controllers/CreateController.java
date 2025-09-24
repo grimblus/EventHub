@@ -64,8 +64,8 @@ public class CreateController {
         }
 
         // Description Validation
-        if (event.getDescription().length() > 25) {
-            errors.add("Description length must be more than 25 characters!");
+        if (event.getDescription().length() < 300) {
+            errors.add("Description length must be less than 300 characters!");
             valid = false;
         }
 
@@ -87,8 +87,12 @@ public class CreateController {
         // Location Validation
 
         // Ticket Price Validation
-        if (!event.getTicketPrice().isEmpty() && (Integer.parseInt(event.getTicketPrice()) < 0 || Integer.parseInt(event.getTicketPrice()) > 1000)) {
+        if (!event.getTicketPrice().isEmpty() && Integer.parseInt(event.getTicketPrice()) < 0) {
             errors.add("Ticket price cannot be negative!");
+            valid = false;
+        }
+        else if (!event.getTicketPrice().isEmpty() && Integer.parseInt(event.getTicketPrice()) > 1000) {
+            errors.add("Ticket price cannot exceed 1000!");
             valid = false;
         }
 
