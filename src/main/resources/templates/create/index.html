@@ -192,6 +192,12 @@
                                 <li th:each="tag : ${tags}" th:text="${tag}"></li>
                             </ul>
                         </div>
+                        <div>
+                            <label>Available Categories:</label>
+                            <ul id="available-categories">
+                                <li th:each="category : ${categories}" th:text="${category}"></li>
+                            </ul>
+                        </div>
                     </div>
 
                     <button type="submit">

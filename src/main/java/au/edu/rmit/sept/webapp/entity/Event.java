@@ -10,6 +10,7 @@ import java.util.List;
 public class Event {
     public enum KEYWORDS { JAVA, WORKSHOP, CODING, CHALLENGE }
     public enum TAGS { EDUCATION, BEGINNER, COMPETITION, TEAMWORK }
+    public enum CATEGORIES { GENERAL, CODING }
 
     private int id;
     private String title;

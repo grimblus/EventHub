@@ -29,6 +29,7 @@ public class CreateController {
         model.addAttribute("event", new Event());
         model.addAttribute("keywords", Event.KEYWORDS.values());
         model.addAttribute("tags", Event.TAGS.values());
+        model.addAttribute("categories", Event.CATEGORIES.values());
 
         return "create/index";
     }
@@ -64,7 +65,7 @@ public class CreateController {
         }
 
         // Description Validation
-        if (event.getDescription().length() < 300) {
+        if (event.getDescription().length() > 300) {
             errors.add("Description length must be less than 300 characters!");
             valid = false;
         }
@@ -97,6 +98,19 @@ public class CreateController {
         }
 
         // Category Validation
+        if (!event.getCategory().isEmpty()) {
+            boolean foundCategoryError = false;
+            for (Event.CATEGORIES category : Event.CATEGORIES.values()) {
+                if (event.getCategory().toUpperCase().equals(category.name())) {
+                    foundCategoryError = true;
+                    break;
+                }
+            }
+            if (!foundCategoryError) {
+                errors.add("Category does not exist!");
+                valid = false;
+            }
+        }
 
         // Bottom two are done in the script
         // Keywords Validation
