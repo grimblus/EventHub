@@ -27,6 +27,8 @@ public class CreateController {
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("event", new Event());
+        model.addAttribute("keywords", Event.KEYWORDS.values());
+        model.addAttribute("tags", Event.TAGS.values());
 
         return "create/index";
     }

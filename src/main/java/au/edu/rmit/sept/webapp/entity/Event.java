@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
+    public enum KEYWORDS { JAVA, WORKSHOP, CODING, CHALLENGE }
+    public enum TAGS { EDUCATION, BEGINNER, COMPETITION, TEAMWORK }
+
     private int id;
     private String title;
     private String description;
