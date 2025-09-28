@@ -54,16 +54,16 @@ public class UserInterestsRepositoryImpl implements UserInterestsRepository{
                 stmt.setInt(1, user_id); // safely sets the value
                 stmt.executeUpdate();
             }
-
+            if (interests != null) {
             String insertSQL = "INSERT INTO user_interests (interest, user_id) VALUES (?, ?)";
                 for (String interest : interests) {
                     try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
 
                         ps.setString(1, interest);
-                    ps.setInt(2, user_id);
-                    ps.executeUpdate();
+                        ps.setInt(2, user_id);
+                        ps.executeUpdate();
+                    }
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();

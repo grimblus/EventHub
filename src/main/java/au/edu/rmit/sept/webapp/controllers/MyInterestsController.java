@@ -57,11 +57,8 @@ public class MyInterestsController {
     @PostMapping("/account/myInterests")
     public String submitForm(@RequestParam(name = "selectedTags", required = false) ArrayList<String> selectedTags, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        prepareInterestsPage(model, session);
         userInterestsService.addUserInterests(user.getId(), selectedTags);
-        model.addAttribute("interests", selectedTags);
 
-
-        return "/account/myInterests/index";
+        return "redirect:/account/myInterests";
     } 
 }

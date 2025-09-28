@@ -1,5 +1,7 @@
 package au.edu.rmit.sept.webapp.controllers;
 
+import au.edu.rmit.sept.webapp.entity.Event;
+import au.edu.rmit.sept.webapp.services.UserInterestsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,16 +17,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import au.edu.rmit.sept.webapp.services.EventService;
 import jakarta.servlet.http.HttpSession;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class EventFeedController {
 
     private EventService eventService;
+    private UserInterestsService userInterestsService;
 
-    public EventFeedController(EventService eventService) {this.eventService = eventService;}
+    public EventFeedController(EventService eventService, UserInterestsService userInterestsService) {
+        this.eventService = eventService;
+        this.userInterestsService = userInterestsService;
+    }
 
     @GetMapping("/events")
     public String events(
@@ -37,7 +41,43 @@ public class EventFeedController {
             HttpSession session
     ) {
         // Find out how to do tags and stuff
-        model.addAttribute("events", eventService.getEventsByFilter(search, tags, location, category, keywords));
+        User user = (User) session.getAttribute("user");
+        List<Event> events =  eventService.getEventsByFilter(search, tags, location, category, keywords);
+
+        //if user is  logged in, display recommended events
+        if (user != null) {
+            //hashset so that checking for an interest is O(1) time B)
+            HashSet<String> userInterests = userInterestsService.getUserInterests(user.getId());
+            List<Event> recommendedEvents = new ArrayList<>();
+
+            //for each event
+            for ( Event event : events) {
+//                System.out.println("Event:" + event.getTitle());
+//                System.out.println(event.getCategory());
+                //if the event's category is the user's interest, add it it to the list to display
+                if (userInterests.contains(event.getCategory().toUpperCase())) {
+                    recommendedEvents.add(event);
+
+                }
+                //if didn't find a category interested in, then check the tags
+                else  {
+                    //for each of the event's tags
+                    for ( String tag : event.getTags()) {
+                       // System.out.println(tag);
+
+                        //if the event's tag is one of the user's interest, add the event to the list
+                        // and break as well because only one interest needs to be found
+                        if (userInterests.contains(tag.toUpperCase())) {
+                            recommendedEvents.add(event);
+                            break;
+                        }
+                    }
+                }
+            }
+            model.addAttribute("recommendedEvents", recommendedEvents);
+        }
+
+        model.addAttribute("events", events);
         model.addAttribute("tags", eventService.getTags());
         model.addAttribute("keywords", eventService.getKeywords());
 
