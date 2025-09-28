@@ -28,6 +28,7 @@
 
         
         <form th:action="@{/print}" th:object="${event}" method="post" novalidate>
+          <input type="hidden" name="refVal" th:value="${ref}">
           <button class="btn-dark" type="submit">Print Receipt</button>
         </form>
       </div>

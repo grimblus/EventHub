@@ -11,14 +11,22 @@ import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
 import au.edu.rmit.sept.webapp.services.UserService;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -156,10 +164,71 @@ public class PaymentController {
     }
 
     @PostMapping("/print")
-    public String PrintReceipt(@Valid @ModelAttribute("event") Event event,
-                        Model model) {
-        System.out.println("Hello world...");
-        return "redirect:";
+    public void PrintReceipt(@Valid @ModelAttribute("event") Event event,
+                        Model model,
+                        HttpServletResponse response) {
+        
+        // maybe move this to its own file for better formatting?
+        PDDocument receipt = new PDDocument();
+        PDPage receiptPage = new PDPage();
+            
+        receipt.addPage(receiptPage);
+
+        int offsetX = 50;
+        int offsetY = 500;
+        
+        PDPageContentStream contentStream; 
+
+        try{
+
+            // header image
+            PDImageXObject header = PDImageXObject.createFromFile("src\\main\\resources\\static\\images\\welcome\\img3.png", receipt);
+
+            contentStream = new PDPageContentStream(receipt, receiptPage);
+            contentStream.drawImage(header, 0, 600, 700, 200);
+
+            // text
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 24 );
+            
+            contentStream.beginText();
+            contentStream.newLineAtOffset(offsetX, offsetY);
+            
+            contentStream.showText("Event: " + event.getTitle());
+
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 12 );
+            contentStream.newLineAtOffset(0, -40);
+            contentStream.showText("Event Location: " + event.getLocation());
+
+            contentStream.newLineAtOffset(0, -30);
+            contentStream.showText("Event Time:" + event.getDate());
+
+            contentStream.newLineAtOffset(0, -30);
+            contentStream.showText("Ticket Price: " + event.getTicketPrice());
+
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 16 );
+            contentStream.newLineAtOffset(0, -45);
+            contentStream.showText("Reference:");
+            contentStream.endText();  
+            
+            contentStream.drawImage(header, 0, 0, 700, 200);
+
+            contentStream.close();    
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=receipt.pdf");
+
+        try {
+            
+            receipt.save(response.getOutputStream());
+            receipt.close();
+            response.getOutputStream().flush();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // helper that gets the next 12 years (e.g. 2025, 2026, 2027...2036) for the initial empty page
