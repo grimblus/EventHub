@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout/layout.html}"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout.html}"
 >
-  <head>
+<head>
     <title>Sign up to EventHub</title>
     <!-- <script src="content-script.js"></script> -->
-  </head>
+</head>
 
-  <body>
-    <div layout:fragment="content">
-      <div class="interest-sections">
+<body>
+<div layout:fragment="content">
+    <div class="interest-sections">
 
         <form
-                class="interest-box"
-                th:action="@{/account/myInterests}"
-                method="post"
+        class="interest-box"
+        th:action="@{/account/myInterests}"
+        method="post"
         >
-          <div class="horizontal-group">
-          <h2>Your Interests</h2>
-          <button class="save-button" type="submit">Save</button>
-          </div>
+            <div class="horizontal-group">
+                <h2>Your Interests</h2>
+                <button class="save-button" type="submit">Save</button>
+            </div>
             <h3>Categories</h3>
 
 
-          <div class="interest-buttons">
-            <div th:each="category : ${categories}">
-              <label>
-                <input
-                        type="checkbox"
-                        th:value="${category}"
-                        name="selectedTags"
-                        th:attr="checked=${interests.contains(category.name()) ? 'checked' : null}"
-                />
-                <span th:text="${category}">category</span>
-              </label>
+            <div class="interest-buttons">
+                <div th:each="category : ${categories}">
+                    <label>
+                        <input
+                                type="checkbox"
+                                th:value="${category}"
+                                name="selectedTags"
+                                th:attr="checked=${interests.contains(category.name()) ? 'checked' : null}"
+                        />
+                        <span th:text="${category}">category</span>
+                    </label>
+                </div>
             </div>
-          </div>
 
             <h3>Tags</h3>
 
-          <div class="interest-buttons">
-            <div th:each="tag : ${tags}">
-              <label>
-                <input
-                  type="checkbox"
-                  th:value="${tag}"
-                  th:attr="checked=${interests.contains(tag.name()) ? 'checked' : null}"
-                  name="selectedTags"
-                />
-                <span th:text="${tag}">tag</span>
-              </label>
+            <div class="interest-buttons">
+                <div th:each="tag : ${tags}">
+                    <label>
+                        <input
+                                type="checkbox"
+                                th:value="${tag}"
+                                th:attr="checked=${interests.contains(tag.name()) ? 'checked' : null}"
+                                name="selectedTags"
+                        />
+                        <span th:text="${tag}">tag</span>
+                    </label>
+                </div>
             </div>
-          </div>
         </form>
         <!-- <div class="interest-box">
           <h3>Keywords</h3>
@@ -63,7 +63,7 @@
             </button>
           </div>
         </div> -->
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>
