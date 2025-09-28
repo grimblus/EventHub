@@ -315,3 +315,14 @@ select {
   padding: 20px 20px 100px 20px;
   border: 2px solid #000000;
 }
+
+.horizontal-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.save-button {
+  height: 30px
+}

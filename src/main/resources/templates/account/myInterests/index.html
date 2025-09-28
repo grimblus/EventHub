@@ -12,32 +12,35 @@
   <body>
     <div layout:fragment="content">
       <div class="interest-sections">
-        <h2>Your Interests</h2>
+
         <form
                 class="interest-box"
-                th:action="@{/account/myInterests/tags}"
+                th:action="@{/account/myInterests}"
                 method="post"
         >
-          <h3>Categories</h3>
+          <div class="horizontal-group">
+          <h2>Your Interests</h2>
+          <button class="save-button" type="submit">Save</button>
+          </div>
+            <h3>Categories</h3>
+
+
           <div class="interest-buttons">
             <div th:each="category : ${categories}">
               <label>
                 <input
                         type="checkbox"
                         th:value="${category}"
+                        name="selectedTags"
                         th:attr="checked=${interests.contains(category.name()) ? 'checked' : null}"
                 />
                 <span th:text="${category}">category</span>
               </label>
             </div>
           </div>
-        </form>
-        <form
-          class="interest-box"
-          th:action="@{/account/myInterests/tags}"
-          method="post"
-        >
-          <h3>Tags</h3>
+
+            <h3>Tags</h3>
+
           <div class="interest-buttons">
             <div th:each="tag : ${tags}">
               <label>
@@ -45,6 +48,7 @@
                   type="checkbox"
                   th:value="${tag}"
                   th:attr="checked=${interests.contains(tag.name()) ? 'checked' : null}"
+                  name="selectedTags"
                 />
                 <span th:text="${tag}">tag</span>
               </label>

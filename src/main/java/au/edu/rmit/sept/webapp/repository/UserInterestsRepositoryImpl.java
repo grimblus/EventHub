@@ -47,13 +47,23 @@ public class UserInterestsRepositoryImpl implements UserInterestsRepository{
         }
     }
 
-    public void addUserInterests(int user_id, String interest) {
+    public void addUserInterests(int user_id, ArrayList<String> interests) {
         try (Connection connection = connectionSupplier.get()) {
+            String deleteSQL = "DELETE FROM user_interests WHERE user_id = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(deleteSQL)) {
+                stmt.setInt(1, user_id); // safely sets the value
+                stmt.executeUpdate();
+            }
+
             String insertSQL = "INSERT INTO user_interests (interest, user_id) VALUES (?, ?)";
-            try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
-                ps.setString(1, interest);
-                ps.setInt(2, user_id);
-                ps.executeUpdate();
+                for (String interest : interests) {
+                    try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
+
+                        ps.setString(1, interest);
+                    ps.setInt(2, user_id);
+                    ps.executeUpdate();
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
