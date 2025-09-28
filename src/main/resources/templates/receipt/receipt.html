@@ -23,11 +23,16 @@
         <h2 th:inline="text">For: [[${user.getFirstName()}]]</h2>
         <h2 th:inline="text">At: [[${time}]]</h2>
         <h2 th:inline="text">Total: $[[${event.getTicketPrice()}]]</h2>
+        <h2 th:inline="text">[[${boughtTime}]]</h2>
         <h2 th:inline="text">Reference Number: [[${ref}]]</h2>
+
         <a th:href="@{/}" class="btn-dark text-decoration-none">Return to Main Page</a>
 
         
-        <form th:action="@{/print}" th:object="${event}" method="post" novalidate>
+        <form th:action="@{/print}" method="post" novalidate>
+          <input type="hidden" name="eventId" th:value="${event.getId()}">
+          <input type="hidden" name="eventTitle" th:value="${event.getTitle()}">
+          <input type="hidden" name="bought" th:value="${boughtTime}">
           <input type="hidden" name="refVal" th:value="${ref}">
           <button class="btn-dark" type="submit">Print Receipt</button>
         </form>

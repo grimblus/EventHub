@@ -154,6 +154,7 @@ public class PaymentController {
         model.addAttribute("event", event);
         model.addAttribute("user", user);
         model.addAttribute("time", event.getDate().format(f));
+        model.addAttribute("boughtTime", LocalDateTime.now().format(f));
         model.addAttribute("ref", ref);
         
         Payment payment = new Payment(ref, user_id, event.getTicketPrice(), LocalDateTime.now());
@@ -164,17 +165,24 @@ public class PaymentController {
     }
 
     @PostMapping("/print")
-    public void PrintReceipt(@Valid @ModelAttribute("event") Event event,
-                        Model model,
-                        HttpServletResponse response) {
+    public void PrintReceipt(@RequestParam("eventId") int id, 
+                            @RequestParam("eventTitle") String title,
+                            @RequestParam("bought") String boughtTime,
+                            @RequestParam("refVal") String ref,
+                            Model model,
+                            HttpServletResponse response) {
         
         // maybe move this to its own file for better formatting?
         PDDocument receipt = new PDDocument();
         PDPage receiptPage = new PDPage();
+
+        Event event = eventService.getEvent(id, title);
+
+        System.out.println(id + title + ref);
             
         receipt.addPage(receiptPage);
 
-        int offsetX = 50;
+        int offsetX = 170;
         int offsetY = 500;
         
         PDPageContentStream contentStream; 
@@ -196,20 +204,26 @@ public class PaymentController {
             contentStream.showText("Event: " + event.getTitle());
 
             contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 12 );
-            contentStream.newLineAtOffset(0, -40);
+            contentStream.newLineAtOffset(-120, -40);
             contentStream.showText("Event Location: " + event.getLocation());
 
             contentStream.newLineAtOffset(0, -30);
-            contentStream.showText("Event Time:" + event.getDate());
+            contentStream.showText("Event Time: " + event.getDate().format(f));
 
             contentStream.newLineAtOffset(0, -30);
-            contentStream.showText("Ticket Price: " + event.getTicketPrice());
+            contentStream.showText("Ticket Price: $" + event.getTicketPrice());
+                        
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 10 );
+            contentStream.newLineAtOffset(0, -45);
+            contentStream.showText("Purchase Time: " + boughtTime);
 
             contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 16 );
-            contentStream.newLineAtOffset(0, -45);
-            contentStream.showText("Reference:");
-            contentStream.endText();  
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Reference: " + ref);
             
+            
+            contentStream.endText();  
+
             contentStream.drawImage(header, 0, 0, 700, 200);
 
             contentStream.close();    
@@ -219,7 +233,7 @@ public class PaymentController {
 
 
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=receipt.pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=receipt-" + ref + ".pdf");
 
         try {
             
