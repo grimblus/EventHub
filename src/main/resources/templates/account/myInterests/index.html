@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
+    <title>Sign up to EventHub</title>
+    <!-- <script src="content-script.js"></script> -->
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <div class="interest-sections">
+        <h2>Your Interests</h2>
+        <div class="interest-box">
+          <h3>Categories</h3>
+          <div class="interest-buttons">
+            <button th:each="category : ${categories}" th:text="${category}">
+              interest
+            </button>
+          </div>
+        </div>
+        <form
+          class="interest-box"
+          th:action="@{/account/myInterests/tags}"
+          th:object="${tagSelection}"
+          method="post"
+        >
+          <h3>Tags</h3>
+          <div class="interest-buttons">
+            <div th:each="tag : ${tags}">
+              <label>
+                <input
+                  type="checkbox"
+                  th:value="tag"
+                  th:field="*{tagSelection}"
+                />
+                <span th:text="${tag}">tag</span>
+              </label>
+            </div>
+            <button th:each="tag : ${tags}" th:text="${tag}">interest</button>
+          </div>
+        </form>
+        <!-- <div class="interest-box">
+          <h3>Keywords</h3>
+          <div class="interest-buttons">
+            <button th:each="keyword : ${keywords}" th:text="${keyword}">
+              interest
+            </button>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </body>
+</html>

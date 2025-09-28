@@ -295,3 +295,23 @@ select {
 .radios {
   margin-top: 5px;
 }
+
+.interest-sections {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.interest-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.interest-buttons {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: auto;
+  gap: 10px;
+  padding: 20px 20px 100px 20px;
+  border: 2px solid #000000;
+}
