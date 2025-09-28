@@ -153,7 +153,14 @@ public class PaymentController {
         
         eventParticipantsService.addEventParticipant(event.getId(), user.getId());
         return "receipt/receipt";
-}
+    }
+
+    @PostMapping("/print")
+    public String PrintReceipt(@Valid @ModelAttribute("event") Event event,
+                        Model model) {
+        System.out.println("Hello world...");
+        return "redirect:";
+    }
 
     // helper that gets the next 12 years (e.g. 2025, 2026, 2027...2036) for the initial empty page
     private List<Integer> nextYears(int count) {

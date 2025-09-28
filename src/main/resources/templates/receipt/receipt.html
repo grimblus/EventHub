@@ -24,7 +24,12 @@
         <h2 th:inline="text">At: [[${time}]]</h2>
         <h2 th:inline="text">Total: $[[${event.getTicketPrice()}]]</h2>
         <h2 th:inline="text">Reference Number: [[${ref}]]</h2>
-        <a th:href="@{/}" class="btn btn-primary">Return to Main Page</a>
+        <a th:href="@{/}" class="btn-dark text-decoration-none">Return to Main Page</a>
+
+        
+        <form th:action="@{/print}" th:object="${event}" method="post" novalidate>
+          <button class="btn-dark" type="submit">Print Receipt</button>
+        </form>
       </div>
     </div>
   </body>
