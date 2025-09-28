@@ -185,7 +185,7 @@ public class TestCreateController {
     public void testInvalidDescription() throws Exception {
         MvcResult result = mockMvc.perform(post(URL).sessionAttr("user", mockUser)
                         .param("title", "Cool Event")
-                        .param("description", "12345678901234567890123456")
+                        .param("description", "This is a specially generated string designed to be exactly three hundred and one characters in total length, including every single space, letter, and punctuation mark, so that you can use it for testing, validation, or any other purpose that requires such precision today. gurtyogurtyogurtyogurtyogu")
                         .param("date", LocalDateTime.now().plusDays(2).toString())
                         .param("location", "Gurt: Yo")
                         .param("ticketPrice", "10")
@@ -197,7 +197,7 @@ public class TestCreateController {
 
         String pageContent = result.getResponse().getContentAsString();
 
-        assertTrue(pageContent.contains("Description length must be more than 25 characters!"));
+        assertTrue(pageContent.contains("Description length must be less than 300 characters!"));
     }
 
     @Test
