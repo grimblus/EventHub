@@ -27,13 +27,6 @@ public class MyInterestsController {
         this.userInterestsService = userInterestsService;
     }
 
-    private void prepareInterestsPage(Model model, HttpSession session) {
-
-        model.addAttribute("categories", Event.CATEGORIES.values());
-        model.addAttribute("tags", Event.TAGS.values());
-
-
-    }
 
     @GetMapping("/account/myInterests")
     public String account(Model model, HttpSession session) {
@@ -45,7 +38,8 @@ public class MyInterestsController {
         HashSet<String> interests = userInterestsService.getUserInterests(user.getId());
         model.addAttribute("interests", interests);
 
-        prepareInterestsPage(model, session);
+        model.addAttribute("categories", Event.CATEGORIES.values());
+        model.addAttribute("tags", Event.TAGS.values());
         //.values() does not return strings
 
 
