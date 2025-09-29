@@ -265,18 +265,15 @@
                          <section class="gallery">
                             <div style="display:flex;align-items:center;justify-content:space-between;">
                                 <h4>Gallery</h4>
+                                <input id="file-input" type="file" accept="image/*" style="display:none" />
                                 <button type="button" class="btn btn-sm btn-primary"
                                         onclick="addImage(this)">+ Add image</button>
                             </div>
 
                             <div class="gallery-grid" th:attr="data-event-id=${event.id}">
                                 <div class="gallery-item" th:each="img : ${event.images}">
-                                <button type="button" class="delete-btn"
-                                        onclick="deleteImage(this)">X</button>
-
-                                <!-- !!! TODO: prepends to welcome folder, change as necessary -->
-                                <img th:src="@{'/images/welcome/' + ${img}}"
-                                    alt="Event photo" loading="lazy">
+                                    <button type="button" class="delete-btn" onclick="deleteImage(this)">X</button>
+                                    <img th:src="@{${img}}" alt="Event photo" loading="lazy">
                                 </div>
                             </div>
                         </section>
@@ -375,6 +372,42 @@
                         }
                     })
                     .catch(err => alert(err.message));
+            }
+
+            // Open file picker, remember which event to upload to
+            function triggerFilePick(btnEl) {
+                const modal = btnEl.closest('.modal-content');
+                const grid  = modal?.querySelector('.gallery-grid');
+                const eventId = grid?.dataset.eventId;
+                if (!eventId) return alert('Could not find event id for gallery.');
+                const input = document.getElementById('file-input');
+                input.onchange = () => uploadPickedFile(eventId, grid, input.files[0]);
+                input.click();
+            }
+
+            function uploadPickedFile(eventId, grid, file) {
+                if (!file) return;
+                const data = new FormData();
+                data.append('file', file);
+
+                fetch(`/events/${eventId}/images`, {
+                    method: 'POST',
+                    body: data
+                })
+                .then(async r => {
+                    if (!r.ok) throw new Error(await r.text() || 'Upload failed');
+                    return r.json(); // { url, index }
+                })
+                .then(({ url }) => {
+                    const tile = document.createElement('div');
+                    tile.className = 'gallery-item';
+                    tile.innerHTML = `
+                    <button type="button" class="delete-btn" onclick="deleteImage(this)">x</button>
+                    <img src="${url}" alt="Event photo" loading="lazy">
+                    `;
+                    grid.appendChild(tile);
+                })
+                .catch(err => alert(err.message));
             }
 
         </script>
