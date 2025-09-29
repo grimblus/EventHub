@@ -25,7 +25,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class EventFeedController {
