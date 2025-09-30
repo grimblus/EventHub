@@ -4,6 +4,7 @@ import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -23,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TestAdminController {
     User user = new User();
     Event event = new Event();
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -31,6 +32,38 @@ public class TestAdminController {
     private UserService userService;
     @MockBean
     private EventService eventService;
+    private AdminController controller = new AdminController(userService, eventService);
+
+    @Test
+    void testIsAdminSuccess() throws Exception {
+        HttpSession session = mock(HttpSession.class);
+        User user = new User();
+        user.setPermissionLevel(User.permissions.ADMIN);
+
+        when(session.getAttribute("user")).thenReturn(user);
+
+        assertTrue(controller.isAdmin(session));
+    }
+
+    @Test
+    void testIsAdminFailure() throws Exception {
+        HttpSession session = mock(HttpSession.class);
+        User user = new User();
+        user.setPermissionLevel(User.permissions.STUDENT);
+
+        when(session.getAttribute("user")).thenReturn(user);
+
+        assertFalse(controller.isAdmin(session));
+    }
+
+    @Test
+    void testIsAdminNull() throws Exception {
+        HttpSession session = mock(HttpSession.class);
+
+        when(session.getAttribute("user")).thenReturn(null);
+
+        assertFalse(controller.isAdmin(session));
+    }
 
     @Test
     void testShowUsers() throws Exception {
