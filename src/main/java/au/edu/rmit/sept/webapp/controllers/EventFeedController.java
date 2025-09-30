@@ -6,9 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.*;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -157,7 +155,7 @@ public class EventFeedController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     // helper for safe extension
     private String safeExt(String originalName) {
         if (originalName == null) return "";
