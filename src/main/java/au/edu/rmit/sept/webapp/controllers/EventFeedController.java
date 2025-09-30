@@ -105,7 +105,12 @@ public class EventFeedController {
 
     // delete images (also remove the file on disk if we can)
     @DeleteMapping("/events/{eventId}/images/{index}")
-    public ResponseEntity<Void> deleteImage(@PathVariable int eventId, @PathVariable int index) {
+    public ResponseEntity<Void> deleteImage(@PathVariable int eventId,
+                                            @PathVariable int index,
+                                            HttpSession session) {
+        if (!canEditEvent(session, eventId)) {
+            return ResponseEntity.status(403).build();
+        }
         // get current filename before removal (so we can delete from disk)
         var ev = eventService.findEventbyID(eventId);
         String filename = null;
@@ -133,8 +138,12 @@ public class EventFeedController {
             @PathVariable int eventId,
             @RequestParam(value = "file",   required = false) MultipartFile file,
             @RequestParam(value = "files",  required = false) List<MultipartFile> files,
-            @RequestParam(value = "image",  required = false) MultipartFile image
+            @RequestParam(value = "image",  required = false) MultipartFile image,
+            HttpSession session
     ) {
+        if (!canEditEvent(session, eventId)) {
+            return ResponseEntity.status(403).body("Insufficient permissions");
+        }
         try {
             // normalize into a list
             List<MultipartFile> incoming = new java.util.ArrayList<>();
@@ -189,10 +198,10 @@ public class EventFeedController {
 
     // delete event
     @DeleteMapping("/events/{eventId}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable int eventId) {
-
-        
-
+    public ResponseEntity<Void> deleteEvent(@PathVariable int eventId, HttpSession session) {
+        if (!canEditEvent(session, eventId)) {
+            return ResponseEntity.status(403).build();
+        }
         return eventService.deleteEventbyID(eventId)
             ? ResponseEntity.noContent().build()
             : ResponseEntity.notFound().build();
