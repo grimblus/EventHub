@@ -49,8 +49,7 @@ public class RSVPListController {
         }
         else {
             //add an empty array list
-            model.addAttribute("rsvpList", new ArrayList<>()) ;    
-
+            model.addAttribute("rsvpList", new ArrayList<>()) ;
         }
         
 

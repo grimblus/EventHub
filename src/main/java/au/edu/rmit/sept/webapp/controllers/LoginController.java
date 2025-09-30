@@ -48,6 +48,13 @@ public class LoginController {
             model.addAttribute("error", "Invalid password.");
             return "login/index";
         }
+
+        // Checks if user is banned
+        if (user.isBanned()) {
+            model.addAttribute("error", "This account has been banned.");
+            return "login/index";
+        }
+
         session.setAttribute("user", user);
 
         return "redirect:/";
