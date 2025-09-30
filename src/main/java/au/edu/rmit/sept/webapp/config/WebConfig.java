@@ -1,7 +1,9 @@
 package au.edu.rmit.sept.webapp.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.lang.NonNull;
@@ -13,6 +15,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Value("${app.uploads.root}")
     private String uploadsRoot;
+
+    @Bean
+        public StandardServletMultipartResolver multipartResolver() {
+            return new StandardServletMultipartResolver();
+        }
 
     @Override
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
