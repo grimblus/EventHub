@@ -140,63 +140,46 @@ public class EventFeedController {
     }
 
     // add images
-    @RequestMapping(value = "/events/{eventId}/images", method = { RequestMethod.POST, RequestMethod.PUT })
+    @PostMapping("/events/{eventId}/images")
     @ResponseBody
-    public ResponseEntity<?> addImage(
-            @PathVariable int eventId,
-            @RequestParam(value = "file",   required = false) MultipartFile file,
-            @RequestParam(value = "files",  required = false) List<MultipartFile> files,
-            @RequestParam(value = "image",  required = false) MultipartFile image
-            // , HttpSession session   // keep this if you added the permission guard earlier
-    ) {
+    public ResponseEntity<?> addImage(@PathVariable int eventId,
+                                    @RequestParam("file") MultipartFile file,
+                                    HttpSession session) {
+        if (!canEditEvent(session, eventId)) {
+            return ResponseEntity.status(403).body("Forbidden");
+        }
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Empty file");
+        }
+        String ct = file.getContentType();
+        if (ct == null || !ct.startsWith("image/")) {
+            return ResponseEntity.badRequest().body("Only images allowed");
+        }
+
         try {
-            // If you added the permission guard earlier, keep this:
-            // if (!canEditEvent(session, eventId)) {
-            //     return ResponseEntity.status(403).body("Insufficient permissions");
-            // }
-
-            // normalize into a list
-            List<MultipartFile> incoming = new java.util.ArrayList<>();
-            if (files != null) incoming.addAll(files);
-            if (file  != null) incoming.add(file);
-            if (image != null) incoming.add(image);
-
-            // If nothing was sent, treat as a bad request (avoid 204/no body)
-            if (incoming.isEmpty()) {
-                return ResponseEntity.badRequest().body("No file provided");
-            }
-
-            Path dir = Path.of(uploadsRoot, "events", String.valueOf(eventId))
-                    .toAbsolutePath().normalize();
+            Path dir = Path.of(uploadsRoot, "events", String.valueOf(eventId)).toAbsolutePath().normalize();
             Files.createDirectories(dir);
 
-            String firstUrl = null;
-            String firstBasename = null;
+            String ext = safeExt(file.getOriginalFilename());
+            String basename = java.util.UUID.randomUUID() + (ext.isEmpty() ? "" : "." + ext);
 
-            for (MultipartFile f : incoming) {
-                String ext = safeExt(f.getOriginalFilename());
-                String basename = java.util.UUID.randomUUID() + (ext.isEmpty() ? "" : "." + ext);
+            Path dest = dir.resolve(basename);
+            Files.copy(file.getInputStream(), dest, StandardCopyOption.REPLACE_EXISTING);
 
-                Path dest = dir.resolve(basename);
-                Files.copy(f.getInputStream(), dest, StandardCopyOption.REPLACE_EXISTING);
+            boolean ok = eventService.addImageForEvent(eventId, basename);
+            if (!ok) return ResponseEntity.notFound().build();
 
-                boolean ok = eventService.addImageForEvent(eventId, basename);
-                if (!ok) return ResponseEntity.notFound().build();
-
-                if (firstUrl == null) {
-                    firstBasename = basename;
-                    firstUrl = "/uploads/events/" + eventId + "/" + basename;
-                }
-            }
-
-            // ✅ Return JSON the frontend expects
-            return ResponseEntity.ok(java.util.Map.of("url", firstUrl, "filename", firstBasename));
+            String url = "/uploads/events/" + eventId + "/" + basename;
+            return ResponseEntity
+                    .created(java.net.URI.create(url))
+                    .body(java.util.Map.of("url", url, "filename", basename));
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Upload failed");
         }
     }
+
 
     // helper for safe extension
     private String safeExt(String originalName) {
