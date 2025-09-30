@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<div layout:fragment="content">
+<div layout:fragment="content" th:if="${isAdmin}">
     <h1>Admin Display</h1>
 
     <div style="text-align: center; margin-bottom: 20px;">
@@ -98,6 +98,9 @@
             </tbody>
         </table>
     </div>
+</div>
+<div layout:fragment="content" th:if="${!isAdmin}">
+    <h1>Not Logged In As Admin</h1>
 </div>
 </body>
 </html>
