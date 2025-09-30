@@ -302,12 +302,13 @@
                         <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}">Event Start Time</span>
                         <span th:text="${event.getLocation()}">Event Location</span>
                     </div>
+                    <div class="event-meta">
+                        <span th:text="${'Category: ' + event.getCategory()}">Event Category</span>
+                        <span th:text="${'Tags: ' + #strings.listJoin(event.getTags(), ' • ')}">Event Tags</span>
+                    </div>
                 </div>
                 <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->
-                <div class="event-meta">
-                    <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
-                    <span th:text="${#strings.listJoin(event.getTags(), ' • ')}">Event Tags</span>
-                </div>
+                <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
                     <div th:attr="id=${'infoModal' + event.id}" class="modal">
                         <div class="modal-content">
 
