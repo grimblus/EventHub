@@ -2,6 +2,7 @@ package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,14 +25,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TestCreateController {
     private static final String URL = "/create";
-    private static final User mockUser =  new User();
+    private static User mockUser;
+
+    @BeforeAll
+    public static void setup() {
+        mockUser = new User();
+        mockUser.setPermissionLevel(User.permissions.ORGANISER);
+    }
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void testCreateDisplayFormContent() throws Exception {
-        MvcResult result = mockMvc.perform(get(URL))
+        MvcResult result = mockMvc.perform(get(URL).sessionAttr("user", mockUser))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -51,7 +58,7 @@ public class TestCreateController {
 
     @Test
     public void testEventModalAttributeInitialised() throws Exception {
-        MvcResult result = mockMvc.perform(get(URL))
+        MvcResult result = mockMvc.perform(get(URL).sessionAttr("user", mockUser))
                 .andExpect(status().isOk())
                 .andReturn();
 

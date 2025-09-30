@@ -25,7 +25,16 @@ public class CreateController {
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
+    public String create(Model model, HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+
+        User user = (User) session.getAttribute("user");
+        if (user.getPermissionLevel() != User.permissions.ADMIN && user.getPermissionLevel() != User.permissions.ORGANISER) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("event", new Event());
         model.addAttribute("keywords", Event.KEYWORDS.values());
         model.addAttribute("tags", Event.TAGS.values());
