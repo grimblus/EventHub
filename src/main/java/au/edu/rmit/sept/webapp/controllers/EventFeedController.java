@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
 @Controller
 public class EventFeedController {
 
@@ -37,6 +38,22 @@ public class EventFeedController {
     private String uploadsRoot;
 
     public EventFeedController(EventService eventService) {this.eventService = eventService;}
+
+    // check for user permission, admin or OWNER organiser
+    private boolean canEditEvent(HttpSession session, int eventId) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return false;
+
+        var role = user.getPermissionLevel();
+        if (role == User.permissions.ADMIN) return true;
+
+        if (role == User.permissions.ORGANISER) {
+            Integer ownerId = eventService.getOwnerID(eventId);
+            return ownerId != null && ownerId.equals(user.getId());
+        }
+
+        return false;
+    }
 
     @GetMapping("/events")
     public String events(
