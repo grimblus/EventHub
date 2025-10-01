@@ -326,7 +326,7 @@
                                 <!-- using the javascript fetch method allows the exportEvent function to fire, but it does not export the csv-->
                                 <form th:action="@{/events/{eventId}/export}" method="post" style="display: inline;">
                                     <input type="hidden" name="eventId" th:value="${event.getId()}">
-                                    <input type="hidden" name="refVal" th:value="${ref}">
+                                    <input type="hidden" name="eventTitle" th:value="${event.getTitle()}">
                                     <button class="btn btn-secondary" type="submit">Export Attendees</button>
                                 </form>
                                 <!-- Delete event button which only shows if user is a club organiser and also is the owner of the event -->

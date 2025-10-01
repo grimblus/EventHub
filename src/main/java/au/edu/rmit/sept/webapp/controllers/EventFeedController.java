@@ -147,15 +147,18 @@ public class EventFeedController {
     // export CSV of people attending event
     @PostMapping("/events/{eventId}/export")
     public ResponseEntity<Void> exportCSV(@RequestParam("eventId") int eventId,
+                                          @RequestParam("eventTitle") String eventTitle,
                                             Model model,
                                             HttpServletResponse response) {
         
-        Event event = eventService.findEventbyID(eventId);
+        // I DONT LIKE HOW THIS CODE IS HERE, I WANT IT IN THE FUNCTION, BUT IT REQUIRES THE SERVLET RESPONSE
+        // AND I CANNOT PASS THAT THROUGH AS A PARAMETER, MAYBE THE FUNCTION CAN RETURN A STRING TO BE PRINTED?
+                
         List<Integer> a_ids = eventParticipantsService.getEventParticipants(eventId);
         System.out.println("Number of attendees: " + a_ids.size());
         response.setContentType("text/csv;  charset=UTF-8");
 
-        response.setHeader("Content-Disposition", "attachment; filename=" + event.getTitle() + "-attendees.csv");
+        response.setHeader("Content-Disposition", "attachment; filename=" + eventTitle + "-attendees.csv");
         
         try(PrintWriter writer = response.getWriter()) {
             writer.println("ID,FirstName,LastName,Email");
