@@ -23,6 +23,9 @@ public class EventParticipantsServiceImpl implements EventParticipantsService {
         return repository.getRSVPList(userId);
     }
 
+    @Override
+    public boolean PrintAttendeeCSV(Integer eventID) { return repository.PrintAttendeeCSV(eventID); }
+
 
 
 }

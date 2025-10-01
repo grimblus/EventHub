@@ -7,4 +7,6 @@ public interface EventParticipantsService {
     public List<Integer> getRSVPList(Integer userId);
 
     public void addEventParticipant(Integer eventId, Integer userId); 
+
+    public boolean PrintAttendeeCSV(Integer eventID);
 }

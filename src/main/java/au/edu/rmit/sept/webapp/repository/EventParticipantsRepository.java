@@ -6,4 +6,6 @@ public interface EventParticipantsRepository {
     public List<Integer> getEventParticipants(Integer eventId);
     public void addEventParticipant(Integer eventId, Integer userId);
     public List<Integer> getRSVPList(Integer userId);
+    
+    public boolean PrintAttendeeCSV(Integer eventID);
 }

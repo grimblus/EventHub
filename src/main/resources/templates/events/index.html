@@ -322,8 +322,10 @@
                                 <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
                                 <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
                                 <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                <button class="btn btn-secondary" th:onclick="|exportEvent(${event.id}, this)|">Export Attendees</button>
                                 <!-- Delete event button which only shows if user is a club organiser and also is the owner of the event -->
                                 <div class="delete-btn-wrapper" style="display: none;">
+                                    
                                     <button class="btn btn-danger" th:onclick="|deleteEvent(${event.id}, this)|">Delete Event</button>
                                 </div>
                             </div>
@@ -455,6 +457,9 @@
                         }
                     })
                     .catch(err => alert(err.message));
+            }
+            function exportEvent(eventId) {
+                fetch(`/events/${eventId}/export`, { method: 'POST'})
             }
 
         </script>

@@ -14,6 +14,7 @@ import au.edu.rmit.sept.webapp.entity.User;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import au.edu.rmit.sept.webapp.services.EventParticipantsService;
 import au.edu.rmit.sept.webapp.services.EventService;
 import jakarta.servlet.http.HttpSession;
 
@@ -24,10 +25,12 @@ public class EventFeedController {
 
     private EventService eventService;
     private UserInterestsService userInterestsService;
+    private EventParticipantsService eventParticipantsService;
 
-    public EventFeedController(EventService eventService, UserInterestsService userInterestsService) {
+    public EventFeedController(EventService eventService, UserInterestsService userInterestsService, EventParticipantsService eventParticipantsService) {
         this.eventService = eventService;
         this.userInterestsService = userInterestsService;
+        this.eventParticipantsService = eventParticipantsService;
     }
 
     @GetMapping("/events")
@@ -129,12 +132,18 @@ public class EventFeedController {
         return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
+    // export CSV of people attending event
+    @PostMapping("/events/{eventId}/export")
+    public ResponseEntity<Void> exportCSV(@PathVariable int eventId) {
+        // function works, but button press does not....
+        return eventParticipantsService.PrintAttendeeCSV(1) 
+                ? ResponseEntity.noContent().build() 
+                : ResponseEntity.notFound().build();
+    }
+
     // delete event
     @DeleteMapping("/events/{eventId}")
     public ResponseEntity<Void> deleteEvent(@PathVariable int eventId) {
-
-        
-
         return eventService.deleteEventbyID(eventId)
             ? ResponseEntity.noContent().build()
             : ResponseEntity.notFound().build();
