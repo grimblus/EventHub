@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import au.edu.rmit.sept.webapp.repository.EventParticipantsRepository;
 
 import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class EventParticipantsServiceImpl implements EventParticipantsService {

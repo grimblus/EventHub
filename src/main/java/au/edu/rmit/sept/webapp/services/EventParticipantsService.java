@@ -1,6 +1,7 @@
 package au.edu.rmit.sept.webapp.services;
 
 import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface EventParticipantsService {
     public List<Integer> getEventParticipants(Integer eventId);

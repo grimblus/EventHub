@@ -88,7 +88,6 @@ public class EventParticipantsRepositoryImpl implements EventParticipantsReposit
     
     public boolean PrintAttendeeCSV(Integer eventId) {
         System.out.println("Printing event atendeeeeees");
-
         return true;
     }
 }

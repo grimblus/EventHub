@@ -2,6 +2,8 @@ package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.services.UserInterestsService;
+import au.edu.rmit.sept.webapp.services.UserService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import au.edu.rmit.sept.webapp.entity.User;
+import au.edu.rmit.sept.webapp.repository.UserRepository;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,11 +33,16 @@ public class EventFeedController {
     private EventService eventService;
     private UserInterestsService userInterestsService;
     private EventParticipantsService eventParticipantsService;
+    private UserService userService;
 
-    public EventFeedController(EventService eventService, UserInterestsService userInterestsService, EventParticipantsService eventParticipantsService) {
+    public EventFeedController(EventService eventService, 
+                                UserInterestsService userInterestsService, 
+                                EventParticipantsService eventParticipantsService,
+                                UserService userService ) {
         this.eventService = eventService;
         this.userInterestsService = userInterestsService;
         this.eventParticipantsService = eventParticipantsService;
+        this.userService = userService;
     }
 
     @GetMapping("/events")
@@ -140,18 +149,32 @@ public class EventFeedController {
     public ResponseEntity<Void> exportCSV(@RequestParam("eventId") int eventId,
                                             Model model,
                                             HttpServletResponse response) {
-        // function works, but button press does not....
-
+        
+        Event event = eventService.findEventbyID(eventId);
+        List<Integer> a_ids = eventParticipantsService.getEventParticipants(eventId);
+        System.out.println("Number of attendees: " + a_ids.size());
         response.setContentType("text/csv;  charset=UTF-8");
-        response.setHeader("Content-Disposition", "attachment; filename=\'users.csv'");
+
+        response.setHeader("Content-Disposition", "attachment; filename=" + event.getTitle() + "-attendees.csv");
         
         try(PrintWriter writer = response.getWriter()) {
-            writer.println("ID,Name,Email");
-            System.out.println("fokfddlkflkd");
+            writer.println("ID,FirstName,LastName,Email");
+            for(int i = 0; i < a_ids.size(); ++i) {
+                User attendee = userService.findUserByID(a_ids.get(i));
+
+                String row = String.format(Locale.ROOT, "%d,%s,%s,%s",
+                    attendee.getId(),
+                    attendee.getFirstName(),
+                    attendee.getLastName(),
+                    attendee.getEmail()
+                );
+                writer.println(row);
+            }
+            
         } catch(IOException e) {
             e.printStackTrace();
         }
-        return eventParticipantsService.PrintAttendeeCSV(1) 
+        return eventParticipantsService.PrintAttendeeCSV(eventId) 
                 ? ResponseEntity.noContent().build() 
                 : ResponseEntity.notFound().build();
     }
