@@ -322,7 +322,13 @@
                                 <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
                                 <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
                                 <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
-                                <button class="btn btn-secondary" th:onclick="|exportEvent(${event.id}, this)|">Export Attendees</button>
+                                <!-- <button class="btn btn-secondary" th:onclick="|exportEvent(${event.id}, this)|">Export Attendees</button> -->
+                                <!-- using the javascript fetch method allows the exportEvent function to fire, but it does not export the csv-->
+                                <form th:action="@{/events/{eventId}/export}" method="post" style="display: inline;">
+                                    <input type="hidden" name="eventId" th:value="${event.getId()}">
+                                    <input type="hidden" name="refVal" th:value="${ref}">
+                                    <button class="btn btn-secondary" type="submit">Export Attendees</button>
+                                </form>
                                 <!-- Delete event button which only shows if user is a club organiser and also is the owner of the event -->
                                 <div class="delete-btn-wrapper" style="display: none;">
                                     
@@ -457,9 +463,6 @@
                         }
                     })
                     .catch(err => alert(err.message));
-            }
-            function exportEvent(eventId) {
-                fetch(`/events/${eventId}/export`, { method: 'POST'})
             }
 
         </script>

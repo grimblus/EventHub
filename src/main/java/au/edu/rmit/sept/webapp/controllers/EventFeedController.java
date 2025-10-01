@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import au.edu.rmit.sept.webapp.services.EventParticipantsService;
 import au.edu.rmit.sept.webapp.services.EventService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 @Controller
@@ -134,8 +137,20 @@ public class EventFeedController {
 
     // export CSV of people attending event
     @PostMapping("/events/{eventId}/export")
-    public ResponseEntity<Void> exportCSV(@PathVariable int eventId) {
+    public ResponseEntity<Void> exportCSV(@RequestParam("eventId") int eventId,
+                                            Model model,
+                                            HttpServletResponse response) {
         // function works, but button press does not....
+
+        response.setContentType("text/csv;  charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\'users.csv'");
+        
+        try(PrintWriter writer = response.getWriter()) {
+            writer.println("ID,Name,Email");
+            System.out.println("fokfddlkflkd");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
         return eventParticipantsService.PrintAttendeeCSV(1) 
                 ? ResponseEntity.noContent().build() 
                 : ResponseEntity.notFound().build();

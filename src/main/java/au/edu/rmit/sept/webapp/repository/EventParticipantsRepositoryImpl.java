@@ -1,5 +1,8 @@
 package au.edu.rmit.sept.webapp.repository;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.http.HttpResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +13,8 @@ import java.util.function.Supplier;
 import org.springframework.stereotype.Repository;
 
 import au.edu.rmit.sept.webapp.H2DatabaseConnection;
+import au.edu.rmit.sept.webapp.entity.Event;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Repository
 public class EventParticipantsRepositoryImpl implements EventParticipantsRepository {
@@ -81,8 +86,9 @@ public class EventParticipantsRepositoryImpl implements EventParticipantsReposit
         }
     }
     
-    public boolean PrintAttendeeCSV(Integer eventID) {
+    public boolean PrintAttendeeCSV(Integer eventId) {
         System.out.println("Printing event atendeeeeees");
+
         return true;
     }
 }
