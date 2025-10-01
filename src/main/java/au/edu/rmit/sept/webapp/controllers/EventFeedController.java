@@ -155,9 +155,8 @@ public class EventFeedController {
         // AND I CANNOT PASS THAT THROUGH AS A PARAMETER, MAYBE THE FUNCTION CAN RETURN A STRING TO BE PRINTED?
                 
         List<Integer> a_ids = eventParticipantsService.getEventParticipants(eventId);
-        System.out.println("Number of attendees: " + a_ids.size());
-        response.setContentType("text/csv;  charset=UTF-8");
 
+        response.setContentType("text/csv;  charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + eventTitle + "-attendees.csv");
         
         try(PrintWriter writer = response.getWriter()) {
