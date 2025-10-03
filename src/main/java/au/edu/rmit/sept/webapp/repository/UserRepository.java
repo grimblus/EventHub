@@ -1,7 +1,11 @@
 package au.edu.rmit.sept.webapp.repository;
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import au.edu.rmit.sept.webapp.entity.User;
 
+@Repository
 public interface UserRepository {
     public void setUsers();
     public List<User> getUsers();
