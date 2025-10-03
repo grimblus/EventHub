@@ -22,12 +22,6 @@ public class TestPaymentServiceImpl {
     private PaymentServiceImpl paymentService;
 
     @Test
-    void testSetPayments() {
-        paymentService.setPayments();
-        verify(paymentRepository).setPayments();
-    }
-
-    @Test
     void testGetAllPayments() {
         List<Payment> payments = List.of(payment);
         when(paymentRepository.GetAllPayments()).thenReturn(payments);

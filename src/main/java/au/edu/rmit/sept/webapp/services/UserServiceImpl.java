@@ -26,11 +26,6 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    //initialises repository
-    public void setUsers() {
-        repository.setUsers();
-    }
-
     //gets all users
     public List<User> getUsers() {
         return repository.getUsers();

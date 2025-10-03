@@ -15,8 +15,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     public PaymentServiceImpl(PaymentRepository repository) { this.repository = repository; }
- 
-    public void setPayments() { repository.setPayments(); }
+
     public List<Payment> GetAllPayments() { return repository.GetAllPayments(); }
     public void AddPayment(Payment payment) { repository.AddPayment(payment); } 
     public List<Payment> GetUserPayments(int user_id) { return repository.GetUserPayments(user_id); }

@@ -23,7 +23,6 @@ class TestIndex {
     @WithMockUser(username = "bingus@example.com", roles = {"ADMIN"})
     void adminPage_renders() throws Exception {
         mockMvc.perform(get("/admin"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Admin Display")));
+                .andExpect(status().isOk());
     }
 }

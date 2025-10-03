@@ -10,29 +10,20 @@ import java.util.function.Supplier;
 import au.edu.rmit.sept.webapp.entity.User;
 import org.springframework.stereotype.Repository;
 
-import au.edu.rmit.sept.webapp.H2DatabaseConnection;
+import javax.sql.DataSource;
+
 
 @Repository
 public class EventParticipantsRepositoryImpl implements EventParticipantsRepository {
-    final private Supplier<Connection> connectionSupplier;
+    private final DataSource dataSource;
 
-    public EventParticipantsRepositoryImpl() {
-        this.connectionSupplier = () -> {
-            try {
-                return H2DatabaseConnection.getConnection();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
-
-    public EventParticipantsRepositoryImpl(Supplier<Connection> connectionSupplier) {
-        this.connectionSupplier = connectionSupplier;
+    public EventParticipantsRepositoryImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public List<User> getEventParticipants(Integer eventId) {
         List<User> userList = new ArrayList<>();
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String searchSQL = "SELECT * " +
                     "FROM event_participants ep " +
                     "INNER JOIN users u ON ep.user_id = u.id " +
@@ -61,7 +52,7 @@ public class EventParticipantsRepositoryImpl implements EventParticipantsReposit
 
     public List<Integer> getRSVPList(Integer userId) {
         List<Integer> eventList = new ArrayList<>();
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String searchSQL = "SELECT * FROM event_participants WHERE user_id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setInt(1, userId);
@@ -77,10 +68,8 @@ public class EventParticipantsRepositoryImpl implements EventParticipantsReposit
         return eventList;
     }
 
-
-
     public void addEventParticipant(Integer eventId, Integer userId) {
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String insertSQL = "INSERT INTO event_participants (event_id, user_id) VALUES (?, ?)";
          
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {

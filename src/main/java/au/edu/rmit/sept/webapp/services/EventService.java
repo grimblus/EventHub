@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface EventService {
     public List<String> stringList(String list);
-    public void setEvents();
     public void addEvent(Event event);
     public List<Event> getEvents();
     public Event getEvent(int id, String name);

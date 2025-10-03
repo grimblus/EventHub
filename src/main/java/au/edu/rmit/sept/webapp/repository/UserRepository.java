@@ -7,7 +7,6 @@ import au.edu.rmit.sept.webapp.entity.User;
 
 @Repository
 public interface UserRepository {
-    public void setUsers();
     public List<User> getUsers();
     public  User findUserByID(Integer id);
     public  User findUserByFirstName(String firstName);

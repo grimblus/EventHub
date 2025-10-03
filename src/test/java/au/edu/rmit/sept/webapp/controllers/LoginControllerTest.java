@@ -28,11 +28,6 @@ public class LoginControllerTest {
     @Autowired
     private UserRepositoryImpl userRepository;
 
-    @BeforeEach
-    void setup() {
-        userRepository.setUsers(); 
-    }
-
     @Test
     void shouldDisplayLoginContent() throws Exception {
         MvcResult result = mvc.perform(get(URL))
