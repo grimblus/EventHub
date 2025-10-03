@@ -2,6 +2,7 @@ package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,14 +25,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TestCreateController {
     private static final String URL = "/create";
-    private static final User mockUser =  new User();
+    private static User mockUser;
+
+    @BeforeAll
+    public static void setup() {
+        mockUser = new User();
+        mockUser.setPermissionLevel(User.permissions.ORGANISER);
+    }
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void testCreateDisplayFormContent() throws Exception {
-        MvcResult result = mockMvc.perform(get(URL))
+        MvcResult result = mockMvc.perform(get(URL).sessionAttr("user", mockUser))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -51,7 +58,7 @@ public class TestCreateController {
 
     @Test
     public void testEventModalAttributeInitialised() throws Exception {
-        MvcResult result = mockMvc.perform(get(URL))
+        MvcResult result = mockMvc.perform(get(URL).sessionAttr("user", mockUser))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -185,7 +192,7 @@ public class TestCreateController {
     public void testInvalidDescription() throws Exception {
         MvcResult result = mockMvc.perform(post(URL).sessionAttr("user", mockUser)
                         .param("title", "Cool Event")
-                        .param("description", "12345678901234567890123456")
+                        .param("description", "This is a specially generated string designed to be exactly three hundred and one characters in total length, including every single space, letter, and punctuation mark, so that you can use it for testing, validation, or any other purpose that requires such precision today. gurtyogurtyogurtyogurtyogu")
                         .param("date", LocalDateTime.now().plusDays(2).toString())
                         .param("location", "Gurt: Yo")
                         .param("ticketPrice", "10")
@@ -197,7 +204,7 @@ public class TestCreateController {
 
         String pageContent = result.getResponse().getContentAsString();
 
-        assertTrue(pageContent.contains("Description length must be more than 25 characters!"));
+        assertTrue(pageContent.contains("Description length must be less than 300 characters!"));
     }
 
     @Test

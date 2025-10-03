@@ -211,6 +211,82 @@
                 </div>
             </form>
         </div>
+        <h2 class="event-feed-title" th:if="${loggedIn}">Recommended Events</h2>
+        <div th:if="${loggedIn}" class="events-display-container">
+            <div class="event-feed-title" th:if="${recommendedEvents.size() == 0}">
+                No events currently match your selected tags or categories.
+            </div>
+            <div class="event-item" th:each="event : ${recommendedEvents}">
+                <!-- !!! TODO: prepends to welcome folder, change as necessary -->
+                <img class="event-banner"
+                     th:src="@{/images/welcome/{f}(f=${event.images[0]})}"
+                     th:alt="${event.images[0]}" />
+                <div class="event-details">
+                    <h2 th:text="${event.getTitle()}">Event Title</h2>
+                    <p th:text="${event.getDescription()}">Event Description</p>
+                    <div class="event-meta">
+                        <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}">Event Start Time</span>
+                        <span th:text="${event.getLocation()}">Event Location</span>
+                    </div>
+                </div>
+                <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->
+                <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
+                <div th:attr="id=${'infoModal' + event.id}" class="modal">
+                    <div class="modal-content">
+
+                        <section class="page-split">
+                            <div id="recleft">
+                                <h3>Event Details</h3>
+                                <p><strong>ID:</strong> <span th:text="${event.getId()}"></span></p>
+                                <p><strong>Name:</strong> <span th:text="${event.getTitle()}"></span></p>
+                                <p><strong>Description:</strong> <span th:text="${event.getDescription()}"></span></p>
+                                <p><strong>Date:</strong> <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"></span></p>
+                                <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
+                                <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
+                                <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                <!-- Delete event button which only shows if user is a club organiser and also is the owner of the event -->
+                                <div class="delete-btn-wrapper" style="display: none;">
+                                    <button class="btn btn-danger" th:onclick="|deleteEvent(${event.id}, this)|">Delete Event</button>
+                                </div>
+                            </div>
+                            <div id="recright">
+                                <p><strong>Location:</strong> <span th:text="${event.getLocation()}"></span></p>
+                                <iframe
+                                        id="recLocationEmbedd"
+                                        width="400"
+                                        height="250"
+                                        loading="lazy"
+                                        th:src="@{${'https://www.google.com/maps?q=' + event.getLocation() + '&output=embed'}}">
+                                </iframe>
+                            </div>
+                        </section>
+                        <hr class="divider"/>
+
+                        <!-- add image gallery to event details -->
+                        <!-- !!!! TODO: show add and delete buttons only to organiser/admin  -->
+                        <section class="gallery">
+                            <div style="display:flex;align-items:center;justify-content:space-between;">
+                                <h4>Gallery</h4>
+                                <button type="button" class="btn btn-sm btn-primary"
+                                        onclick="addImage(this)">+ Add image</button>
+                            </div>
+
+                            <div class="gallery-grid" th:attr="data-event-id=${event.id}">
+                                <div class="gallery-item" th:each="img : ${event.images}">
+                                    <button type="button" class="delete-btn"
+                                            onclick="deleteImage(this)">X</button>
+
+                                    <!-- !!! TODO: prepends to welcome folder, change as necessary -->
+                                    <img th:src="@{'/images/welcome/' + ${img}}"
+                                         alt="Event photo" loading="lazy">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="event-feed-title">All events</h2>
         <div class="events-display-container">
             <div class="event-item" th:each="event : ${events}">
                 <!-- !!! TODO: prepends to welcome folder, change as necessary -->
@@ -233,6 +309,10 @@
                     <div class="event-meta">
                         <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}">Event Start Time</span>
                         <span th:text="${event.getLocation()}">Event Location</span>
+                    </div>
+                    <div class="event-meta">
+                        <span th:text="${'Category: ' + event.getCategory()}">Event Category</span>
+                        <span th:text="${'Tags: ' + #strings.listJoin(event.getTags(), ' • ')}">Event Tags</span>
                     </div>
                 </div>
                 <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->

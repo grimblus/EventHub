@@ -25,8 +25,20 @@ public class CreateController {
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
+    public String create(Model model, HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+
+        User user = (User) session.getAttribute("user");
+        if (user.getPermissionLevel() != User.permissions.ADMIN && user.getPermissionLevel() != User.permissions.ORGANISER) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("event", new Event());
+        model.addAttribute("keywords", Event.KEYWORDS.values());
+        model.addAttribute("tags", Event.TAGS.values());
+        model.addAttribute("categories", Event.CATEGORIES.values());
 
         return "create/index";
     }
@@ -62,8 +74,8 @@ public class CreateController {
         }
 
         // Description Validation
-        if (event.getDescription().length() > 25) {
-            errors.add("Description length must be more than 25 characters!");
+        if (event.getDescription().length() > 300) {
+            errors.add("Description length must be less than 300 characters!");
             valid = false;
         }
 
@@ -85,12 +97,29 @@ public class CreateController {
         // Location Validation
 
         // Ticket Price Validation
-        if (!event.getTicketPrice().isEmpty() && (Integer.parseInt(event.getTicketPrice()) < 0 || Integer.parseInt(event.getTicketPrice()) > 1000)) {
+        if (!event.getTicketPrice().isEmpty() && Integer.parseInt(event.getTicketPrice()) < 0) {
             errors.add("Ticket price cannot be negative!");
+            valid = false;
+        }
+        else if (!event.getTicketPrice().isEmpty() && Integer.parseInt(event.getTicketPrice()) > 1000) {
+            errors.add("Ticket price cannot exceed 1000!");
             valid = false;
         }
 
         // Category Validation
+        if (!event.getCategory().isEmpty()) {
+            boolean foundCategoryError = false;
+            for (Event.CATEGORIES category : Event.CATEGORIES.values()) {
+                if (event.getCategory().toUpperCase().equals(category.name())) {
+                    foundCategoryError = true;
+                    break;
+                }
+            }
+            if (!foundCategoryError) {
+                errors.add("Category does not exist!");
+                valid = false;
+            }
+        }
 
         // Bottom two are done in the script
         // Keywords Validation

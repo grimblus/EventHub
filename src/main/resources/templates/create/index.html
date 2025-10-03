@@ -118,6 +118,31 @@
             border-radius: 6px;
             font-size: 0.95rem;
         }
+
+        .available-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            margin-top: 0.45rem;
+        }
+
+        .available-container div {
+            flex: 1;
+        }
+
+        .available-container ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 5px;
+        }
+
+        .available-container ul li {
+            display: inline-block;
+            background: #808080;
+            padding: 5px 10px;
+            border-radius: 12px;
+            margin: 4px;
+        }
     </style>
 </head>
 
@@ -153,6 +178,28 @@
                     <input type="text" id="tags" placeholder="Type Tag and Press Enter" />
                     <input type="hidden" th:field="*{tags}" id="tags-hidden" />
                     <div id="tags-container"></div>
+
+                    <div class="available-container">
+                        <div>
+                            <label>Available Keywords:</label>
+                            <ul id="available-keywords">
+                                <li th:each="keyword : ${keywords}" th:text="${keyword}"></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <label>Available Tags:</label>
+                            <ul id="available-tags">
+                                <li th:each="tag : ${tags}" th:text="${tag}"></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <label>Available Categories:</label>
+                            <ul id="available-categories">
+                                <li th:each="category : ${categories}" th:text="${category}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <button type="submit">
                         Submit
                     </button>
@@ -170,6 +217,9 @@
     </div>
     <div layout:fragment="scripts">
         <script>
+            console.log(Array.from(document.querySelectorAll('#available-tags li')).map((value) => value.textContent.trim()));
+            console.log(Array.from(document.querySelectorAll('#available-keywords li')).map((value) => value.textContent.trim()))
+
             function createTagElement(container, array, tagText, updateHidden) {
                 const div = document.createElement('div');
                 div.classList.add('tag');
@@ -199,6 +249,8 @@
             const tagsInput = document.getElementById('tags');
             const tagsHidden = document.getElementById('tags-hidden');
             const tagsArray = [];
+            const tagsAvailable = Array.from(document.querySelectorAll('#available-tags li')).map((value) => value.textContent.trim());
+
 
             function updateTagsHidden() {
                 tagsHidden.value = tagsArray.join(',');
@@ -207,8 +259,16 @@
             tagsInput.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    const tag = tagsInput.value.trim();
-                    if (tag && !tagsArray.includes(tag)) {
+                    const tag = tagsInput.value.trim().toUpperCase();
+                    if (!tag) return;
+
+                    if (!tagsAvailable.includes(tag)) {
+                        alert(`'${tag}' is not a valid tag`);
+                        tagsInput.value = '';
+                        return;
+                    }
+
+                    if (!tagsArray.includes(tag)) {
                         tagsArray.push(tag);
                         createTagElement(tagsContainer, tagsArray, tag, updateTagsHidden);
                         updateTagsHidden();
@@ -217,10 +277,12 @@
                 }
             });
 
+
             const keywordsContainer = document.getElementById('keywords-container');
             const keywordsInput = document.getElementById('keywords');
             const keywordsHidden = document.getElementById('keywords-hidden');
             const keywordsArray = [];
+            const keywordsAvailable = Array.from(document.querySelectorAll('#available-keywords li')).map((value) => value.textContent.trim());
 
             function updateKeywordsHidden() {
                 keywordsHidden.value = keywordsArray.join(',');
@@ -229,8 +291,16 @@
             keywordsInput.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    const keyword = keywordsInput.value.trim();
-                    if (keyword && !keywordsArray.includes(keyword)) {
+                    const keyword = keywordsInput.value.trim().toUpperCase();
+                    if (!keyword) return;
+
+                    if (!keywordsAvailable.includes(keyword)) {
+                        alert(`'${keyword}' is not a valid keyword`);
+                        keywordsInput.value = '';
+                        return;
+                    }
+
+                    if (!keywordsArray.includes(keyword)) {
                         keywordsArray.push(keyword);
                         createTagElement(keywordsContainer, keywordsArray, keyword, updateKeywordsHidden);
                         updateKeywordsHidden();

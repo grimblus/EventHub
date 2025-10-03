@@ -47,6 +47,26 @@ public class EventParticipantsRepositoryImpl implements EventParticipantsReposit
         return userList;
     }
 
+    public List<Integer> getRSVPList(Integer userId) {
+        List<Integer> eventList = new ArrayList<>();
+        try (Connection connection = connectionSupplier.get()) {
+            String searchSQL = "SELECT * FROM event_participants WHERE user_id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                ps.setInt(1, userId);
+                try  (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        eventList.add(rs.getInt("event_id"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return eventList;
+    }
+
+
+
     public void addEventParticipant(Integer eventId, Integer userId) {
         try (Connection connection = connectionSupplier.get()) {
             String insertSQL = "INSERT INTO event_participants (event_id, user_id) VALUES (?, ?)";

@@ -1,6 +1,7 @@
 package au.edu.rmit.sept.webapp.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class User {
     public enum permissions {STUDENT, ORGANISER, ADMIN};
@@ -13,7 +14,7 @@ public class User {
     private permissions permissionLevel;
     private boolean banned;
     private ArrayList<Event> rsvpList;
-
+    private HashSet<String> interests;
     // Default Constructor
     public User() {
         this.id = 0;
@@ -24,6 +25,7 @@ public class User {
         this.permissionLevel = permissions.STUDENT;
         this.banned = false;
         this.rsvpList = new ArrayList<>();
+        this.interests = new HashSet<String>();
     }
 
     // No ID Constructor
@@ -36,6 +38,7 @@ public class User {
         this.permissionLevel = permissionLevel;
         this.banned = false;
         this.rsvpList = new ArrayList<>();
+        this.interests = new HashSet<String>();
     }
 
     // Full Constructor
@@ -48,6 +51,7 @@ public class User {
         this.permissionLevel = permissionLevel;
         this.banned = banned;
         this.rsvpList = new ArrayList<Event>();
+        this.interests = new HashSet<String>();
     }
 
     public int getId() {
@@ -116,5 +120,13 @@ public class User {
 
     public void setBanned(boolean banned) {
         this.banned = banned;
+    }
+
+    public HashSet<String> getInterests() {
+        return this.interests;
+    }
+
+    public void addInterest(String interest) {
+        this.interests.add(interest);
     }
 }
