@@ -254,7 +254,7 @@ public class EventFeedController {
         // I DONT LIKE HOW THIS CODE IS HERE, I WANT IT IN THE FUNCTION, BUT IT REQUIRES THE SERVLET RESPONSE
         // AND I CANNOT PASS THAT THROUGH AS A PARAMETER, MAYBE THE FUNCTION CAN RETURN A STRING TO BE PRINTED?
                 
-        List<Integer> a_ids = eventParticipantsService.getEventParticipants(eventId);
+        List<User> a_ids = eventParticipantsService.getEventParticipants(eventId);
 
         response.setContentType("text/csv;  charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + eventTitle + "-attendees.csv");
@@ -262,7 +262,7 @@ public class EventFeedController {
         try(PrintWriter writer = response.getWriter()) {
             writer.println("ID,FirstName,LastName,Email");
             for(int i = 0; i < a_ids.size(); ++i) {
-                User attendee = userService.findUserByID(a_ids.get(i));
+                User attendee = userService.findUserByID(a_ids.get(i).getId());
 
                 String row = String.format(Locale.ROOT, "%d,%s,%s,%s",
                     attendee.getId(),

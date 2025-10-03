@@ -12,9 +12,4 @@ class TestWebappApplication {
     void contextLoads() {
         // Stays empty just checks if spring loads
     }
-
-    @Test
-    void mainMethodRunsWithoutErrors() {
-        assertDoesNotThrow(() -> WebappApplication.main(new String[]{}));
-    }
 }

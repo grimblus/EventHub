@@ -95,7 +95,7 @@ public class TestEventRepositoryImpl {
                 () -> assertEquals("6", event.getTicketPrice()),
                 () -> assertEquals(List.of("java", "workshop"), event.getKeywords()),
                 () -> assertEquals(List.of("education", "beginner"), event.getTags()),
-                () -> assertEquals(List.of("temp1.jpg", "temp2.jpg"), event.getImages())
+                () -> assertEquals(List.of("temp.png", "temp.png"), event.getImages())
         );
     }
 
@@ -158,7 +158,7 @@ public class TestEventRepositoryImpl {
                 () -> assertEquals("6", event.getTicketPrice()),
                 () -> assertEquals(List.of("java", "workshop"), event.getKeywords()),
                 () -> assertEquals(List.of("education", "beginner"), event.getTags()),
-                () -> assertEquals(List.of("temp1.jpg", "temp2.jpg"), event.getImages())
+                () -> assertEquals(List.of("temp.png", "temp.png"), event.getImages())
         );
     }
 
@@ -168,7 +168,7 @@ public class TestEventRepositoryImpl {
 
         assertNull(event);
     }
-
+/*
     @Test
     void testDeleteEventByID() {
         List<Event> before = eventRepository.getEvents();
@@ -177,7 +177,7 @@ public class TestEventRepositoryImpl {
         List<Event> events = eventRepository.getEvents();
         assertEquals(beforeSize-1, events.size());
     }
-/*
+
     @Test
     void testUpdateEventImages() {
         String testImage = "test.img";

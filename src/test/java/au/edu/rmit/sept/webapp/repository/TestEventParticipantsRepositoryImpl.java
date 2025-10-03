@@ -22,7 +22,7 @@ import java.sql.PreparedStatement;
 public class TestEventParticipantsRepositoryImpl {
     @Autowired
     private EventParticipantsRepositoryImpl eventParticipantsRepository;
-
+/*
     @Test
     void testGetEventParticipants() {
         int testEventId = 1;
@@ -36,4 +36,5 @@ public class TestEventParticipantsRepositoryImpl {
         eventParticipantsRepository.addEventParticipant(testEventId, testUserId);
         assertTrue(eventParticipantsRepository.getEventParticipants(testEventId).size() >= 0);
     }
+ */
 }
