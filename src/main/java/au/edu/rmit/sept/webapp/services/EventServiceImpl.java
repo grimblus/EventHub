@@ -52,4 +52,10 @@ public class EventServiceImpl implements EventService {
         return repository.updateEventImages(eventId, imgs);*/
         return repository.addImageForEvent(eventId, filename);
     }
+
+    @Override
+    public List<Event> getEventsByOwnerId(int id) {
+        return repository.getEventsByOwnerId(id);
+    }
+
 }

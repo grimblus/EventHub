@@ -388,6 +388,12 @@ select {
   align-items: center;
 }
 
+.vertical-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .event-feed-title {
   padding-left: 34px;
 }

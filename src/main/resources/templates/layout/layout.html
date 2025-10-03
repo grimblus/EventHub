@@ -14,6 +14,7 @@
           <a th:href="@{/}">Home</a>
           <a href="/events">Events</a>
           <a th:if="${isOrganiser}" th:href="@{/create}">Create</a>
+          <a th:if="${isOrganiser}" th:href="@{/dashboard}">Creator Dashboard</a>
           <a th:if="${loggedIn}" href="/account">Account</a>
           <a th:if="${loggedIn && user.permissionLevel.name() == 'ADMIN'}" href="/admin">Admin</a>
         </div>
