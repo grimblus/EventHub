@@ -34,10 +34,10 @@ public class TestUserRepositoryImpl {
 
     @Test
     void testAddUser() {
-        String testFirstName = "Test";
-        String testLastName = "User";
-        String testEmail = "test@example.com";
-        String testPassword = "pass123";
+        String testFirstName = "Bingus";
+        String testLastName = "Bongus";
+        String testEmail = "bingus@example.com";
+        String testPassword = "s3cur3pass";
         User.permissions testRole = User.permissions.ADMIN;
         user = new User(testFirstName, testLastName, testPassword, testEmail, testRole);
         userRepository.addUser(user);

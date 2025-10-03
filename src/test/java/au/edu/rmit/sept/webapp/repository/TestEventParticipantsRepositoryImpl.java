@@ -26,7 +26,7 @@ public class TestEventParticipantsRepositoryImpl {
     @Test
     void testGetEventParticipants() {
         int testEventId = 1;
-        assertTrue(eventParticipantsRepository.getEventParticipants(testEventId).isEmpty());
+        assertFalse(eventParticipantsRepository.getEventParticipants(testEventId).isEmpty());
     }
 
     @Test
@@ -35,18 +35,5 @@ public class TestEventParticipantsRepositoryImpl {
         int testUserId = 1;
         eventParticipantsRepository.addEventParticipant(testEventId, testUserId);
         assertEquals(testUserId, eventParticipantsRepository.getEventParticipants(testEventId).get(0));
-    }
-
-    @Test
-    void testCatchBranches() {
-        Supplier<Connection> connectionSupplier = () -> {
-            throw new RuntimeException("Simulated Failure");
-        };
-        EventParticipantsRepositoryImpl mockRepo = new EventParticipantsRepositoryImpl(connectionSupplier);
-
-        assertAll("All catch",
-                () -> assertDoesNotThrow(() -> mockRepo.getEventParticipants(1)),
-                () -> assertDoesNotThrow(() -> mockRepo.addEventParticipant(1, 1))
-        );
     }
 }

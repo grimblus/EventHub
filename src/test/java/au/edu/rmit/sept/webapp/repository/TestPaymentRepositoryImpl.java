@@ -40,7 +40,7 @@ public class TestPaymentRepositoryImpl {
     @Test
     void testAddAndGetPayment() {
         String testPaymentRef = "abcd";
-        int testUserID = 1;
+        int testUserID = 2;
         String testAmount = "1234.00";
         LocalDateTime testTime = LocalDateTime.of(2000, Month.JANUARY, 1, 0, 0, 0);
         payment = new Payment(testPaymentRef, testUserID, testAmount, testTime);
