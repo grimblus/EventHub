@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS payments (
     id VARCHAR(255) PRIMARY KEY,
     user_id INT,
     amount DECIMAL(10, 2),
-    time TIMESTAMP,
+    `time` TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
