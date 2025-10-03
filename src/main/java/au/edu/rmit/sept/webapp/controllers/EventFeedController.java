@@ -1,5 +1,12 @@
 package au.edu.rmit.sept.webapp.controllers;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.*;
+import java.util.Locale;
+import java.util.Map;
+
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.services.UserInterestsService;
 import au.edu.rmit.sept.webapp.services.UserService;
@@ -32,6 +39,9 @@ public class EventFeedController {
 
     private EventService eventService;
     private UserInterestsService userInterestsService;
+
+    @Value("${app.uploads.root:uploads}")
+    private String uploadsRoot;
     private EventParticipantsService eventParticipantsService;
     private UserService userService;
 
@@ -41,8 +51,22 @@ public class EventFeedController {
                                 UserService userService ) {
         this.eventService = eventService;
         this.userInterestsService = userInterestsService;
-        this.eventParticipantsService = eventParticipantsService;
-        this.userService = userService;
+    }
+
+    // check for user permission, admin or OWNER organiser
+    private boolean canEditEvent(HttpSession session, int eventId) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return false;
+
+        var role = user.getPermissionLevel();
+        if (role == User.permissions.ADMIN) return true;
+
+        if (role == User.permissions.ORGANISER) {
+            Integer ownerId = eventService.getOwnerID(eventId);
+            return ownerId != null && ownerId.equals(user.getId());
+        }
+
+        return false;
     }
 
     @GetMapping("/events")
@@ -105,17 +129,25 @@ public class EventFeedController {
     public Map<String, Object> checkOwner(@PathVariable Integer eventId, HttpSession session) {
         User user = (User) session.getAttribute("user");
         boolean isOwner = false;
+        boolean isAdmin = false;
+        boolean canEdit = false;
 
-        //If the owner is an organiser and the user exists, checks if user id matches with the event's owner id
-        if (user != null && user.getPermissionLevel() == User.permissions.ORGANISER) {
-            Integer ownerId = eventService.getOwnerID(eventId);
-            if (ownerId != null && ownerId.equals(user.getId())) {
-                isOwner = true;
+        if (user != null) {
+            isAdmin = user.getPermissionLevel() == User.permissions.ADMIN;
+
+            if (user.getPermissionLevel() == User.permissions.ORGANISER) {
+                Integer ownerId = eventService.getOwnerID(eventId);
+                isOwner = ownerId != null && ownerId.equals(user.getId());
             }
+
+            // Admin can always edit; organiser only if owner
+            canEdit = isAdmin || isOwner;
         }
 
         Map<String, Object> resp = new HashMap<>();
         resp.put("isOwner", isOwner);
+        resp.put("isAdmin", isAdmin);
+        resp.put("canEdit", canEdit);
         return resp;
     }
 
@@ -129,19 +161,88 @@ public class EventFeedController {
         return "events/index";
     }
 
-    // delete images
+    // delete images (also remove the file on disk if we can)
     @DeleteMapping("/events/{eventId}/images/{index}")
-    public ResponseEntity<Void> deleteImage(@PathVariable int eventId, @PathVariable int index) {
-        return eventService.deleteImageForEvent(eventId, index)
-            ? ResponseEntity.noContent().build()
-            : ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteImage(@PathVariable int eventId,
+                                            @PathVariable int index,
+                                            HttpSession session) {
+        if (!canEditEvent(session, eventId)) {
+            return ResponseEntity.status(403).build();
+        }
+        // get current filename before removal (so we can delete from disk)
+        var ev = eventService.findEventbyID(eventId);
+        String filename = null;
+        if (ev != null && ev.getImages() != null && index >= 0 && index < ev.getImages().size()) {
+            filename = ev.getImages().get(index);
+        }
+
+        boolean ok = eventService.deleteImageForEvent(eventId, index);
+        if (!ok) return ResponseEntity.notFound().build();
+
+        if (filename != null) {
+            try {
+                Path p = Path.of(uploadsRoot, "events", String.valueOf(eventId), filename)
+                            .toAbsolutePath().normalize();
+                Files.deleteIfExists(p);
+            } catch (Exception ignored) {}
+        }
+        return ResponseEntity.noContent().build();
     }
 
     // add images
     @PostMapping("/events/{eventId}/images")
-    public ResponseEntity<Void> addImage(@PathVariable int eventId) {
-        boolean ok = eventService.addImageForEvent(eventId, "temp.png");
-        return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @ResponseBody
+    public ResponseEntity<?> addImage(@PathVariable int eventId,
+                                    @RequestParam("file") MultipartFile file,
+                                    HttpSession session) {
+        if (!canEditEvent(session, eventId)) {
+            return ResponseEntity.status(403).body("Forbidden");
+        }
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Empty file");
+        }
+        String ct = file.getContentType();
+        if (ct == null || !ct.startsWith("image/")) {
+            return ResponseEntity.badRequest().body("Only images allowed");
+        }
+
+        try {
+            Path dir = Path.of(uploadsRoot, "events", String.valueOf(eventId)).toAbsolutePath().normalize();
+            Files.createDirectories(dir);
+
+            String ext = safeExt(file.getOriginalFilename());
+            String basename = java.util.UUID.randomUUID() + (ext.isEmpty() ? "" : "." + ext);
+
+            Path dest = dir.resolve(basename);
+            Files.copy(file.getInputStream(), dest, StandardCopyOption.REPLACE_EXISTING);
+
+            boolean ok = eventService.addImageForEvent(eventId, basename);
+            if (!ok) return ResponseEntity.notFound().build();
+
+            String url = "/uploads/events/" + eventId + "/" + basename;
+            return ResponseEntity
+                    .created(java.net.URI.create(url))
+                    .body(java.util.Map.of("url", url, "filename", basename));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Upload failed");
+        }
+    }
+
+
+    // helper for safe extension
+    private String safeExt(String originalName) {
+        if (originalName == null) return "";
+        String name = org.springframework.util.StringUtils.getFilename(originalName);
+        if (name == null) return "";
+        int dot = name.lastIndexOf('.');
+        if (dot < 0) return "";
+        String ext = name.substring(dot + 1).toLowerCase(Locale.ROOT);
+        return switch (ext) {
+            case "png","jpg","jpeg","gif","webp","bmp","svg" -> ext;
+            default -> "";
+        };
     }
 
     // export CSV of people attending event
@@ -184,6 +285,9 @@ public class EventFeedController {
     // delete event
     @DeleteMapping("/events/{eventId}")
     public ResponseEntity<Void> deleteEvent(@PathVariable int eventId) {
+
+        
+
         return eventService.deleteEventbyID(eventId)
             ? ResponseEntity.noContent().build()
             : ResponseEntity.notFound().build();

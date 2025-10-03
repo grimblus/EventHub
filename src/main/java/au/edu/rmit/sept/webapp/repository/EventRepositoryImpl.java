@@ -18,8 +18,8 @@ public class EventRepositoryImpl implements EventRepository {
     final private Supplier<Connection> connectionSupplier;
 
     static List<Event> eventList = List.of(
-            new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "6","General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
-            new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "999999", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
+            new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "6","General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp1.jpg", "temp2.jpg")),
+            new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "999999", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp3.jpg", "temp4.jpg"))
     );
 
     public List<String> stringList(String list) {

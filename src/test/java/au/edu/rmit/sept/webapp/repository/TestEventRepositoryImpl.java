@@ -96,7 +96,7 @@ public class TestEventRepositoryImpl {
                 () -> assertEquals("6", event.getTicketPrice()),
                 () -> assertEquals(List.of("java", "workshop"), event.getKeywords()),
                 () -> assertEquals(List.of("education", "beginner"), event.getTags()),
-                () -> assertEquals(List.of("temp.png", "temp.png"), event.getImages())
+                () -> assertEquals(List.of("temp1.jpg", "temp2.jpg"), event.getImages())
         );
     }
 
@@ -159,7 +159,7 @@ public class TestEventRepositoryImpl {
                 () -> assertEquals("6", event.getTicketPrice()),
                 () -> assertEquals(List.of("java", "workshop"), event.getKeywords()),
                 () -> assertEquals(List.of("education", "beginner"), event.getTags()),
-                () -> assertEquals(List.of("temp.png", "temp.png"), event.getImages())
+                () -> assertEquals(List.of("temp1.jpg", "temp2.jpg"), event.getImages())
         );
     }
 
