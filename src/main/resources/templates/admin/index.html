@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<div layout:fragment="content" th:if="${isAdmin}">
+<div layout:fragment="content" th:if="${isAdmin == true}">
     <h1>Admin Display</h1>
 
     <div style="text-align: center; margin-bottom: 20px;">
@@ -99,7 +99,7 @@
         </table>
     </div>
 </div>
-<div layout:fragment="content" th:if="${!isAdmin}">
+<div layout:fragment="content" th:if="${isAdmin != true}">
     <h1>Not Logged In As Admin</h1>
 </div>
 </body>
