@@ -1,5 +1,7 @@
 package au.edu.rmit.sept.webapp;
 
+import au.edu.rmit.sept.webapp.repository.BadgeRepository;
+import au.edu.rmit.sept.webapp.repository.BadgeRepositoryImpl;
 import au.edu.rmit.sept.webapp.repository.EventRepository;
 import au.edu.rmit.sept.webapp.repository.EventRepositoryImpl;
 import au.edu.rmit.sept.webapp.repository.PaymentRepository;
@@ -19,9 +21,11 @@ public class WebappApplication {
         EventRepository eventRepo = new EventRepositoryImpl();
 		PaymentRepository paymentRepo = new PaymentRepositoryImpl();
 		UserInterestsRepository  userInterestsRepo = new UserInterestsRepositoryImpl();
+		BadgeRepository badgeRepo = new BadgeRepositoryImpl();
         userRepo.setUsers();
         eventRepo.setEvents();
 		paymentRepo.setPayments();
 		userInterestsRepo.setUserInterests();
+		badgeRepo.setBadges();
 	}
 }

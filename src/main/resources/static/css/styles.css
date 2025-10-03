@@ -254,11 +254,32 @@ select {
   gap: 10px;
 }
 
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
 .badges-box {
   display: flex;
   flex-direction: column;
   border: 1px solid #111111;
   align-items: center;
+}
+
+.badges .earned {
+  border: 2px solid green;
+  background: #e6ffe6;
+  width: 100%;      /* fill the .badge container */
+  height: 100%;
+}
+
+.badges .locked {
+  border: 2px solid gray;
+  opacity: 0.5;
+  width: 100%;      /* fill the .badge container */
+  height: 100%;
 }
 
 .my-things {

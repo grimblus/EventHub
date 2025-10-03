@@ -10,7 +10,7 @@ import au.edu.rmit.sept.webapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BadgeServiceImpl {
+public class BadgeServiceImpl implements BadgeService {
     private UserRepository userRepo;
     private BadgeRepository badgeRepo;
 
@@ -18,8 +18,14 @@ public class BadgeServiceImpl {
         this.badgeRepo = badgeRepo;
     }
 
-    public List<Badge> getBadgesForUser(int userId) {
+    public List<Badge> getBadgesByUser(int userId) {
+        // List<Badge> badges = badgeRepository.getBadgesForUser(int userId);
+        // System.out.print("Badges for user: " + userId + ": " + badges);
         return badgeRepo.getBadgesByUser(userId);
+    }
+
+    public List<Badge> getAllBadges() {
+        return badgeRepo.getAllBadges();
     }
 
     public void awardBadge(int userId, int badgeId) {

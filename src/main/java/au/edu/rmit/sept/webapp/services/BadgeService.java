@@ -3,6 +3,7 @@ import au.edu.rmit.sept.webapp.entity.Badge;
 import java.util.*;
 
 public interface BadgeService {
-    public List<Badge> getBadgesForUser(int userId);
+    public List<Badge> getBadgesByUser(int userId);
+    public List<Badge> getAllBadges();
     public void awardBadge(int userId, int badgeId);
 }
