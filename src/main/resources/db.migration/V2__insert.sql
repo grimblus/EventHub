@@ -1,0 +1,11 @@
+INSERT INTO users ("Aaron", "Tran", "password123", "aaron@example.com", User.permissions.STUDENT);
+INSERT INTO users ("Bingus", "Bongus", "s3cur3pass", "bingus@example.com", User.permissions.ADMIN);
+INSERT INTO users ("Coolguy", "Joe", "coolguy123", "coolguy@example.com", User.permissions.STUDENT);
+INSERT INTO users ("Johndev", "Programmer", "g0d0t0man", "johndev@example.com", User.permissions.ORGANISER);
+INSERT INTO users ("Dexter", "Morgan", "b4yharb0r", "morgan@example.com", User.permissions.STUDENT);
+INSERT INTO users ("Deez", "Noots", "g0tt3m", "deez@example.com", User.permissions.ORGANISER);
+INSERT INTO events ("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "6","General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png"));
+INSERT INTO events ("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "999999", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"));
+INSERT INTO payments (randUUID(), 1, "54", LocalDateTime.now());
+INSERT INTO payments (randUUID(), 1, "43", LocalDateTime.now());
+INSERT INTO payments (randUUID(), 2, "999", LocalDateTime.now());

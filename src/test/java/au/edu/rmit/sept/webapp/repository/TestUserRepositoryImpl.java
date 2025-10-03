@@ -1,35 +1,33 @@
 package au.edu.rmit.sept.webapp.repository;
 
 import au.edu.rmit.sept.webapp.entity.User;
-import au.edu.rmit.sept.webapp.H2DatabaseConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.function.Supplier;
 import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class TestUserRepositoryImpl {
-    final private static UserRepository userRepository = new UserRepositoryImpl();
+    @Autowired
+    private UserRepository userRepository;
     User user;
 
-    @BeforeEach
-    void setUp() throws Exception{
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
-            String cleanSlate = "DROP TABLE IF EXISTS users CASCADE";
-            PreparedStatement createTableStatement = connection.prepareStatement(cleanSlate);
-            createTableStatement.executeUpdate();
-        }
-
-        userRepository.setUsers();
-    }
-
     @Test
-    void testSetAndGetUsers() {
+    void testGetUsers() {
         List<User> users = userRepository.getUsers();
         assertEquals(6, users.size());
     }
@@ -115,34 +113,5 @@ public class TestUserRepositoryImpl {
     @Test
     void testToggleBannedNotFound() {
         assertFalse(userRepository.toggleBanned(0));
-    }
-
-    @Test
-    void testConstructorCatch() {
-        try (MockedStatic<H2DatabaseConnection> mocked = mockStatic(H2DatabaseConnection.class)) {
-            mocked.when(H2DatabaseConnection::getConnection).thenThrow(new RuntimeException("Simulated Failure"));
-            UserRepository mockRepo = new UserRepositoryImpl();
-
-            assertDoesNotThrow(mockRepo::getUsers);
-        }
-    }
-
-    @Test
-    void testCatchBranches() {
-        Supplier<Connection> connectionSupplier = () -> {
-            throw new RuntimeException("Simulated Failure");
-        };
-        UserRepositoryImpl mockRepo = new UserRepositoryImpl(connectionSupplier);
-
-        assertAll("All catch",
-                () -> assertDoesNotThrow(mockRepo::setUsers),
-                () -> assertDoesNotThrow(() -> mockRepo.addUser(user)),
-                () -> assertDoesNotThrow(() -> mockRepo.getUsers().size()),
-                () -> assertDoesNotThrow(() -> mockRepo.findUserByID(2)),
-                () -> assertDoesNotThrow(() -> mockRepo.findUserByFirstName("bingus")),
-                () -> assertDoesNotThrow(() -> mockRepo.findUserByLastName("bongus")),
-                () -> assertDoesNotThrow(() -> mockRepo.findUserByEmail("bingus@example.com")),
-                () -> assertDoesNotThrow(() -> mockRepo.toggleBanned(2))
-        );
     }
 }

@@ -1,10 +1,9 @@
 package au.edu.rmit.sept.webapp.repository;
-
-import au.edu.rmit.sept.webapp.H2DatabaseConnection;
 import au.edu.rmit.sept.webapp.entity.Event;
 
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,12 +14,7 @@ import java.util.function.Supplier;
 
 @Repository
 public class EventRepositoryImpl implements EventRepository {
-    final private Supplier<Connection> connectionSupplier;
-
-    static List<Event> eventList = List.of(
-            new Event("Workshop", "Learn Basics", 5, LocalDateTime.of(2025, 9, 1, 10, 0), "Old Melbourne Gaol, 377 Russell St", "6","General", List.of("java", "workshop"), List.of("education", "beginner"), List.of("temp.png", "temp.png")),
-            new Event("Hackathon", "Coding Challenge", 4, LocalDateTime.of(2025, 10, 10, 9, 0), "1 Hacker Wy, Menlo Park", "999999", "Coding", List.of("coding", "challenge"), List.of("competition", "teamwork"), List.of("temp.png", "temp.png"))
-    );
+    private final DataSource dataSource;
 
     public List<String> stringList(String list) {
         List<String> finalList = new ArrayList<>();
@@ -29,86 +23,12 @@ public class EventRepositoryImpl implements EventRepository {
         return finalList;
     }
 
-    public EventRepositoryImpl() {
-        this.connectionSupplier = () -> {
-            try {
-                return H2DatabaseConnection.getConnection();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
-
-    //Constructor for mock connection
-    public EventRepositoryImpl(Supplier<Connection> connectionSupplier) {
-        this.connectionSupplier = connectionSupplier;
-    }
-
-    public void setEvents() {
-        try (Connection connection = connectionSupplier.get()) {
-            String createTableSQL = "CREATE TABLE IF NOT EXISTS events (" +
-                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                    "title VARCHAR(255), " +
-                    "description VARCHAR(255), " +
-                    "ownerID INT, " +
-                    "date TIMESTAMP," +
-                    "location VARCHAR(255), " +
-                    "ticketPrice VARCHAR(255)," +
-                    "category VARCHAR(255)," +
-                    "keywords VARCHAR(1000)," +
-                    "tags VARCHAR(1000)," +
-                    "images VARCHAR(1000)," +
-                    "FOREIGN KEY(ownerID) REFERENCES users(id))";
-            PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
-            createTableStatement.executeUpdate();
-
-            String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, ticketPrice, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            for (Event event : eventList) {
-                try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
-                    ps.setString(1, event.getTitle());
-                    ps.setString(2, event.getDescription());
-                    ps.setInt(3, event.getOwnerID());
-                    ps.setTimestamp(4, Timestamp.valueOf(event.getDate()));
-                    ps.setString(5, event.getLocation());
-                    ps.setString(6, event.getTicketPrice());
-                    ps.setString(7, event.getCategory());
-                    ps.setString(8, String.join(",", event.getKeywords()));
-                    ps.setString(9, String.join(",", event.getTags()));
-                    ps.setString(10, String.join(",", event.getImages()));
-                    ps.executeUpdate();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try (Connection connection = connectionSupplier.get()) {
-            String createTableSQL = "CREATE TABLE IF NOT EXISTS event_participants (" +
-                    "    event_id INT NOT NULL," +
-                    "    user_id INT NOT NULL," +
-                    "    PRIMARY KEY (event_id, user_id)," +
-                    "    FOREIGN KEY (event_id) REFERENCES events(id)," +
-                    "    FOREIGN KEY (user_id) REFERENCES users(id))";
-            PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
-            createTableStatement.executeUpdate();
-
-            /*String insertSQL = "INSERT INTO event_participants (event_id, user_id) VALUES (?, ?)";
-            for (Event event: eventList) {
-                for (User user : event.getParticipants()) {
-                    try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
-                        ps.setInt(1, event.getId());
-                        ps.setInt(2, user.getId());
-                        ps.executeUpdate();
-                    }
-                }
-            } Commented this part out for the sake of testing while no default events have participants*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public EventRepositoryImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public void addEvent(Event event) {
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String insertSQL = "INSERT INTO events (title, description, ownerID, date, location, ticketPrice, category, keywords, tags, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
                 ps.setString(1, event.getTitle());
@@ -130,7 +50,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     public List<Event> getEvents() {
         List<Event> events = new ArrayList<>();
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String searchSQL = "SELECT * FROM events";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 try  (ResultSet rs = ps.executeQuery()) {
@@ -164,7 +84,7 @@ public class EventRepositoryImpl implements EventRepository {
         Event event = null; // start with a blank event
         StringBuilder searchSQL = new StringBuilder("SELECT * FROM events WHERE id = ? AND LOWER(title) = ?");
 
-        try( Connection connection = connectionSupplier.get()) {
+        try( Connection connection = this.dataSource.getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(searchSQL.toString())) {
                 ps.setInt(1, id);
                 ps.setString(2, name.toLowerCase());
@@ -233,7 +153,7 @@ public class EventRepositoryImpl implements EventRepository {
         }
 
         List<Event> events = new ArrayList<>();
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(searchSQL.toString())) {
                 // Bind parameters
                 for (int i = 0; i < parameters.size(); i++) {
@@ -266,7 +186,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     public List<String> getTags() {
         Set<String> tags = new  HashSet<String>();
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String searchSQL = "SELECT tags FROM events";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 try  (ResultSet rs = ps.executeQuery()) {
@@ -283,7 +203,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     public List<String> getKeywords() {
         Set<String> keywords = new HashSet<String>();
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String searchSQL = "SELECT keywords FROM events";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 try  (ResultSet rs = ps.executeQuery()) {
@@ -299,13 +219,12 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public Event findEventbyID(Integer id) {
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String searchSQL = "SELECT * FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setInt(1, id);
                 try  (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        EventRepositoryImpl eventrepo = new EventRepositoryImpl();
                         return new Event(
                             rs.getInt("id"),
                             rs.getString("title"),
@@ -315,9 +234,9 @@ public class EventRepositoryImpl implements EventRepository {
                             rs.getString("location"),
                             rs.getString("ticketPrice"),
                             rs.getString("category"),
-                            eventrepo.stringList(rs.getString("keywords")),
-                            eventrepo.stringList(rs.getString("tags")),
-                            eventrepo.stringList(rs.getString("images"))
+                            stringList(rs.getString("keywords")),
+                            stringList(rs.getString("tags")),
+                            stringList(rs.getString("images"))
                         );
                     }
                 }
@@ -329,7 +248,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public boolean deleteEventbyID(Integer id) {
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String deleteSQL = "DELETE FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(deleteSQL)) {
                 ps.setInt(1, id);
@@ -344,7 +263,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     // update event image list (delimited ,)
     public boolean updateEventImages(int id, List<String> images) {
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String sql = "UPDATE events SET images = ? WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setString(1, String.join(",", images));
@@ -372,7 +291,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public Integer getOwnerID(Integer eventId) {
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String sql = "SELECT ownerID FROM events WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, eventId);

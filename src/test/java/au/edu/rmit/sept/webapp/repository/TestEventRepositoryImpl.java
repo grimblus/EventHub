@@ -1,7 +1,6 @@
 package au.edu.rmit.sept.webapp.repository;
 
 import au.edu.rmit.sept.webapp.entity.Event;
-import au.edu.rmit.sept.webapp.H2DatabaseConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,29 +10,29 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class TestEventRepositoryImpl {
-    final private static UserRepository userRepository = new UserRepositoryImpl();
-    final private static EventRepository eventRepository = new EventRepositoryImpl();
+    @Autowired
+    private UserRepositoryImpl userRepository;
+    @Autowired
+    private EventRepositoryImpl eventRepository;
     Event event;
 
-    @BeforeEach
-    void setUp() throws Exception{
-        try (Connection connection = H2DatabaseConnection.getConnection()) {
-            String cleanSlate = "DROP TABLE IF EXISTS events CASCADE";
-            PreparedStatement createTableStatement = connection.prepareStatement(cleanSlate);
-            createTableStatement.executeUpdate();
-        }
-        userRepository.setUsers();
-        eventRepository.setEvents();
-    }
-
     @Test
-    void testSetAndGetEvents() {
+    void testGetEvents() {
         List<Event> events = eventRepository.getEvents();
         assertEquals(2, events.size());
     }
@@ -228,39 +227,6 @@ public class TestEventRepositoryImpl {
     void testAddImageForEventNotFound() {
         String testImage = "test.img";
         assertFalse(eventRepository.addImageForEvent(-1, testImage));
-    }
-
-    @Test
-    void testConstructorCatch() {
-        try (MockedStatic<H2DatabaseConnection> mocked = mockStatic(H2DatabaseConnection.class)) {
-            mocked.when(H2DatabaseConnection::getConnection).thenThrow(new RuntimeException("Simulated Failure"));
-            EventRepositoryImpl mockRepo = new EventRepositoryImpl();
-
-            assertDoesNotThrow(mockRepo::getEvents);
-        }
-    }
-
-    @Test
-    void testCatchBranches() {
-        Supplier<Connection> connectionSupplier = () -> {
-            throw new RuntimeException("Simulated Failure");
-        };
-        EventRepositoryImpl mockRepo = new EventRepositoryImpl(connectionSupplier);
-
-        assertAll("All catch",
-                () -> assertDoesNotThrow(mockRepo::setEvents),
-                () -> assertDoesNotThrow(() -> mockRepo.addEvent(event)),
-                () -> assertDoesNotThrow(() -> mockRepo.getEvents().isEmpty()),
-                () -> assertDoesNotThrow(() -> mockRepo.getEvent(1, "Workshop")),
-                () -> assertDoesNotThrow(() -> mockRepo.getEventsByFilter("Workshop", null, null, null, null).isEmpty()),
-                () -> assertDoesNotThrow(() -> mockRepo.getTags().isEmpty()),
-                () -> assertDoesNotThrow(() -> mockRepo.getKeywords().isEmpty()),
-                () -> assertDoesNotThrow(() -> mockRepo.findEventbyID(1)),
-                () -> assertDoesNotThrow(() -> mockRepo.deleteEventbyID(1)),
-                () -> assertDoesNotThrow(() -> mockRepo.updateEventImages(1, List.of("img.png"))),
-                () -> assertDoesNotThrow(() -> mockRepo.deleteImageForEvent(1, 0)),
-                () -> assertDoesNotThrow(() -> mockRepo.getOwnerID(1))
-        );
     }
 }
 

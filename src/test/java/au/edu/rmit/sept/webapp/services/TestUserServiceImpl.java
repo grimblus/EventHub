@@ -23,12 +23,6 @@ public class TestUserServiceImpl {
     private UserServiceImpl userService;
 
     @Test
-    void testSetUsers() {
-        userService.setUsers();
-        verify(userRepository).setUsers();
-    }
-
-    @Test
     void testAddUser() {
         userService.addUser(user);
         verify(userRepository).addUser(user);
