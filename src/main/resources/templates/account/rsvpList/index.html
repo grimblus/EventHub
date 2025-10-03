@@ -5,7 +5,7 @@
   layout:decorate="~{layout/layout.html}"
 >
   <head>
-    <title>Sign up to EventHub</title>
+    <title>rsvpList</title>
     <!-- <script src="content-script.js"></script> -->
     <style>
       .events-filter-container {
@@ -56,6 +56,10 @@
                 >Event Start Time</span
               >
               <span th:text="${rsvp.getLocation()}">Event Location</span>
+            </div>
+            <div class="event-meta">
+              <span th:text="${'Category: ' + rsvp.getCategory()}">Event Category</span>
+              <span th:text="${'Tags: ' + #strings.listJoin(rsvp.getTags(), ' • ')}">Event Tags</span>
             </div>
           </div>
         </div>

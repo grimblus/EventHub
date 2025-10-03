@@ -395,4 +395,36 @@ public class EventRepositoryImpl implements EventRepository {
         imgs.add(filename);
         return updateEventImages(eventId, imgs);
     }
+
+    public List<Event> getEventsByOwnerId(int id) {
+        List<Event> events = new ArrayList<>();
+        try (Connection connection = connectionSupplier.get()) {
+            String searchSQL = "SELECT * FROM events WHERE ownerId = ?";
+
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                ps.setInt(1, id);
+                try  (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Event event = new Event(
+                                rs.getInt("id"),
+                                rs.getString("title"),
+                                rs.getString("description"),
+                                rs.getInt("ownerID"),
+                                rs.getTimestamp("date").toLocalDateTime(),
+                                rs.getString("location"),
+                                rs.getString("ticketPrice"),
+                                rs.getString("category"),
+                                stringList(rs.getString("keywords")),
+                                stringList(rs.getString("tags")),
+                                stringList(rs.getString("images"))
+                        );
+                        events.add(event);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
 }

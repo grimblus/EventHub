@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.services;
 
+import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.repository.EventParticipantsRepository;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,12 +23,14 @@ public class TestEventParticipantsServiceImpl {
     @Test
     void testGetEventParticipants() {
         int testEventId = 1;
-        List<Integer> participants = List.of(testEventId);
+        User testUser = new User();
+        testUser.setFirstName("john");
+        List<User> participants = List.of(testUser);
         when(eventParticipantsRepository.getEventParticipants(testEventId)).thenReturn(participants);
 
-        List<Integer> result = eventParticipantsService.getEventParticipants(testEventId);
+        List<User> result = eventParticipantsService.getEventParticipants(testEventId);
 
-        assertEquals(participants, result);
+        assertEquals("john", result.get(0).getFirstName());
     }
 
     @Test
