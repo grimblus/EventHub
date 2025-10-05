@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <title>Layout page</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
   </head>
 
   <body>
@@ -14,9 +20,15 @@
           <a th:href="@{/}">Home</a>
           <a href="/events">Events</a>
           <a th:if="${isOrganiser}" th:href="@{/create}">Create</a>
-          <a th:if="${isOrganiser}" th:href="@{/dashboard}">Creator Dashboard</a>
+          <a th:if="${isOrganiser}" th:href="@{/dashboard}"
+            >Creator Dashboard</a
+          >
           <a th:if="${loggedIn}" href="/account">Account</a>
-          <a th:if="${loggedIn && user.permissionLevel.name() == 'ADMIN'}" href="/admin">Admin</a>
+          <a
+            th:if="${loggedIn && user.permissionLevel.name() == 'ADMIN'}"
+            href="/admin"
+            >Admin</a
+          >
         </div>
         <div th:if="${loggedIn}">
           <a th:href="@{/logout}">Sign Out</a>
