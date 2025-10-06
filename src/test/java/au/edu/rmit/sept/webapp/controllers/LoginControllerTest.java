@@ -63,7 +63,7 @@ public class LoginControllerTest {
     @Test
     void invalidPassword() throws Exception {
         mvc.perform(post("/login")
-                .param("email", "aaron@example.com")
+                .param("email", "lay.aaron@example.com")
                 .param("pw", "bingus"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", "Invalid password."));
@@ -72,7 +72,7 @@ public class LoginControllerTest {
     @Test
     void invalidPasswordEmpty() throws Exception {
         mvc.perform(post("/login")
-                .param("email", "aaron@example.com")
+                .param("email", "lay.aaron@example.com")
                 .param("pw", ""))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", "Invalid password."));

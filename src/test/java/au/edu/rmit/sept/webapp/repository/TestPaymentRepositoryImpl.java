@@ -62,6 +62,6 @@ public class TestPaymentRepositoryImpl {
 
     @Test
     void testGetUserPayments() {
-        assertEquals(2, paymentRepository.GetUserPayments(1).size());
+        assertEquals(2, paymentRepository.GetUserPayments(2).size());
     }
 }

@@ -92,10 +92,10 @@ public class TestEventRepositoryImpl {
                 () -> assertEquals(LocalDateTime.of(2025, 9, 1, 10, 0), event.getDate()),
                 () -> assertEquals("Old Melbourne Gaol, 377 Russell St", event.getLocation()),
                 () -> assertEquals("General", event.getCategory()),
-                () -> assertEquals("6", event.getTicketPrice()),
+                () -> assertEquals("54", event.getTicketPrice()),
                 () -> assertEquals(List.of("java", "workshop"), event.getKeywords()),
                 () -> assertEquals(List.of("education", "beginner"), event.getTags()),
-                () -> assertEquals(List.of("temp.png", "temp.png"), event.getImages())
+                () -> assertEquals(List.of("temp1.jpg", "temp2.jpg"), event.getImages())
         );
     }
 
@@ -155,10 +155,10 @@ public class TestEventRepositoryImpl {
                 () -> assertEquals(LocalDateTime.of(2025, 9, 1, 10, 0), event.getDate()),
                 () -> assertEquals("Old Melbourne Gaol, 377 Russell St", event.getLocation()),
                 () -> assertEquals("General", event.getCategory()),
-                () -> assertEquals("6", event.getTicketPrice()),
+                () -> assertEquals("54", event.getTicketPrice()),
                 () -> assertEquals(List.of("java", "workshop"), event.getKeywords()),
                 () -> assertEquals(List.of("education", "beginner"), event.getTags()),
-                () -> assertEquals(List.of("temp.png", "temp.png"), event.getImages())
+                () -> assertEquals(List.of("temp1.jpg", "temp2.jpg"), event.getImages())
         );
     }
 

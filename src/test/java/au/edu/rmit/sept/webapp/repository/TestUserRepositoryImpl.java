@@ -56,7 +56,7 @@ public class TestUserRepositoryImpl {
     @Test
     void testFindUserByID() {
         user = userRepository.findUserByID(2);
-        assertEquals("Bingus", user.getFirstName());
+        assertEquals("Andrew", user.getFirstName());
     }
 
     @Test
@@ -67,8 +67,8 @@ public class TestUserRepositoryImpl {
 
     @Test
     void testFindUserByFirstName() {
-        user = userRepository.findUserByFirstName("Bingus");
-        assertEquals("Bongus", user.getLastName());
+        user = userRepository.findUserByFirstName("Aaron");
+        assertEquals("Lay", user.getLastName());
     }
 
     @Test
@@ -79,8 +79,8 @@ public class TestUserRepositoryImpl {
 
     @Test
     void testFindUserByLastName() {
-        user = userRepository.findUserByLastName("Bongus");
-        assertEquals("Bingus", user.getFirstName());
+        user = userRepository.findUserByLastName("Watson");
+        assertEquals("Brody", user.getFirstName());
     }
 
     @Test
@@ -91,8 +91,8 @@ public class TestUserRepositoryImpl {
 
     @Test
     void testFindUserByEmail() {
-        user = userRepository.findUserByEmail("bingus@example.com");
-        assertEquals("Bingus", user.getFirstName());
+        user = userRepository.findUserByEmail("tran.aaron@example.com");
+        assertEquals("Aaron", user.getFirstName());
     }
 
     @Test
