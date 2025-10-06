@@ -190,7 +190,7 @@ public class PaymentController {
         try{
 
             // header image
-            PDImageXObject header = PDImageXObject.createFromFile("src\\main\\resources\\static\\images\\welcome\\img3.png", receipt);
+            PDImageXObject header = PDImageXObject.createFromFile("src/main/resources/static/images/welcome/img3.png", receipt);
 
             contentStream = new PDPageContentStream(receipt, receiptPage);
             contentStream.drawImage(header, 0, 600, 700, 200);

@@ -50,6 +50,7 @@ public class EventFeedController {
         this.eventService = eventService;
         this.userInterestsService = userInterestsService;
         this.userService = userService;
+        this.eventParticipantsService = eventParticipantsService;
     }
 
     // check for user permission, admin or OWNER organiser
