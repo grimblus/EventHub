@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import java.util.Locale;
 import java.util.UUID;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Repository
 public class PaymentRepositoryImpl implements PaymentRepository {

@@ -5,11 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.function.Supplier;
-
-import au.edu.rmit.sept.webapp.entity.Event;
-import au.edu.rmit.sept.webapp.entity.User;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;

@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import au.edu.rmit.sept.webapp.entity.Event;
-import au.edu.rmit.sept.webapp.entity.Event.CATEGORIES;
-import au.edu.rmit.sept.webapp.entity.Event.TAGS;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;

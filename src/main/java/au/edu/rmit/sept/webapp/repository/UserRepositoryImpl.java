@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
