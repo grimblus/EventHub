@@ -19,26 +19,28 @@ public class FeedbackRepositoryImpl implements FeedbackRepository {
 
     @Override
     public boolean add(Feedback f) {
-        String sql = "INSERT INTO feedback (user_id, rating, comment, created_at) " +
-                     "VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+        String sql = "INSERT INTO feedback (user_id, event_id, event_title, rating, comment, created_at) " +
+                     "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, f.getUserId());
-            ps.setInt(2, f.getRating());
-            ps.setString(3, f.getComment());
+            ps.setInt(2, f.getEventId());
+            ps.setString(3, f.getEventTitle());
+            ps.setInt(4, f.getRating());
+            ps.setString(5, f.getComment());
             ps.executeUpdate();
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace(); // or use a logger
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public List<Feedback> findByUserId(int userId) {
-        String sql = "SELECT id, user_id, rating, comment, created_at " +
+        String sql = "SELECT id, user_id, event_id, event_title, rating, comment, created_at " +
                      "FROM feedback WHERE user_id = ? ORDER BY created_at DESC";
         List<Feedback> list = new ArrayList<>();
 
@@ -46,12 +48,13 @@ public class FeedbackRepositoryImpl implements FeedbackRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
-
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Feedback f = new Feedback();
                     f.setId(rs.getInt("id"));
                     f.setUserId(rs.getInt("user_id"));
+                    f.setEventId(rs.getInt("event_id"));
+                    f.setEventTitle(rs.getString("event_title"));
                     f.setRating(rs.getInt("rating"));
                     f.setComment(rs.getString("comment"));
 

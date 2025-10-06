@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 public class Feedback {
     private Integer id;
     private Integer userId;
+    private Integer eventId;
+    private String  eventTitle;
     private Integer rating;
-    private String comment;
+    private String  comment;
     private LocalDateTime createdAt;
 
     public Integer getId() { return id; }
@@ -14,6 +16,12 @@ public class Feedback {
 
     public Integer getUserId() { return userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
+
+    public Integer getEventId() { return eventId; }
+    public void setEventId(Integer eventId) { this.eventId = eventId; }
+
+    public String getEventTitle() { return eventTitle; }
+    public void setEventTitle(String eventTitle) { this.eventTitle = eventTitle; }
 
     public Integer getRating() { return rating; }
     public void setRating(Integer rating) { this.rating = rating; }

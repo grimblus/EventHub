@@ -16,12 +16,14 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public boolean submit(int userId, int rating, String comment) {
+    public boolean submitForEvent(int userId, int eventId, String eventTitle, int rating, String comment) {
         if (rating < 1 || rating > 5) return false;
         if (comment == null || comment.isBlank()) return false;
 
         Feedback f = new Feedback();
         f.setUserId(userId);
+        f.setEventId(eventId);
+        f.setEventTitle(eventTitle);
         f.setRating(rating);
         f.setComment(comment.trim());
 

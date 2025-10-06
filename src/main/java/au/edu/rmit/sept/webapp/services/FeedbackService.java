@@ -4,6 +4,6 @@ import au.edu.rmit.sept.webapp.entity.Feedback;
 import java.util.List;
 
 public interface FeedbackService {
-    public boolean submit(int userId, int rating, String comment);
+    public boolean submitForEvent(int userId, int eventId, String eventTitle, int rating, String comment);
     public List<Feedback> findByUserId(int userId);
 }
