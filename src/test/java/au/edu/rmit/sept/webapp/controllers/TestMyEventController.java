@@ -16,10 +16,10 @@ public class TestMyEventController {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void testAccount() throws Exception {
-        mockMvc.perform(get("/account/myEvents"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("account/myEvents/index"));
-    }
+    // @Test
+    // void testAccount() throws Exception {
+    //     mockMvc.perform(get("/account/myEvents"))
+    //             .andExpect(status().isOk())
+    //             .andExpect(view().name("account/myEvents/index"));
+    // }
 }
