@@ -1,8 +1,5 @@
 package au.edu.rmit.sept.webapp.controllers;
 
-import au.edu.rmit.sept.webapp.repository.UserRepositoryImpl;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,9 +21,6 @@ public class LoginControllerTest {
 
     @Autowired
     private MockMvc mvc;
-
-    @Autowired
-    private UserRepositoryImpl userRepository;
 
     @Test
     void shouldDisplayLoginContent() throws Exception {
