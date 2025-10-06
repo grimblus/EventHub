@@ -30,6 +30,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class EventFeedController {
@@ -80,7 +81,7 @@ public class EventFeedController {
         // Find out how to do tags and stuff
         User user = (User) session.getAttribute("user");
         List<Event> events =  eventService.getEventsByFilter(search, tags, location, category, keywords);
-
+        
         //if user is  logged in, display recommended events
         if (user != null) {
             //hashset so that checking for an interest is O(1) time B)
@@ -112,7 +113,14 @@ public class EventFeedController {
                 }
             }
             model.addAttribute("recommendedEvents", recommendedEvents);
+
+            List<Event> savedEvents = userService.getSavedEvents(user.getId());
+            Set<Integer> savedEventIds = savedEvents.stream()
+                .map(Event::getId)  
+                .collect(Collectors.toSet());
+            model.addAttribute("userSavedEvents", savedEventIds);
         }
+        
 
         model.addAttribute("events", events);
         model.addAttribute("tags", eventService.getTags());
@@ -315,5 +323,18 @@ public class EventFeedController {
             userService.saveEvent(user.getId(), id);
             return "redirect:/events";
         }
+    }
+
+    @DeleteMapping("/events/unsave/{eventId}")
+    public String unsaveEvent(@PathVariable int eventId, HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+        else {
+            User user = (User) session.getAttribute("user");
+            userService.unsaveEvent(user.getId(), eventId);
+            return "redirect:/events";
+        }
+   
     }
 }

@@ -18,4 +18,5 @@ public interface EventService {
     public boolean deleteImageForEvent(int eventId, int index);
     public boolean addImageForEvent(int eventId, String filename);
     public List<Event> getEventsByOwnerId(int id);
+    
 }

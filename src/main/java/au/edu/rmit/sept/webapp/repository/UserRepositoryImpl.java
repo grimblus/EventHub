@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -212,37 +213,51 @@ public class UserRepositoryImpl implements UserRepository {
             e.printStackTrace();
         }
     }
-        public List<Event> getSavedEvents(int user_id) {
-            List<Event> savedEvents = new ArrayList<>();
-            try (Connection connection = this.dataSource.getConnection()) {
-                String searchSQL = "SELECT * " +
-                        "FROM saved_events e " +
-                        "INNER JOIN events ev ON e.event_id = ev.id " +
-                        "WHERE e.user_id = ?";
-                try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
-                    ps.setInt(1, user_id);
-                    try  (ResultSet rs = ps.executeQuery()) {
-                        while (rs.next()) {
-                            savedEvents.add(new Event(
-                                rs.getInt("id"),
-                                rs.getString("title"),
-                                rs.getString("description"),
-                                rs.getInt("ownerID"),
-                                rs.getTimestamp("date").toLocalDateTime(),
-                                rs.getString("location"),
-                                rs.getString("ticketPrice"),
-                                rs.getString("category"),
-                                stringList(rs.getString("keywords")),
-                                stringList(rs.getString("tags")),
-                                stringList(rs.getString("images"))
-                        ));
+    public List<Event> getSavedEvents(int user_id) {
+        List<Event> savedEvents = new ArrayList<>();
+        try (Connection connection = this.dataSource.getConnection()) {
+            String searchSQL = "SELECT * " +
+                    "FROM saved_events e " +
+                    "INNER JOIN events ev ON e.event_id = ev.id " +
+                    "WHERE e.user_id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                ps.setInt(1, user_id);
+                try  (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        savedEvents.add(new Event(
+                            rs.getInt("event_id"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getInt("ownerID"),
+                            rs.getTimestamp("date").toLocalDateTime(),
+                            rs.getString("location"),
+                            rs.getString("ticketPrice"),
+                            rs.getString("category"),
+                            stringList(rs.getString("keywords")),
+                            stringList(rs.getString("tags")),
+                            stringList(rs.getString("images"))
+                    ));
 
-                        }
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            return savedEvents;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return savedEvents;
+    }
+    public void unsaveEvent(int user_id, int event_id) {
+          try (Connection connection = this.dataSource.getConnection()) {
+            String deleteSQL = "DELETE FROM saved_events WHERE user_id = ? AND event_id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(deleteSQL)) {
+                ps.setInt(1, user_id);
+                ps.setInt(2, event_id);
+            
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -62,5 +62,9 @@ public class UserServiceImpl implements UserService {
     public List<Event> getSavedEvents(int user_id) {
         return repository.getSavedEvents(user_id);
     }
+    public void unsaveEvent(int user_id, int event_id) {
+        repository.unsaveEvent(user_id, event_id);
+    }
+
 
 }
