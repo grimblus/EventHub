@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<head>
+  <title>Feedback</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+  <div class="container py-4">
+
+    <!-- Not logged in -->
+    <div th:if="${user == null}">
+      <div class="alert alert-warning mb-3">
+        Please log in to leave feedback.
+      </div>
+      <a class="btn btn-primary me-2" th:href="@{/login}">Log in</a>
+      <a class="btn btn-outline-secondary" th:href="@{/signup}">Sign up</a>
+    </div>
+
+    <!-- Logged in -->
+    <div th:if="${user != null}">
+      <h1 class="h4 mb-3">Leave Feedback</h1>
+
+      <div th:if="${success}" class="alert alert-success">Thanks! Your feedback was submitted.</div>
+      <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+      <form th:action="@{/feedback}" method="post" class="card p-3 shadow-sm">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input class="form-control" type="text"
+                 th:value="${user.firstName + ' ' + user.lastName}" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label d-block">Rating <span class="text-danger">*</span></label>
+          <div class="btn-group" role="group" aria-label="Rating">
+            <input type="radio" class="btn-check" name="rating" id="r1" value="1" required>
+            <label class="btn btn-outline-secondary" for="r1">1</label>
+
+            <input type="radio" class="btn-check" name="rating" id="r2" value="2">
+            <label class="btn btn-outline-secondary" for="r2">2</label>
+
+            <input type="radio" class="btn-check" name="rating" id="r3" value="3">
+            <label class="btn btn-outline-secondary" for="r3">3</label>
+
+            <input type="radio" class="btn-check" name="rating" id="r4" value="4">
+            <label class="btn btn-outline-secondary" for="r4">4</label>
+
+            <input type="radio" class="btn-check" name="rating" id="r5" value="5">
+            <label class="btn btn-outline-secondary" for="r5">5</label>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Short description <span class="text-danger">*</span></label>
+          <textarea class="form-control" name="comment" rows="3" maxlength="1000"
+                    placeholder="Tell us what worked and what we can improve" required></textarea>
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary">Submit feedback</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

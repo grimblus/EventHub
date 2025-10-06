@@ -35,7 +35,7 @@ public class FeedbackController {
             return "redirect:/feedback";
         }
         if (rating == null || rating < 1 || rating > 5 || comment == null || comment.isBlank()) {
-            ra.addFlashAttribute("error", "Rating (1–5) and a short description are required.");
+            ra.addFlashAttribute("error", "Rating (1-5) and a short description are required.");
             return "redirect:/feedback";
         }
         boolean ok = feedbackService.submit(user.getId(), rating, comment);
