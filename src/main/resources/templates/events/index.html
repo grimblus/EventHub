@@ -230,7 +230,7 @@
                 </div>
                 <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->
                 <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
-                <div th:attr="id=${'infoModal' + event.id}" class="modal">
+                <div th:attr="id=${'recInfoModal' + event.id}" class="modal">
                     <div class="modal-content">
 
                         <section class="page-split">
@@ -269,8 +269,8 @@
                         <section class="gallery">
                             <div style="display:flex;align-items:center;justify-content:space-between;">
                                 <h4>Gallery</h4>
-                                <button type="button" class="btn btn-sm btn-primary"
-                                        onclick="addImage(this)">+ Add image</button>
+                                <input class="file-input" type="file" accept="image/*" style="display:none" />
+                                <button type="button" class="btn btn-sm btn-primary" onclick="triggerFilePick(this)">+ Add image</button>
                             </div>
 
                             <div class="gallery-grid" th:attr="data-event-id=${event.id}">
