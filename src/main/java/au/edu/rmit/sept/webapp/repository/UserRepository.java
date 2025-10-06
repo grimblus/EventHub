@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
 
 @Repository
@@ -15,4 +16,5 @@ public interface UserRepository {
     public void addUser(User user);
     public boolean toggleBanned(Integer id);
     public void saveEvent(int user_id, int event_id);
+    public List<Event> getSavedEvents(int user_id);
 }

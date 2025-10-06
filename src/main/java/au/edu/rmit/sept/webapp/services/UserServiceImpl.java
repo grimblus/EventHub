@@ -3,6 +3,7 @@ package au.edu.rmit.sept.webapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.repository.UserRepository;
 
@@ -56,6 +57,10 @@ public class UserServiceImpl implements UserService {
 
     public void saveEvent(int user_id, int event_id) {
         repository.saveEvent(user_id, event_id);
+    }
+
+    public List<Event> getSavedEvents(int user_id) {
+        return repository.getSavedEvents(user_id);
     }
 
 }

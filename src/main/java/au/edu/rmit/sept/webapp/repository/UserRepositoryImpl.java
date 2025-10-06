@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.repository;
 
+import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,13 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
     private final DataSource dataSource;
+
+    public List<String> stringList(String list) {
+        List<String> finalList = new ArrayList<>();
+        for (String s : list.split(","))
+            finalList.add(s);
+        return finalList;
+    }
 
     public UserRepositoryImpl(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -204,4 +212,37 @@ public class UserRepositoryImpl implements UserRepository {
             e.printStackTrace();
         }
     }
+        public List<Event> getSavedEvents(int user_id) {
+            List<Event> savedEvents = new ArrayList<>();
+            try (Connection connection = this.dataSource.getConnection()) {
+                String searchSQL = "SELECT * " +
+                        "FROM saved_events e " +
+                        "INNER JOIN events ev ON e.event_id = ev.id " +
+                        "WHERE e.user_id = ?";
+                try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
+                    ps.setInt(1, user_id);
+                    try  (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            savedEvents.add(new Event(
+                                rs.getInt("id"),
+                                rs.getString("title"),
+                                rs.getString("description"),
+                                rs.getInt("ownerID"),
+                                rs.getTimestamp("date").toLocalDateTime(),
+                                rs.getString("location"),
+                                rs.getString("ticketPrice"),
+                                rs.getString("category"),
+                                stringList(rs.getString("keywords")),
+                                stringList(rs.getString("tags")),
+                                stringList(rs.getString("images"))
+                        ));
+
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return savedEvents;
+        }
 }
