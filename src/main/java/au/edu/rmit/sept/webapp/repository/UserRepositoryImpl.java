@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,5 +186,22 @@ public class UserRepositoryImpl implements UserRepository {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void saveEvent(int user_id, int event_id) {
+        try (Connection connection = this.dataSource.getConnection()) {
+            String insertSQL = "INSERT INTO saved_events (user_id, event_id) VALUES (?, ?)";
+            try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
+                ps.setInt(1, user_id);
+                ps.setInt(2, event_id);
+                ps.executeUpdate();
+            }
+        } catch (SQLIntegrityConstraintViolationException exception) {
+            System.out.println("Already saved this event.");
+        }
+        
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

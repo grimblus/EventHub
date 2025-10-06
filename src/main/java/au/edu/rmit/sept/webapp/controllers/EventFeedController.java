@@ -48,6 +48,7 @@ public class EventFeedController {
                                 UserService userService ) {
         this.eventService = eventService;
         this.userInterestsService = userInterestsService;
+        this.userService = userService;
     }
 
     // check for user permission, admin or OWNER organiser
@@ -303,10 +304,16 @@ public class EventFeedController {
 
     @PostMapping("/events/save/{id}")
     public String eventDetails(
-            @PathVariable String id, 
-            Model model
+            @PathVariable int id, 
+            Model model, HttpSession session
     ) {
-        System.out.println(id);
-        return "redirect:/events";
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+        else {
+            User user = (User) session.getAttribute("user");
+            userService.saveEvent(user.getId(), id);
+            return "redirect:/events";
+        }
     }
 }

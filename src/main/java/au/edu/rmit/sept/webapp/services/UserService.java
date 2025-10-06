@@ -12,4 +12,5 @@ public interface UserService {
     public User findUserByLastName(String lastName);
     public User findUserByEmail(String email);
     public boolean toggleBanned(Integer id);
+    public void saveEvent(int user_id, int event_id);
 }

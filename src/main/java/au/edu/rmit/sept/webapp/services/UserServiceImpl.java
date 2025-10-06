@@ -53,4 +53,9 @@ public class UserServiceImpl implements UserService {
 
     //sets the ban state of a user
     public boolean toggleBanned(Integer id) {return repository.toggleBanned(id);}
+
+    public void saveEvent(int user_id, int event_id) {
+        repository.saveEvent(user_id, event_id);
+    }
+
 }
