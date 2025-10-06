@@ -317,8 +317,15 @@
                     </div>
                 </div>
                 <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->
-                <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
+                 <div class="horizontal-group"><button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
                 <a th:href="@{/events/{id}/feedback(id=${event.id})}" class="btn btn-secondary">Leave Feedback</a>
+
+                <form th:action="@{/events/save/{id}(id=${event.id})}" method="post">                    
+                    <button class="btn btn-secondary" type="submit">Save</button>
+                </form>
+            </div>
+                
+
                     <div th:attr="id=${'infoModal' + event.id}" class="modal">
                         <div class="modal-content">
 

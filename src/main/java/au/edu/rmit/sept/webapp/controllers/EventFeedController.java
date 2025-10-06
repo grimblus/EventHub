@@ -299,5 +299,14 @@ public class EventFeedController {
             ? ResponseEntity.noContent().build()
             : ResponseEntity.notFound().build();
     }
+    
 
+    @PostMapping("/events/save/{id}")
+    public String eventDetails(
+            @PathVariable String id, 
+            Model model
+    ) {
+        System.out.println(id);
+        return "redirect:/events";
+    }
 }
