@@ -217,7 +217,6 @@
                 No events currently match your selected tags or categories.
             </div>
             <div class="event-item" th:each="event : ${recommendedEvents}">
-                <!-- !!! TODO: prepends to welcome folder, change as necessary -->
                 <img class="event-banner"
                      th:src="@{/images/welcome/{f}(f=${event.images[0]})}"
                      th:alt="${event.images[0]}" />
@@ -242,8 +241,11 @@
                                 <p><strong>Description:</strong> <span th:text="${event.getDescription()}"></span></p>
                                 <p><strong>Date:</strong> <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"></span></p>
                                 <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
-                                <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
-                                <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                                    <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
+                                    <!-- <a th:href="@{/events/{id}/feedback(id=${event.id})}" class="btn btn-secondary">Leave Feedback</a> -->
+                                    <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                </div>
                                 <!-- Delete event button which only shows if user is a club organiser and also is the owner of the event -->
                                 <div class="delete-btn-wrapper" style="display: none;">
                                     <button class="btn btn-danger" th:onclick="|deleteEvent(${event.id}, this)|">Delete Event</button>
@@ -289,7 +291,6 @@
         <h2 class="event-feed-title">All events</h2>
         <div class="events-display-container">
             <div class="event-item" th:each="event : ${events}">
-                <!-- !!! TODO: prepends to welcome folder, change as necessary -->
                 <!-- No uploads → placeholder -->
                 <img class="event-banner"
                     th:if="${#lists.isEmpty(event.images)}"
@@ -317,6 +318,7 @@
                 </div>
                 <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->
                 <button th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|" class="btn btn-secondary">View Details</button>
+                <a th:href="@{/events/{id}/feedback(id=${event.id})}" class="btn btn-secondary">Leave Feedback</a>
                     <div th:attr="id=${'infoModal' + event.id}" class="modal">
                         <div class="modal-content">
 
@@ -328,8 +330,11 @@
                                 <p><strong>Description:</strong> <span th:text="${event.getDescription()}"></span></p>
                                 <p><strong>Date:</strong> <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"></span></p>
                                 <p><strong>Ticket Price: $</strong><span th:text="${event.getTicketPrice()}"></span></p>
-                                <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
-                                <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                                    <a th:href="@{/checkout(id=${event.id}, title=${event.title})}" class="btn btn-primary">Buy Ticket</a>
+                                    <!-- <a th:href="@{/events/{id}/feedback(id=${event.id})}" class="btn btn-secondary">Leave Feedback</a> -->
+                                    <button th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|" class="btn btn-secondary">Close</button>
+                                </div>
                                 <!-- <button class="btn btn-secondary" th:onclick="|exportEvent(${event.id}, this)|">Export Attendees</button> -->
 
                                 <!-- Delete event button which only shows if user is a club organiser and also is the owner of the event -->
@@ -357,7 +362,6 @@
                         <hr class="divider"/>
 
                         <!-- add image gallery to event details -->
-                        <!-- !!!! TODO: show add and delete buttons only to organiser/admin  -->
                          <section class="gallery">
                             <div style="display:flex;align-items:center;justify-content:space-between;">
                                 <h4>Gallery</h4>
@@ -377,9 +381,6 @@
             </div>
         </div>
     </div>
-
-                <!-- document.getElementById(modalId).style.display = 'block';
-                fetch('/events/modal?eventid=' + eventId); -->
 
     <div layout:fragment="scripts">
         <script th:inline="javascript">
@@ -467,10 +468,10 @@
                 const eventId = grid?.dataset.eventId;
                 if (!eventId) return alert('Could not find event id for gallery.');
 
-                const input = modal.querySelector('.file-input');   // <-- local to this modal
+                const input = modal.querySelector('.file-input');
                 if (!input) return alert('No file input found');
 
-                input.value = '';                                   // allow re-selecting same file
+                input.value = '';
                 input.onchange = () => uploadPickedFile(eventId, grid, input.files[0]);
                 input.click();
             }
