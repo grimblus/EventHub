@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.entity.User;
@@ -22,6 +24,12 @@ import static org.hamcrest.Matchers.startsWith;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class EventFeedControllerTest {
+
+    @DynamicPropertySource
+    static void overrideUploadsRoot(DynamicPropertyRegistry r) throws Exception {
+        java.nio.file.Path tmp = java.nio.file.Files.createTempDirectory("evt-hub-test-uploads");
+        r.add("app.uploads.root", () -> tmp.toString());
+    }
     
     private final static String URL = "/events";
 

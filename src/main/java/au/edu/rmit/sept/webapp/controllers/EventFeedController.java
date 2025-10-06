@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.*;
-import java.util.Locale;
-import java.util.Map;
 
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.services.UserInterestsService;
@@ -205,6 +203,8 @@ public class EventFeedController {
             return ResponseEntity.badRequest().body("Only images allowed");
         }
 
+        Path dest = null;
+
         try {
             Path dir = Path.of(uploadsRoot, "events", String.valueOf(eventId)).toAbsolutePath().normalize();
             Files.createDirectories(dir);
@@ -212,11 +212,15 @@ public class EventFeedController {
             String ext = safeExt(file.getOriginalFilename());
             String basename = java.util.UUID.randomUUID() + (ext.isEmpty() ? "" : "." + ext);
 
-            Path dest = dir.resolve(basename);
+            dest = dir.resolve(basename);
             Files.copy(file.getInputStream(), dest, StandardCopyOption.REPLACE_EXISTING);
 
             boolean ok = eventService.addImageForEvent(eventId, basename);
-            if (!ok) return ResponseEntity.notFound().build();
+            if (!ok) {
+                // DB update failed — remove the file we just wrote
+                Files.deleteIfExists(dest);
+                return ResponseEntity.notFound().build();
+            }
 
             String url = "/uploads/events/" + eventId + "/" + basename;
             return ResponseEntity
@@ -224,6 +228,10 @@ public class EventFeedController {
                     .body(java.util.Map.of("url", url, "filename", basename));
 
         } catch (Exception e) {
+            // any failure — try to remove the partial file
+            if (dest != null) {
+                try { Files.deleteIfExists(dest); } catch (Exception ignore) {}
+            }
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Upload failed");
         }
