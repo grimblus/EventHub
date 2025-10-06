@@ -12,6 +12,24 @@
 <div layout:fragment="content">
 
     <h2>Your saved events</h2>
+    <div class="events-display-container">
+        <div class="event-list" th:each="event : ${savedEvents}">
+          <div class="event-details">
+            <h2 th:text="${event.getTitle()}">Event Title</h2>
+            <p th:text="${event.getDescription()}">Event Description</p>
+            <div class="event-meta">
+              <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"
+                >Event Start Time</span
+              >
+              <span th:text="${event.getLocation()}">Event Location</span>
+            </div>
+            <div class="event-meta">
+              <span th:text="${'Category: ' + event.getCategory()}">Event Category</span>
+              <span th:text="${'Tags: ' + #strings.listJoin(event.getTags(), ' • ')}">Event Tags</span>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>
 </body>
 
