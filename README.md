@@ -22,9 +22,9 @@
 
 ## Test Accounts
 
-- aaron@example.com password123 STUDENT
-- johndev@example.com g0d0t0man ORGANISER
-- bingus@example.com s3cur3pass ADMIN
+- loi.andrew@example.com tDN2l2:.041` STUDENT
+- lay.aaron@example.com 0?04W!RgzEN9 ORGANISER
+- ly.patrick@example.com 7Fig92i3B<z< ADMIN
 
 
 ## Sprint 2 status
