@@ -32,6 +32,9 @@ public class AccountController {
             System.out.println("found stored user");
             model.addAttribute("user", session.getAttribute("user"));
 
+            badgeService.assignPaymentBadge(user.getId());
+            badgeService.assign2AttendBadge(user.getId());
+
             List <Badge> allBadge = badgeService.getAllBadges();
             List <Badge> userBadge = badgeService.getBadgesByUser(user.getId());
             model.addAttribute("allBadges", allBadge);

@@ -20,8 +20,10 @@ public class BadgeRepositoryImpl implements BadgeRepository {
     
     // placeholder badges
     static List<Badge> badgeList = List.of(
-        new Badge(0, "Create Acc", "Create an account"),
-        new Badge(0, "5 Attends", "Attend 5 Events")
+        new Badge(0, "2 Attends", "Attend 2 Events"),
+        new Badge (0, "Create event", "Create an event"),
+        // new Badge (0, "Save event", "Save an event"),
+        new Badge (0, "Payment", "Pay for an event")
     );
 
     public BadgeRepositoryImpl() {

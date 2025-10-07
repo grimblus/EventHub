@@ -5,5 +5,6 @@ import java.util.*;
 public interface BadgeService {
     public List<Badge> getBadgesByUser(int userId);
     public List<Badge> getAllBadges();
-    public void awardBadge(int userId, int badgeId);
+    public void assignPaymentBadge(int userId);
+    public void assign2AttendBadge(int userId);
 }

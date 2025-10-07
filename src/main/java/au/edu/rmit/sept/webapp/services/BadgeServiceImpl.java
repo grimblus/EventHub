@@ -3,8 +3,13 @@ package au.edu.rmit.sept.webapp.services;
 import java.util.*;
 
 import au.edu.rmit.sept.webapp.entity.Badge;
+import au.edu.rmit.sept.webapp.entity.Payment;
 import au.edu.rmit.sept.webapp.entity.User;
+import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.repository.BadgeRepository;
+import au.edu.rmit.sept.webapp.repository.EventParticipantsRepository;
+import au.edu.rmit.sept.webapp.repository.EventRepository;
+import au.edu.rmit.sept.webapp.repository.PaymentRepository;
 import au.edu.rmit.sept.webapp.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
@@ -13,9 +18,17 @@ import org.springframework.stereotype.Service;
 public class BadgeServiceImpl implements BadgeService {
     private UserRepository userRepo;
     private BadgeRepository badgeRepo;
+    private PaymentRepository paymentRepo;
+    private EventParticipantsRepository eventParticipantRepo;
+    // private EventRepository eventRepo;
 
-    public BadgeServiceImpl(BadgeRepository badgeRepo) {
+    public BadgeServiceImpl(BadgeRepository badgeRepo, PaymentRepository paymentRepo, EventParticipantsRepository eventParticipantRepo
+    // , EventRepository eventRepo
+    ) {
         this.badgeRepo = badgeRepo;
+        this.paymentRepo = paymentRepo;
+        this.eventParticipantRepo = eventParticipantRepo;
+        // this.eventRepo = eventRepo;
     }
 
     public List<Badge> getBadgesByUser(int userId) {
@@ -28,7 +41,52 @@ public class BadgeServiceImpl implements BadgeService {
         return badgeRepo.getAllBadges();
     }
 
-    public void awardBadge(int userId, int badgeId) {
-        badgeRepo.assignBadgeToUser(userId, badgeId);
+    public void assign2AttendBadge(int userId) {
+        List<Integer> rsvps = eventParticipantRepo.getRSVPList(userId);
+
+        if (rsvps.size() >= 2) {
+            List<Badge> allBadges = badgeRepo.getAllBadges();
+            Optional<Badge> attendBadge = allBadges.stream()
+                    .filter(b -> b.getBadgeName().equalsIgnoreCase("2 Attends"))
+                    .findFirst();
+
+            if (attendBadge.isPresent()) {
+                badgeRepo.assignBadgeToUser(userId, attendBadge.get().getBadgeID());
+            }
+        }
+    }
+
+    // public void assignCreate(int userId) {
+    //     List<Event> created = eventRepo.getEvents();
+    //     for (created.size()) {
+
+    //     }
+
+    //     if () {
+    //         List<Badge> allBadges = badgeRepo.getAllBadges();
+    //         Optional<Badge> createBadge = allBadges.stream()
+    //                 .filter(b -> b.getBadgeName().equalsIgnoreCase("Create Event"))
+    //                 .findFirst();
+
+    //         if (createBadge.isPresent()) {
+    //             badgeRepo.assignBadgeToUser(userId, createBadge.get().getBadgeID());
+    //         }
+    //     }
+    // }
+
+    public void assignPaymentBadge(int userId) {
+        List<Payment> payments = paymentRepo.GetUserPayments(userId);
+
+        // If has at least 1 payment, award the badge
+        if (!payments.isEmpty()) {
+            List<Badge> allBadges = badgeRepo.getAllBadges();
+            Optional<Badge> paymentBadge = allBadges.stream()
+                    .filter(b -> b.getBadgeName().equalsIgnoreCase("Payment"))
+                    .findFirst();
+
+            if (paymentBadge.isPresent()) {
+                badgeRepo.assignBadgeToUser(userId, paymentBadge.get().getBadgeID());
+            }
+        }
     }
 }
