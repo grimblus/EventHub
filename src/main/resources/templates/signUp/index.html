@@ -13,10 +13,10 @@
       }
 
       form {
-        background-color: rgb(223, 223, 223);
+        /* background-color: rgb(223, 223, 223); */
         width: 300px;
         border: 3px solid rgb(0, 0, 0);
-        padding: 30px;
+        padding: 15px;
         margin: 0 auto;
       }
     </style>
@@ -25,26 +25,44 @@
   <body>
     <div layout:fragment="content">
       <h1>Sign Up To EventHub</h1>
+
       <form action="#" th:action="@{/signUp}" th:object="${user}" method="post">
-        <div class="group">
+        <div class="mb-3">
           <label for="firstname">First Name:</label><br />
           <input
             id="firstname"
             type="text"
             th:field="*{firstName}"
+            class="form-control"
           /><br /><br />
         </div>
-        <div class="group">
-          <label for="lastname">Last Name:</label><br />
-          <input id="lastname" type="text" th:field="*{lastName}" /><br /><br />
+
+        <div class="mb-3">
+          <label for="lastname" class="form-label">Last Name:</label><br />
+          <input
+            id="lastname"
+            type="text"
+            th:field="*{lastName}"
+            class="form-control"
+          /><br /><br />
         </div>
-        <div class="group">
+        <div class="mb-3">
           <label for="email">Email:</label><br />
-          <input id="email" type="text" th:field="*{email}" /><br /><br />
+          <input
+            id="email"
+            type="text"
+            th:field="*{email}"
+            class="form-control"
+          /><br /><br />
         </div>
-        <div class="group">
+        <div class="mb-3">
           <label for="password">Password:</label><br />
-          <input id="password" type="password" th:field="*{password}" /><br />
+          <input
+            id="password"
+            type="password"
+            th:field="*{password}"
+            class="form-control"
+          /><br />
         </div>
         <div class="permissionRadios">
           <label>Sign up as a:</label><br />
@@ -63,7 +81,7 @@
         <div class="errors" th:each="error : ${errors}">
           <p th:if="${error}" th:text="${error}" style="color: red"></p>
         </div>
-        <input type="submit" value="Submit" />
+        <input class="btn btn-primary" type="submit" value="Submit" />
       </form>
     </div>
   </body>

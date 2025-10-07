@@ -1,8 +1,5 @@
 package au.edu.rmit.sept.webapp.controllers;
 
-import au.edu.rmit.sept.webapp.repository.UserRepositoryImpl;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,14 +21,6 @@ public class LoginControllerTest {
 
     @Autowired
     private MockMvc mvc;
-
-    @Autowired
-    private UserRepositoryImpl userRepository;
-
-    @BeforeEach
-    void setup() {
-        userRepository.setUsers(); 
-    }
 
     @Test
     void shouldDisplayLoginContent() throws Exception {
@@ -74,7 +63,7 @@ public class LoginControllerTest {
     @Test
     void invalidPassword() throws Exception {
         mvc.perform(post("/login")
-                .param("email", "aaron@example.com")
+                .param("email", "lay.aaron@example.com")
                 .param("pw", "bingus"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", "Invalid password."));
@@ -83,7 +72,7 @@ public class LoginControllerTest {
     @Test
     void invalidPasswordEmpty() throws Exception {
         mvc.perform(post("/login")
-                .param("email", "aaron@example.com")
+                .param("email", "lay.aaron@example.com")
                 .param("pw", ""))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", "Invalid password."));

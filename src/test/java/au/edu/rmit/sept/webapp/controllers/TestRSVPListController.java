@@ -4,20 +4,16 @@ import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.repository.EventParticipantsRepository;
 import au.edu.rmit.sept.webapp.repository.EventRepository;
-import au.edu.rmit.sept.webapp.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

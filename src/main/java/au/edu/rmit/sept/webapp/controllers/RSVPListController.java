@@ -35,13 +35,11 @@ public class RSVPListController {
         System.out.println("id: " + user.getId());
 
         List<Integer> eventIds = eventParticipantsService.getRSVPList(user.getId());
-        System.out.println(eventIds.size());
         ArrayList<Event> rsvpList = new ArrayList<>();
 
         for  (Integer eventId : eventIds) {
             rsvpList.add(eventService.findEventbyID(eventId));
         }
-        System.out.println(rsvpList.size());
         //check that they exist to be safe
         if (user != null) {
             //add the user's rsvplist
@@ -49,8 +47,7 @@ public class RSVPListController {
         }
         else {
             //add an empty array list
-            model.addAttribute("rsvpList", new ArrayList<>()) ;    
-
+            model.addAttribute("rsvpList", new ArrayList<>()) ;
         }
         
 

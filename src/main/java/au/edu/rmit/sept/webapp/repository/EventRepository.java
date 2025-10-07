@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface EventRepository {
     public List<String> stringList(String list);
-    public void setEvents();
     public void addEvent(Event event);
     public List<Event> getEvents();
     public Event getEvent(int id, String name);
@@ -20,4 +19,5 @@ public interface EventRepository {
     public boolean deleteImageForEvent(int id, int index);
     public Integer getOwnerID(Integer eventId);
     public boolean addImageForEvent(int eventId, String filename);
+    public List<Event> getEventsByOwnerId(int id);
 }

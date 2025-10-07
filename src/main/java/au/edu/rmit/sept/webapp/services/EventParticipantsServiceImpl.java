@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.services;
 
+import au.edu.rmit.sept.webapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class EventParticipantsServiceImpl implements EventParticipantsService {
 
      @Autowired
     public EventParticipantsServiceImpl(EventParticipantsRepository repository) {this.repository = repository;}
-    public List<Integer> getEventParticipants(Integer eventId) {return repository.getEventParticipants(eventId);}
+    public List<User> getEventParticipants(Integer eventId) {return repository.getEventParticipants(eventId);}
     @Override
     public void addEventParticipant(Integer eventId, Integer userId) {
       repository.addEventParticipant(eventId, userId);
@@ -23,6 +24,6 @@ public class EventParticipantsServiceImpl implements EventParticipantsService {
         return repository.getRSVPList(userId);
     }
 
-
-
+    @Override
+    public boolean PrintAttendeeCSV(Integer eventID) { return repository.PrintAttendeeCSV(eventID); }
 }

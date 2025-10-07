@@ -3,52 +3,22 @@ package au.edu.rmit.sept.webapp.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.function.Supplier;
-
-import au.edu.rmit.sept.webapp.H2DatabaseConnection;
-import au.edu.rmit.sept.webapp.entity.Event;
-import au.edu.rmit.sept.webapp.entity.User;
 import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
 
 @Repository
 public class UserInterestsRepositoryImpl implements UserInterestsRepository{
-    final private Supplier<Connection> connectionSupplier;
+    private final DataSource dataSource;
 
-    public UserInterestsRepositoryImpl() {
-        this.connectionSupplier = () -> {
-            try {
-                return H2DatabaseConnection.getConnection();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
-
-    public UserInterestsRepositoryImpl(Supplier<Connection> connectionSupplier) {
-        this.connectionSupplier = connectionSupplier;
-    }
-
-    public void setUserInterests() {
-        try (Connection connection = connectionSupplier.get()) {
-            String createTableSQL = 
-            "CREATE TABLE IF NOT EXISTS user_interests (" +
-            "id INT AUTO_INCREMENT PRIMARY KEY, " +
-            "interest VARCHAR(255), " +
-            "user_id INT, " +
-            "FOREIGN KEY (user_id) REFERENCES users(id))";
-            PreparedStatement createTableStatement = connection.prepareStatement(createTableSQL);
-            createTableStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public UserInterestsRepositoryImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public void addUserInterests(int user_id, ArrayList<String> interests) {
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String deleteSQL = "DELETE FROM user_interests WHERE user_id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(deleteSQL)) {
                 stmt.setInt(1, user_id); // safely sets the value
@@ -72,7 +42,7 @@ public class UserInterestsRepositoryImpl implements UserInterestsRepository{
 
     public HashSet<String> getUserInterests(int user_id) {
         HashSet<String> interests = new HashSet<String>();
-        try (Connection connection = connectionSupplier.get()) {
+        try (Connection connection = this.dataSource.getConnection()) {
             String searchSQL = "SELECT * FROM user_interests WHERE user_id = ?";
             try (PreparedStatement ps = connection.prepareStatement(searchSQL)) {
                 ps.setInt(1, user_id);

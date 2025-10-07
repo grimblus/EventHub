@@ -5,7 +5,7 @@
   layout:decorate="~{layout/layout.html}"
 >
   <head>
-    <title>Sign up to EventHub</title>
+    <title>rsvpList</title>
     <!-- <script src="content-script.js"></script> -->
     <style>
       .events-filter-container {
@@ -46,6 +46,8 @@
   <body>
     <div layout:fragment="content">
       <h2>Your RSVP List</h2>
+        <p class="vertical-group" th:if="${rsvpList.size() == 0}">You have not RSVP'd to any events.</p>
+
       <div class="events-display-container">
         <div class="rsvp-list" th:each="rsvp : ${rsvpList}">
           <div class="event-details">
@@ -56,6 +58,10 @@
                 >Event Start Time</span
               >
               <span th:text="${rsvp.getLocation()}">Event Location</span>
+            </div>
+            <div class="event-meta">
+              <span th:text="${'Category: ' + rsvp.getCategory()}">Event Category</span>
+              <span th:text="${'Tags: ' + #strings.listJoin(rsvp.getTags(), ' • ')}">Event Tags</span>
             </div>
           </div>
         </div>

@@ -34,12 +34,6 @@ public class TestEventServiceImpl {
     }
 
     @Test
-    void testSetEvents() {
-        eventService.setEvents();
-        verify(eventRepository).setEvents();
-    }
-
-    @Test
     void testAddEvent() {
         eventService.addEvent(event);
         verify(eventRepository).addEvent(event);

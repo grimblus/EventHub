@@ -19,7 +19,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<String> stringList(String list) {return repository.stringList(list);}
     @Override
-    public void setEvents() {repository.setEvents();}
     public void addEvent(Event event) {repository.addEvent(event);}
     public List<Event> getEvents() {return repository.getEvents();}
     public Event getEvent(int id, String name) { return repository.getEvent(id, name); }
@@ -52,4 +51,10 @@ public class EventServiceImpl implements EventService {
         return repository.updateEventImages(eventId, imgs);*/
         return repository.addImageForEvent(eventId, filename);
     }
+
+    @Override
+    public List<Event> getEventsByOwnerId(int id) {
+        return repository.getEventsByOwnerId(id);
+    }
+
 }

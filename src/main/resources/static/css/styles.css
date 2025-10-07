@@ -12,6 +12,71 @@ body {
   font-family: Arial, sans-serif;
 }
 
+h1 {
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+.button {
+    text-align: center;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    overflow:hidden;
+}
+
+.table-container {
+    padding: 20px;
+}
+
+thead {
+    background-color: #2c3e50;
+    color: #fff;
+}
+
+thead th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody td {
+    padding: 10px 12px;
+    color: #333;
+}
+
+tbody tr:hover {
+    background-color: #f1f7ff;
+}
 .page-container {
   flex: 1;
   display: flex;
@@ -344,9 +409,32 @@ select {
   align-items: center;
 }
 
+.vertical-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .event-feed-title {
   padding-left: 34px;
 }
 .save-button {
   height: 30px
 }
+/*admin page*/
+.ban {
+    background-color: #e74c3c;
+}
+
+.unban {
+    background-color: #2ecc71;
+}
+
+button.ban:hover {
+    background-color: #c0392b;
+}
+
+button.unban:hover {
+    background-color: #219150;
+}
+

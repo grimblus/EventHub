@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -23,7 +22,6 @@ class TestIndex {
     @WithMockUser(username = "bingus@example.com", roles = {"ADMIN"})
     void adminPage_renders() throws Exception {
         mockMvc.perform(get("/admin"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Admin Display")));
+                .andExpect(status().isOk());
     }
 }

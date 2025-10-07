@@ -1,14 +1,13 @@
 package au.edu.rmit.sept.webapp.controllers;
 
+import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -16,6 +15,23 @@ public class AdminController {
 
     private UserService userService;
     private EventService eventService;
+
+    @ModelAttribute("isAdmin")
+    public boolean isAdmin(HttpSession session) {
+        if (session.getAttribute("user") != null) {
+            User user = (User) session.getAttribute("user");
+
+            if (user.getPermissionLevel() == User.permissions.ADMIN) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
 
     @Autowired
     public AdminController(UserService userService, EventService eventService) {

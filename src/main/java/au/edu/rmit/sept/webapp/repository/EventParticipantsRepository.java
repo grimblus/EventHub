@@ -1,9 +1,13 @@
 package au.edu.rmit.sept.webapp.repository;
 
+import au.edu.rmit.sept.webapp.entity.User;
+
 import java.util.List;
 
 public interface EventParticipantsRepository {
-    public List<Integer> getEventParticipants(Integer eventId);
+    public List<User> getEventParticipants(Integer eventId);
     public void addEventParticipant(Integer eventId, Integer userId);
     public List<Integer> getRSVPList(Integer userId);
+    
+    public boolean PrintAttendeeCSV(Integer eventId);
 }
