@@ -45,9 +45,16 @@ public class DashboardController {
     }
 
     @GetMapping("dashboard/{id}")
-    public String eventRSVP(Model model, @PathVariable("id") int id) {
-        List<User> users = eventParticipantsService.getEventParticipants(id);
-        model.addAttribute("users", users);
-        return "dashboard/event/index";
+    public String eventRSVP(Model model, @PathVariable("id") int id, HttpSession session) {
+         if (session.getAttribute("user") == null ) {
+            return "redirect:/login";
+        }
+
+        else {
+            List<User> users = eventParticipantsService.getEventParticipants(id);
+            model.addAttribute("users", users);
+            return "dashboard/event/index";
+        }
+        
     }
 }
