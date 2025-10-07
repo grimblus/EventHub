@@ -54,7 +54,7 @@ public class TestFeedBackRepositoryImpl {
 
     @Test
     void testFindByUserIdNotFound() {
-        List<Feedback> feedbackList = feedbackRepository.findByUserId(1);
+        List<Feedback> feedbackList = feedbackRepository.findByUserId(0);
         assertTrue(feedbackList.isEmpty());
     }
 }

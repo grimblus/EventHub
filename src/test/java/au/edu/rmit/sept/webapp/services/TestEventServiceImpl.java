@@ -135,4 +135,14 @@ public class TestEventServiceImpl {
         boolean result = eventService.addImageForEvent(testId, testString);
         assertEquals(testAdd, result);
     }
+
+    @Test
+    void getEventsByOwnerId() {
+        List<Event> events = List.of(event);
+        when(eventRepository.getEventsByOwnerId(1)).thenReturn(events);
+
+        List<Event> result = eventService.getEventsByOwnerId(1);
+
+        assertEquals(events, result);
+    }
 }

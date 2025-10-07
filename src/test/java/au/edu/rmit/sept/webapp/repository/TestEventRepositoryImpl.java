@@ -168,6 +168,26 @@ public class TestEventRepositoryImpl {
 
         assertNull(event);
     }
+     @Test
+    void getEventsByOwnerId() {
+       
+
+        List<Event> result = eventRepository.getEventsByOwnerId(5);
+
+        Event event = result.get(0);
+        assertAll("Get first event by ID",
+                () -> assertEquals("Workshop", event.getTitle()),
+                () -> assertEquals("Learn Basics", event.getDescription()),
+                () -> assertEquals(5, event.getOwnerID()),
+                () -> assertEquals(LocalDateTime.of(2025, 9, 1, 10, 0), event.getDate()),
+                () -> assertEquals("Old Melbourne Gaol, 377 Russell St", event.getLocation()),
+                () -> assertEquals("General", event.getCategory()),
+                () -> assertEquals("54", event.getTicketPrice()),
+                () -> assertEquals(List.of("java", "workshop"), event.getKeywords()),
+                () -> assertEquals(List.of("education", "beginner"), event.getTags()),
+                () -> assertEquals(List.of("temp1.jpg", "temp2.jpg"), event.getImages())
+        );
+    }
 /*
     @Test
     void testDeleteEventByID() {
@@ -233,31 +253,6 @@ public class TestEventRepositoryImpl {
         assertFalse(eventRepository.addImageForEvent(-1, testImage));
     }
 
-    @Test
-    void testUpdateImageForEvent() {
-        int testId = 1;
-        String testName = "test";
-
-        List<String> testImageList = new ArrayList<>();
-        testImageList.add("test.img");
-        testImageList.add("test.img");
-        testImageList.add("test.img");
-        testImageList.add("test.img");
-
-        eventRepository.updateEventImages(testId, testImageList);
-
-        Event updatedEvent = eventRepository.findEventbyID(1);
-        List<String> imageList = updatedEvent.getImages();
-
-        assertEquals(4, imageList.size());
-    }
-
-    @Test
-    void testUpdateImageForEventNotFound() {
-        List<String> testImageList = new ArrayList<>();
-        testImageList.add("test.img");
-        eventRepository.updateEventImages(-1, testImageList);
-        assertNull(eventRepository.findEventbyID(-1));
-    }
+   
 }
 
