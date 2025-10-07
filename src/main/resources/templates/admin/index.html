@@ -45,7 +45,7 @@
                         <td th:text="${user.banned}"></td>
                         <td>
                             <form th:action="@{/admin/toggleBanned/{id}(id=${user.id})}" method="post">
-                                <button type="submit" class="button" style="min-width: 70px"
+                                <button type="submit" class="btn-warning" style="min-width: 70px"
                                         th:classappend="${user.banned} ? 'unban ' : 'ban'"
                                     th:text="${user.banned} ? 'Unban' : 'Ban'">
 
@@ -90,7 +90,7 @@
                     <td th:text="${event.images}"></td>
                     <td>
                         <form th:action="@{/admin/deleteEvent/{id}(id=${event.id})}" method="post">
-                            <button type="submit" class="button" th:classappend="ban"
+                            <button type="submit" class="btn-warning" th:classappend="ban"
                                     th:text="Delete">
                             </button>
                         </form>
