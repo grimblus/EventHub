@@ -232,5 +232,32 @@ public class TestEventRepositoryImpl {
         String testImage = "test.img";
         assertFalse(eventRepository.addImageForEvent(-1, testImage));
     }
+
+    @Test
+    void testUpdateImageForEvent() {
+        int testId = 1;
+        String testName = "test";
+
+        List<String> testImageList = new ArrayList<>();
+        testImageList.add("test.img");
+        testImageList.add("test.img");
+        testImageList.add("test.img");
+        testImageList.add("test.img");
+
+        eventRepository.updateEventImages(testId, testImageList);
+
+        Event updatedEvent = eventRepository.findEventbyID(1);
+        List<String> imageList = updatedEvent.getImages();
+
+        assertEquals(4, imageList.size());
+    }
+
+    @Test
+    void testUpdateImageForEventNotFound() {
+        List<String> testImageList = new ArrayList<>();
+        testImageList.add("test.img");
+        eventRepository.updateEventImages(-1, testImageList);
+        assertNull(eventRepository.findEventbyID(-1));
+    }
 }
 
