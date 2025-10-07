@@ -20,15 +20,13 @@ public class BadgeServiceImpl implements BadgeService {
     private BadgeRepository badgeRepo;
     private PaymentRepository paymentRepo;
     private EventParticipantsRepository eventParticipantRepo;
-    // private EventRepository eventRepo;
+    private EventRepository eventRepo;
 
-    public BadgeServiceImpl(BadgeRepository badgeRepo, PaymentRepository paymentRepo, EventParticipantsRepository eventParticipantRepo
-    // , EventRepository eventRepo
-    ) {
+    public BadgeServiceImpl(BadgeRepository badgeRepo, PaymentRepository paymentRepo, EventParticipantsRepository eventParticipantRepo, EventRepository eventRepo) {
         this.badgeRepo = badgeRepo;
         this.paymentRepo = paymentRepo;
         this.eventParticipantRepo = eventParticipantRepo;
-        // this.eventRepo = eventRepo;
+        this.eventRepo = eventRepo;
     }
 
     public List<Badge> getBadgesByUser(int userId) {
@@ -56,23 +54,20 @@ public class BadgeServiceImpl implements BadgeService {
         }
     }
 
-    // public void assignCreate(int userId) {
-    //     List<Event> created = eventRepo.getEvents();
-    //     for (created.size()) {
+    public void assignCreate(int userId) {
+        List<Event> created = eventRepo.getEventsByOwnerId(userId);
 
-    //     }
+        if (!created.isEmpty()) {
+            List<Badge> allBadges = badgeRepo.getAllBadges();
+            Optional<Badge> createBadge = allBadges.stream()
+                    .filter(b -> b.getBadgeName().equalsIgnoreCase("Create Event"))
+                    .findFirst();
 
-    //     if () {
-    //         List<Badge> allBadges = badgeRepo.getAllBadges();
-    //         Optional<Badge> createBadge = allBadges.stream()
-    //                 .filter(b -> b.getBadgeName().equalsIgnoreCase("Create Event"))
-    //                 .findFirst();
-
-    //         if (createBadge.isPresent()) {
-    //             badgeRepo.assignBadgeToUser(userId, createBadge.get().getBadgeID());
-    //         }
-    //     }
-    // }
+            if (createBadge.isPresent()) {
+                badgeRepo.assignBadgeToUser(userId, createBadge.get().getBadgeID());
+            }
+        }
+    }
 
     public void assignPaymentBadge(int userId) {
         List<Payment> payments = paymentRepo.GetUserPayments(userId);
