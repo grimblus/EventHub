@@ -41,6 +41,8 @@ import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 
@@ -67,39 +69,6 @@ public class PaymentController {
     public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model, HttpSession session) {
         if(session.getAttribute("user") == null)  { return "redirect:/login"; }
 
-        // move to other spot
-        Stripe.apiKey = "";
-        
-        String recieptPassthroughURL = "http://localhost:8080/receipt?id=1&title=Workshop&ref=999xxx&userId=1";
-         //receipt?id=event.getId()&title=event.getTitle()&ref=r.reference()&userId=userId;
-
-        SessionCreateParams params = SessionCreateParams.builder()
-            .setMode(SessionCreateParams.Mode.PAYMENT)
-            .setSuccessUrl("http://localhost:8080/events")
-            .setCancelUrl(recieptPassthroughURL)
-            .addLineItem(
-                SessionCreateParams.LineItem.builder()
-                    .setQuantity(1L)
-                    .setPriceData(
-                        SessionCreateParams.LineItem.PriceData.builder()
-                            .setCurrency("aud")
-                            .setUnitAmount(2000L)
-                            .setProductData(
-                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                    .setName("Vbucks")
-                                    .build()
-                            ).build()
-                    ).build()
-            )
-        .build();
-
-        try {
-            Session paysession = Session.create(params);
-            return "redirect:" + paysession.getUrl();
-        } catch(StripeException e) {
-            e.printStackTrace();
-        }
-
 
         Event curEvent = eventService.getEvent(id, title);
         PaymentRequest req = new PaymentRequest();
@@ -112,12 +81,67 @@ public class PaymentController {
         // see nextYears helper below
         model.addAttribute("years", nextYears(12));
 
+        // valid card 4242424242424242
+        // any 3 digits
+        // any future date
+
+
         // Getting user when id through user email, stops weird issue
         // where if user creates an account and immediatly goes to buy a ticket the page 
         // crashes
         String em = (((User)session.getAttribute("user")).getEmail());
         User user = userService.findUserByEmail(em);
         //System.out.println(user.getId());
+
+        // move to other spot
+        Stripe.apiKey = "";
+        
+        String recieptPassthroughURL = "http://localhost:8080/receipt?id=1&title=Workshop&ref=999xxx&userId=1";
+         //receipt?id=event.getId()&title=event.getTitle()&ref=r.reference()&userId=userId;
+
+        recieptPassthroughURL = "http://localhost:8080/receipt?id=";
+        recieptPassthroughURL += curEvent.getId();
+
+        String returnURL = "http://localhost:8080/Events";
+
+        StringBuilder receiptURLSB = new StringBuilder("http://localhost:8080/receipt?id=");
+        receiptURLSB.append(curEvent.getId());
+        receiptURLSB.append("&title=");
+        receiptURLSB.append(curEvent.getTitle());
+        receiptURLSB.append("&ref=");
+        receiptURLSB.append("REF-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(Locale.ROOT));
+        receiptURLSB.append("&userId=");
+        receiptURLSB.append(user.getId());
+
+        // defaults to cents, guess they use that instead of a decimal?
+        Long ticketPriceL = Long.parseLong(curEvent.getTicketPrice()) * 1000;
+
+        SessionCreateParams params = SessionCreateParams.builder()
+            .setMode(SessionCreateParams.Mode.PAYMENT)
+            .setSuccessUrl(receiptURLSB.toString())
+            .setCancelUrl(returnURL)
+            .addLineItem(
+                SessionCreateParams.LineItem.builder()
+                    .setQuantity(1L)
+                    .setPriceData(
+                        SessionCreateParams.LineItem.PriceData.builder()
+                            .setCurrency("aud")
+                            .setUnitAmount(ticketPriceL)
+                            .setProductData(
+                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                    .setName(curEvent.getTitle())
+                                    .build()
+                            ).build()
+                    ).build()
+            )
+        .build();
+
+        try {
+            Session paysession = Session.create(params);
+            return "redirect:" + paysession.getUrl();
+        } catch(StripeException e) {
+            e.printStackTrace();
+        }
 
         model.addAttribute("userId", user.getId());
         model.addAttribute("event", curEvent);
