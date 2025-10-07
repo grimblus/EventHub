@@ -11,96 +11,98 @@
 </head>
 
 <body>
-<div layout:fragment="content" th:if="${isAdmin == true}">
-    <h1>Admin Display</h1>
+<div layout:fragment="content">
+    <div th:if="${isAdmin}">
+        <h1>Admin Display</h1>
 
-    <div style="text-align: center; margin-bottom: 20px;">
-        <a th:href="@{/admin/users}"
-           th:classappend="${active == 'users'} ? 'active-tab' : ''">Users</a> |
-        <a th:href="@{/admin/events}"
-           th:classappend="${active == 'events'} ? 'active-tab' : ''">Events</a>
-    </div>
-    <div th:if="${active == 'users'}" class="table-container">
-        <h2>Users</h2>
-        <table>
-            <thead>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a th:href="@{/admin/users}"
+               th:classappend="${active == 'users'} ? 'active-tab' : ''">Users</a> |
+            <a th:href="@{/admin/events}"
+               th:classappend="${active == 'events'} ? 'active-tab' : ''">Events</a>
+        </div>
+        <div th:if="${active == 'users'}" class="table-container">
+            <h2>Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Permissions</th>
+                        <th>Banned</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.firstName}"></td>
+                        <td th:text="${user.lastName}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.permissionLevel.name()}"></td>
+                        <td th:text="${user.banned}"></td>
+                        <td>
+                            <form th:action="@{/admin/toggleBanned/{id}(id=${user.id})}" method="post">
+                                <button type="submit" class="button" style="min-width: 70px"
+                                        th:classappend="${user.banned} ? 'unban ' : 'ban'"
+                                    th:text="${user.banned} ? 'Unban' : 'Ban'">
+
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${active == 'events'}" class="table-container">
+            <h2>Events</h2>
+            <table>
+                <thead>
                 <tr>
                     <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Permissions</th>
-                    <th>Banned</th>
-                    <th></th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Owner</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Ticket Price</th>
+                    <th>Keywords</th>
+                    <th>Tags</th>
+                    <th>Images</th>
+                    <th>Remove</th>
                 </tr>
-            </thead>
-            <tbody>
-                <tr th:each="user : ${users}">
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.firstName}"></td>
-                    <td th:text="${user.lastName}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.permissionLevel.name()}"></td>
-                    <td th:text="${user.banned}"></td>
+                </thead>
+                <tbody>
+                <tr th:each="event : ${events}">
+                    <td th:text="${event.id}"></td>
+                    <td th:text="${event.title}"></td>
+                    <td th:text="${event.description}"></td>
+                    <td th:text="${event.ownerID}"></td>
+                    <td th:text="${event.date}"></td>
+                    <td th:text="${event.location}"></td>
+                    <td th:text="${event.category}"></td>
+                    <td th:text="${event.ticketPrice}"></td>
+                    <td th:text="${event.keywords}"></td>
+                    <td th:text="${event.tags}"></td>
+                    <td th:text="${event.images}"></td>
                     <td>
-                        <form th:action="@{/admin/toggleBanned/{id}(id=${user.id})}" method="post">
-                            <button type="submit" class="button" style="min-width: 70px"
-                                    th:classappend="${user.banned} ? 'unban ' : 'ban'"
-                                th:text="${user.banned} ? 'Unban' : 'Ban'">
-
+                        <form th:action="@{/admin/deleteEvent/{id}(id=${event.id})}" method="post">
+                            <button type="submit" class="button" th:classappend="ban"
+                                    th:text="Delete">
                             </button>
                         </form>
                     </td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div th:if="${active == 'events'}" class="table-container">
-        <h2>Events</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Owner</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Category</th>
-                <th>Ticket Price</th>
-                <th>Keywords</th>
-                <th>Tags</th>
-                <th>Images</th>
-                <th>Remove</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="event : ${events}">
-                <td th:text="${event.id}"></td>
-                <td th:text="${event.title}"></td>
-                <td th:text="${event.description}"></td>
-                <td th:text="${event.ownerID}"></td>
-                <td th:text="${event.date}"></td>
-                <td th:text="${event.location}"></td>
-                <td th:text="${event.category}"></td>
-                <td th:text="${event.ticketPrice}"></td>
-                <td th:text="${event.keywords}"></td>
-                <td th:text="${event.tags}"></td>
-                <td th:text="${event.images}"></td>
-                <td>
-                    <form th:action="@{/admin/deleteEvent/{id}(id=${event.id})}" method="post">
-                        <button type="submit" class="button" th:classappend="ban"
-                                th:text="Delete">
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div th:unless="${isAdmin}">
+        <h1>Not Logged In As Admin</h1>
     </div>
-</div>
-<div layout:fragment="content" th:if="${isAdmin != true}">
-    <h1>Not Logged In As Admin</h1>
 </div>
 </body>
 </html>

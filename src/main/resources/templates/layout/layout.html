@@ -26,7 +26,7 @@
           <a th:if="${loggedIn}" href="/account">Account</a>
           <a
             th:if="${loggedIn && user.permissionLevel.name() == 'ADMIN'}"
-            href="/admin"
+            th:href="@{/admin/users}"
             >Admin</a
           >
         </div>

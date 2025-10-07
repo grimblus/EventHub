@@ -20,6 +20,9 @@ public class AdminController {
     public boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
+            System.out.println("User in session: " + user.getEmail());
+            System.out.println("Permission level: " + user.getPermissionLevel());
+            System.out.println("Enum check: " + (user.getPermissionLevel() == User.permissions.ADMIN));
             return user.getPermissionLevel() == User.permissions.ADMIN;
         }
         else {
