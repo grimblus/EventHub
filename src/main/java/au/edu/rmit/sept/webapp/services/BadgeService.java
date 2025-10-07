@@ -7,4 +7,5 @@ public interface BadgeService {
     public List<Badge> getAllBadges();
     public void assignPaymentBadge(int userId);
     public void assign2AttendBadge(int userId);
+    public void assignCreate(int userId);
 }

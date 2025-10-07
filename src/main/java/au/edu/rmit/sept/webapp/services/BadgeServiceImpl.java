@@ -4,23 +4,24 @@ import java.util.*;
 
 import au.edu.rmit.sept.webapp.entity.Badge;
 import au.edu.rmit.sept.webapp.entity.Payment;
-import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.repository.BadgeRepository;
 import au.edu.rmit.sept.webapp.repository.EventParticipantsRepository;
 import au.edu.rmit.sept.webapp.repository.EventRepository;
 import au.edu.rmit.sept.webapp.repository.PaymentRepository;
-import au.edu.rmit.sept.webapp.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class BadgeServiceImpl implements BadgeService {
-    private UserRepository userRepo;
     private BadgeRepository badgeRepo;
     private PaymentRepository paymentRepo;
     private EventParticipantsRepository eventParticipantRepo;
     private EventRepository eventRepo;
+
+    // constant for the assign2AttendBadge to check for
+    private static final int REQUIREDAMOUNT = 2;
+
 
     public BadgeServiceImpl(BadgeRepository badgeRepo, PaymentRepository paymentRepo, EventParticipantsRepository eventParticipantRepo, EventRepository eventRepo) {
         this.badgeRepo = badgeRepo;
@@ -42,7 +43,8 @@ public class BadgeServiceImpl implements BadgeService {
     public void assign2AttendBadge(int userId) {
         List<Integer> rsvps = eventParticipantRepo.getRSVPList(userId);
 
-        if (rsvps.size() >= 2) {
+        // If has 2 or more rsvps, award the badge
+        if (rsvps.size() >= REQUIREDAMOUNT) {
             List<Badge> allBadges = badgeRepo.getAllBadges();
             Optional<Badge> attendBadge = allBadges.stream()
                     .filter(b -> b.getBadgeName().equalsIgnoreCase("2 Attends"))
@@ -57,6 +59,7 @@ public class BadgeServiceImpl implements BadgeService {
     public void assignCreate(int userId) {
         List<Event> created = eventRepo.getEventsByOwnerId(userId);
 
+        // If has at least 1 created, award badge
         if (!created.isEmpty()) {
             List<Badge> allBadges = badgeRepo.getAllBadges();
             Optional<Badge> createBadge = allBadges.stream()

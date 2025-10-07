@@ -34,6 +34,7 @@ public class AccountController {
 
             badgeService.assignPaymentBadge(user.getId());
             badgeService.assign2AttendBadge(user.getId());
+            badgeService.assignCreate(user.getId());
 
             List <Badge> allBadge = badgeService.getAllBadges();
             List <Badge> userBadge = badgeService.getBadgesByUser(user.getId());
@@ -44,14 +45,14 @@ public class AccountController {
             // }
 
             //Checking user badge
-            List<Badge> badges = badgeService.getBadgesByUser(user.getId());
-            System.out.print("Badges for user: " + user.getId() + ": " + badges);
-            model.addAttribute("badge", badges);
+            // List<Badge> badges = badgeService.getBadgesByUser(user.getId());
+            // System.out.print("Badges for user: " + user.getId() + ": " + badges);
+            // model.addAttribute("badge", badges);
 
-            //Checking all badge
-            List<Badge> allBadges = badgeService.getAllBadges();
-            System.out.print("All badges: " + allBadges);
-            model.addAttribute("allBadge", allBadges);
+            // //Checking all badge
+            // List<Badge> allBadges = badgeService.getAllBadges();
+            // System.out.print("All badges: " + allBadges);
+            // model.addAttribute("allBadge", allBadges);
         }
 
 
