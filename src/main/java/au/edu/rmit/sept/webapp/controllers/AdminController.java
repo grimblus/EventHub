@@ -20,13 +20,7 @@ public class AdminController {
     public boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-
-            if (user.getPermissionLevel() == User.permissions.ADMIN) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return user.getPermissionLevel() == User.permissions.ADMIN;
         }
         else {
             return false;
