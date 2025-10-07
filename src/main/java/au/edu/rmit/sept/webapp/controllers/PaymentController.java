@@ -9,6 +9,7 @@ import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.services.PaymentService;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
 import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
+import io.github.cdimascio.dotenv.Dotenv;
 import au.edu.rmit.sept.webapp.services.UserService;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -92,17 +93,15 @@ public class PaymentController {
         String em = (((User)session.getAttribute("user")).getEmail());
         User user = userService.findUserByEmail(em);
         //System.out.println(user.getId());
-
         // move to other spot
-        Stripe.apiKey = "";
-        
-        String recieptPassthroughURL = "http://localhost:8080/receipt?id=1&title=Workshop&ref=999xxx&userId=1";
+        Dotenv dotenv = Dotenv.load();
+        Stripe.apiKey = dotenv.get("STRIPE_SECRET_KEY_TEST");
+
          //receipt?id=event.getId()&title=event.getTitle()&ref=r.reference()&userId=userId;
 
-        recieptPassthroughURL = "http://localhost:8080/receipt?id=";
-        recieptPassthroughURL += curEvent.getId();
+        String returnURL = "http://localhost:8080/events";
+        String imgURL = "https://cdn11.bigcommerce.com/s-042b2/product_images/uploaded_images/man-lecturing-at-university.jpg";
 
-        String returnURL = "http://localhost:8080/Events";
 
         StringBuilder receiptURLSB = new StringBuilder("http://localhost:8080/receipt?id=");
         receiptURLSB.append(curEvent.getId());
@@ -114,7 +113,9 @@ public class PaymentController {
         receiptURLSB.append(user.getId());
 
         // defaults to cents, guess they use that instead of a decimal?
-        Long ticketPriceL = Long.parseLong(curEvent.getTicketPrice()) * 1000;
+        Long ticketPriceL = Long.parseLong(curEvent.getTicketPrice()) * 100;
+
+        String ticketDesc = curEvent.getDescription() + " located at " + curEvent.getLocation() + " @ " + curEvent.getDate().format(f);
 
         SessionCreateParams params = SessionCreateParams.builder()
             .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -130,6 +131,8 @@ public class PaymentController {
                             .setProductData(
                                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                     .setName(curEvent.getTitle())
+                                    .setDescription(ticketDesc)
+                                    .addImage(imgURL)
                                     .build()
                             ).build()
                     ).build()
