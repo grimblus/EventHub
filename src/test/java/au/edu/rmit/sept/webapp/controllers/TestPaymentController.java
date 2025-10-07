@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -110,5 +111,36 @@ public class TestPaymentController {
 
         verify(paymentService).AddPayment(any(Payment.class));
         verify(eventParticipantsService).addEventParticipant(event.getId(), user.getId());
+    }
+
+    @Test
+    void testPrintGeneratesFilledPdf() throws Exception {
+        int eventId = 1;
+        String title = "Test Event";
+        String bought = "2025-10-05 12:00:00";
+        String ref = "REF123";
+
+        Event event = new Event();
+        event.setId(eventId);
+        event.setTitle(title);
+        event.setLocation("Melbourne");
+        event.setTicketPrice("50.00");
+        event.setDate(LocalDateTime.MIN);
+        when(eventService.getEvent(eventId, title)).thenReturn(event);
+
+        byte[] pdfBytes = mockMvc.perform(post("/print")
+                        .param("eventId", String.valueOf(eventId))
+                        .param("eventTitle", title)
+                        .param("bought", bought)
+                        .param("refVal", ref))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/pdf"))
+                .andExpect(header().string("Content-Disposition", "attachment; filename=receipt-" + ref + ".pdf"))
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
+
+        assertThat(pdfBytes).isNotEmpty();
+        assertThat(pdfBytes.length).isGreaterThan(500);
     }
 }
