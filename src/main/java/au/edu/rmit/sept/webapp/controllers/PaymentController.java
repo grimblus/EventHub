@@ -21,10 +21,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
+import com.stripe.param.checkout.SessionExpireParams;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.websocket.SessionException;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -34,6 +42,7 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.IntStream;
+
 
 @Controller
 public class PaymentController {
@@ -57,6 +66,40 @@ public class PaymentController {
     @GetMapping("/checkout")
     public String checkout(@RequestParam("id") int id, @RequestParam("title") String title, Model model, HttpSession session) {
         if(session.getAttribute("user") == null)  { return "redirect:/login"; }
+
+        // move to other spot
+        Stripe.apiKey = "";
+        
+        String recieptPassthroughURL = "http://localhost:8080/receipt?id=1&title=Workshop&ref=999xxx&userId=1";
+         //receipt?id=event.getId()&title=event.getTitle()&ref=r.reference()&userId=userId;
+
+        SessionCreateParams params = SessionCreateParams.builder()
+            .setMode(SessionCreateParams.Mode.PAYMENT)
+            .setSuccessUrl("http://localhost:8080/events")
+            .setCancelUrl(recieptPassthroughURL)
+            .addLineItem(
+                SessionCreateParams.LineItem.builder()
+                    .setQuantity(1L)
+                    .setPriceData(
+                        SessionCreateParams.LineItem.PriceData.builder()
+                            .setCurrency("aud")
+                            .setUnitAmount(2000L)
+                            .setProductData(
+                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                    .setName("Vbucks")
+                                    .build()
+                            ).build()
+                    ).build()
+            )
+        .build();
+
+        try {
+            Session paysession = Session.create(params);
+            return "redirect:" + paysession.getUrl();
+        } catch(StripeException e) {
+            e.printStackTrace();
+        }
+
 
         Event curEvent = eventService.getEvent(id, title);
         PaymentRequest req = new PaymentRequest();
@@ -124,6 +167,7 @@ public class PaymentController {
         if (errors.hasErrors()) {
             return "payment/checkout";
         }
+
 
         Result r = gateway.charge(req);
         // now we check if the user has input valid details, sending them to the receipt page if they have
