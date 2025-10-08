@@ -126,10 +126,6 @@
             margin-top: 0.45rem;
         }
 
-        .available-container div {
-            flex: 1;
-        }
-
         .available-container ul {
             list-style: none;
             padding: 0;
@@ -138,10 +134,30 @@
 
         .available-container ul li {
             display: inline-block;
-            background: #808080;
-            padding: 5px 10px;
-            border-radius: 12px;
             margin: 4px;
+        }
+
+        .available-container ul li label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #808080;
+            color: white;
+            border-radius: 12px;
+            padding: 8px 14px;
+            width: 100%;
+            height: 100%;
+            transition-duration: 0.2s;
+        }
+
+        .available-container ul li input[type="checkbox"],
+        .available-container ul li input[type="radio"] {
+            display: none;
+        }
+
+        .available-container ul li label:has(input[type="checkbox"]:checked),
+        .available-container ul li label:has(input[type="radio"]:checked) {
+            background: #4caf50;
         }
     </style>
 </head>
@@ -166,38 +182,40 @@
                     <label for="ticketPrice">Ticket Price:</label>
                     <input type="number" id="ticketPrice" th:field="*{ticketPrice}" placeholder="Ticket Price" />
 
-                    <label for="category">Category:</label>
-                    <input type="text" id="category" th:field="*{category}" placeholder="Category" />
-
-                    <label for="keywords">Keywords:</label>
-                    <input type="text" id="keywords" placeholder="Type Keyword and Press Enter" />
-                    <input type="hidden" th:field="*{keywords}" id="keywords-hidden" />
-                    <div id="keywords-container"></div>
-
-                    <label for="tags">Tags:</label>
-                    <input type="text" id="tags" placeholder="Type Tag and Press Enter" />
-                    <input type="hidden" th:field="*{tags}" id="tags-hidden" />
-                    <div id="tags-container"></div>
-
+                    <label>Category:</label>
                     <div class="available-container">
-                        <div>
-                            <label>Available Keywords:</label>
-                            <ul id="available-keywords">
-                                <li th:each="keyword : ${keywords}" th:text="${keyword}"></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <label>Available Tags:</label>
-                            <ul id="available-tags">
-                                <li th:each="tag : ${tags}" th:text="${tag}"></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <label>Available Categories:</label>
-                            <ul id="available-categories">
-                                <li th:each="category : ${categories}" th:text="${category}"></li>
-                            </ul>
-                        </div>
+                        <ul>
+                            <li th:each="category : ${categories}">
+                                <label>
+                                    <input type="radio" name="category" th:value="${category}" />
+                                    <span th:text="${category.name}"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <label>Keywords:</label>
+                    <div class="available-container">
+                        <ul>
+                            <li th:each="keyword : ${keywords}">
+                                <label>
+                                    <input type="checkbox" th:field="*{keywords}" th:value="${keyword}" />
+                                    <span th:text="${keyword.name}"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <label>Tags:</label>
+                    <div class="available-container">
+                        <ul>
+                            <li th:each="tag : ${tags}">
+                                <label>
+                                    <input type="checkbox" th:field="*{tags}" th:value="${tag}" />
+                                    <span th:text="${tag.name}"></span>
+                                </label>
+                            </li>
+                        </ul>
                     </div>
 
                     <button type="submit">
@@ -214,101 +232,6 @@
                 </div>
             </form>
         </div>
-    </div>
-    <div layout:fragment="scripts">
-        <script>
-            console.log(Array.from(document.querySelectorAll('#available-tags li')).map((value) => value.textContent.trim()));
-            console.log(Array.from(document.querySelectorAll('#available-keywords li')).map((value) => value.textContent.trim()))
-
-            function createTagElement(container, array, tagText, updateHidden) {
-                const div = document.createElement('div');
-                div.classList.add('tag');
-
-                const span = document.createElement('span');
-                span.textContent = tagText.trim();
-                span.classList.add('tag-text');
-
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.textContent = 'x';
-                button.classList.add('tag-remove');
-
-                button.addEventListener('click', () => {
-                    const index = array.indexOf(tagText);
-                    if (index > -1) array.splice(index, 1);
-                    updateHidden();
-                    div.remove();
-                });
-
-                div.appendChild(span);
-                div.appendChild(button);
-                container.appendChild(div);
-            }
-
-            const tagsContainer = document.getElementById('tags-container');
-            const tagsInput = document.getElementById('tags');
-            const tagsHidden = document.getElementById('tags-hidden');
-            const tagsArray = [];
-            const tagsAvailable = Array.from(document.querySelectorAll('#available-tags li')).map((value) => value.textContent.trim());
-
-
-            function updateTagsHidden() {
-                tagsHidden.value = tagsArray.join(',');
-            }
-
-            tagsInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const tag = tagsInput.value.trim().toUpperCase();
-                    if (!tag) return;
-
-                    if (!tagsAvailable.includes(tag)) {
-                        alert(`'${tag}' is not a valid tag`);
-                        tagsInput.value = '';
-                        return;
-                    }
-
-                    if (!tagsArray.includes(tag)) {
-                        tagsArray.push(tag);
-                        createTagElement(tagsContainer, tagsArray, tag, updateTagsHidden);
-                        updateTagsHidden();
-                    }
-                    tagsInput.value = '';
-                }
-            });
-
-
-            const keywordsContainer = document.getElementById('keywords-container');
-            const keywordsInput = document.getElementById('keywords');
-            const keywordsHidden = document.getElementById('keywords-hidden');
-            const keywordsArray = [];
-            const keywordsAvailable = Array.from(document.querySelectorAll('#available-keywords li')).map((value) => value.textContent.trim());
-
-            function updateKeywordsHidden() {
-                keywordsHidden.value = keywordsArray.join(',');
-            }
-
-            keywordsInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const keyword = keywordsInput.value.trim().toUpperCase();
-                    if (!keyword) return;
-
-                    if (!keywordsAvailable.includes(keyword)) {
-                        alert(`'${keyword}' is not a valid keyword`);
-                        keywordsInput.value = '';
-                        return;
-                    }
-
-                    if (!keywordsArray.includes(keyword)) {
-                        keywordsArray.push(keyword);
-                        createTagElement(keywordsContainer, keywordsArray, keyword, updateKeywordsHidden);
-                        updateKeywordsHidden();
-                    }
-                    keywordsInput.value = '';
-                }
-            });
-        </script>
     </div>
 </body>
 
