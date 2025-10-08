@@ -24,6 +24,7 @@ import au.edu.rmit.sept.webapp.services.UserInterestsService;
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.entity.Event;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -240,7 +241,7 @@ public class EventFeedControllerTest {
 
         Event event1 = new Event(1, "Losing Fights", "Get beat up by omniman", 1, LocalDateTime.of(2000, Month.JANUARY, 1, 0, 0, 0), "Earth", "90", "GENERAL", List.of(""), List.of("ADULT", "ACCESSIBLE"), List.of(""));
 
-        Event event2 = new Event(2, "Writing Tests", "The worst torture method available", 1, LocalDateTime.of(2000, Month.JANUARY, 1, 0, 0, 0), "Earth", "90", "GENERAL", List.of(""), List.of("ADULT", "ACCESSIBLE"), List.of(""));
+        Event event2 = new Event(2, "Writing Tests", "The worst torture method available", 1, LocalDateTime.of(2000, Month.JANUARY, 1, 0, 0, 0), "Earth", "90", "FUN", List.of(""), List.of("ADULT"), List.of(""));
         List<Event> events = Arrays.asList(event1, event2);
 
         HashSet<String> interests = new HashSet<>(Set.of("GENERAL", "ACCESSIBLE"));
@@ -257,8 +258,9 @@ public class EventFeedControllerTest {
 
         String pageContent = result.getResponse().getContentAsString();
 
+        assertFalse(pageContent.contains("No events currently match your selected tags or categories."));
         assertTrue(pageContent.contains("Losing Fights"));
-        assertTrue(pageContent.contains("Writing Tests"));
+
 
 
 

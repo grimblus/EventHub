@@ -18,7 +18,7 @@ import au.edu.rmit.sept.webapp.services.EventService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MyInterestsTest {
+public class MyInterestsControllerTest {
      private static final String URL = "/account/myInterests";
 
     @Autowired
