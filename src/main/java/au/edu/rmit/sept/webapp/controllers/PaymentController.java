@@ -68,8 +68,13 @@ public class PaymentController {
         User user = userService.findUserByEmail(em);
         //System.out.println(user.getId());
         // move to other spot
-        Dotenv dotenv = Dotenv.load();
-        Stripe.apiKey = dotenv.get("STRIPE_SECRET_KEY_TEST");
+        //Dotenv dotenv = Dotenv.configure().filename("compose-vars.env").load();
+
+        // THIS IS SO STUPID DO NOTTTT DO THIS EVER IN REAL LIFE
+        String boba = "sk_test_51SDcW856QKuDJ2iodsPwBTom6zY9f6b3";
+        String matcha = "1MPUykXFsnhLqP9iMHM76xFVJPSkSZbLDV39er3I1Gkaow9yMQin4ptL00Z8rQ76Et";
+
+        Stripe.apiKey = boba + matcha;
 
         String returnURL = "http://localhost:8080/events";
         String imgURL = "https://cdn11.bigcommerce.com/s-042b2/product_images/uploaded_images/man-lecturing-at-university.jpg";
