@@ -43,8 +43,8 @@ public class BadgeServiceImpl implements BadgeService {
     public void assign2AttendBadge(int userId) {
         List<Integer> rsvps = eventParticipantRepo.getRSVPList(userId);
 
-        // If has 2 or more rsvps, award the badge
-        if (rsvps.size() >= REQUIREDAMOUNT) {
+        // If has 2 or more rsvps, award the badge also if dont have already
+        if (rsvps.size() >= REQUIREDAMOUNT && !alreadyHasBadge(userId, "2 Attends")) {
             List<Badge> allBadges = badgeRepo.getAllBadges();
             Optional<Badge> attendBadge = allBadges.stream()
                     .filter(b -> b.getBadgeName().equalsIgnoreCase("2 Attends"))
@@ -59,8 +59,8 @@ public class BadgeServiceImpl implements BadgeService {
     public void assignCreate(int userId) {
         List<Event> created = eventRepo.getEventsByOwnerId(userId);
 
-        // If has at least 1 created, award badge
-        if (!created.isEmpty()) {
+        // If has at least 1 created, award badge also if dont have already
+        if (!created.isEmpty() && !alreadyHasBadge(userId, "Create Event")) {
             List<Badge> allBadges = badgeRepo.getAllBadges();
             Optional<Badge> createBadge = allBadges.stream()
                     .filter(b -> b.getBadgeName().equalsIgnoreCase("Create Event"))
@@ -75,8 +75,8 @@ public class BadgeServiceImpl implements BadgeService {
     public void assignPaymentBadge(int userId) {
         List<Payment> payments = paymentRepo.GetUserPayments(userId);
 
-        // If has at least 1 payment, award the badge
-        if (!payments.isEmpty()) {
+        // If has at least 1 payment, award the badge also if dont have already
+        if (!payments.isEmpty() && !alreadyHasBadge(userId, "Payment")) {
             List<Badge> allBadges = badgeRepo.getAllBadges();
             Optional<Badge> paymentBadge = allBadges.stream()
                     .filter(b -> b.getBadgeName().equalsIgnoreCase("Payment"))
@@ -86,5 +86,11 @@ public class BadgeServiceImpl implements BadgeService {
                 badgeRepo.assignBadgeToUser(userId, paymentBadge.get().getBadgeID());
             }
         }
+    }
+
+    public boolean alreadyHasBadge(int userId, String badgeName) {
+        List<Badge> userBadges = badgeRepo.getBadgesByUser(userId);
+        return userBadges.stream()
+                .anyMatch(b -> b.getBadgeName().equalsIgnoreCase(badgeName));
     }
 }

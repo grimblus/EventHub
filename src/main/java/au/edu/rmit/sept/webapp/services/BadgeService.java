@@ -8,4 +8,5 @@ public interface BadgeService {
     public void assignPaymentBadge(int userId);
     public void assign2AttendBadge(int userId);
     public void assignCreate(int userId);
+    public boolean alreadyHasBadge(int userId, String badgeName);
 }
