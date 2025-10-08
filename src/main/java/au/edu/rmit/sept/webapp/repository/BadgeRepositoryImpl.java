@@ -26,18 +26,18 @@ public class BadgeRepositoryImpl implements BadgeRepository {
         this.dataSource = dataSource;
     }
 
-    public void setBadges() {
-        try (Connection connection = this.dataSource.getConnection()) {
-            String insertJoin = "INSERT INTO user_badges (user_id, badge_id) VALUES (?, ?)";
-                try (PreparedStatement ps = connection.prepareStatement(insertJoin)) {
-                    ps.setInt(1, 4);
-                    ps.setInt(2, badgeList.get(1).getBadgeID());
-                    ps.executeUpdate();
-                }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    // public void setBadges() {
+    //     try (Connection connection = this.dataSource.getConnection()) {
+    //         String insertJoin = "INSERT INTO user_badges (user_id, badge_id) VALUES (?, ?)";
+    //             try (PreparedStatement ps = connection.prepareStatement(insertJoin)) {
+    //                 ps.setInt(1, 4);
+    //                 ps.setInt(2, badgeList.get(1).getBadgeID());
+    //                 ps.executeUpdate();
+    //             }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
     
     public List<Badge> getAllBadges() {
         List<Badge> badges = new ArrayList<>();
