@@ -1,315 +1,283 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout/layout.html}">
-
-<head>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
     <title>Event Hub - Create</title>
     <!-- <script src="content-script.js"></script> -->
     <style>
-        .form-block {
-            display: flex;
-            width: 100%;
-            padding: 1.5rem;
-            align-content: center;
-            justify-content: center;
-        }
+      .form-block {
+        display: flex;
+        width: 100%;
+        padding: 1.5rem;
+        align-content: center;
+        justify-content: center;
+      }
 
-        .form-elements {
-            display: flex;
-            flex-direction: column;
-            align-content: flex-start;
-            align-items: flex-start;
-            background: #aaaaaa;
-            padding: 1rem;
-            border-radius: 8px;
-            width: 42.5rem;
-        }
+      .form-elements {
+        display: flex;
+        flex-direction: column;
+        align-content: flex-start;
+        align-items: flex-start;
+        background: #ffffff;
+        padding: 1rem;
+        border-radius: 8px;
+        width: 42.5rem;
+        border: 1px solid #ddd;
+      }
 
-        .form-elements label {
-            display: block;
-            font-weight: bold;
-            margin: 0 0 0.5rem 0;
-        }
+      .form-elements label {
+        display: block;
+        font-weight: bold;
+        margin: 0 0 0.5rem 0;
+      }
 
-        .form-elements input,
-        .form-elements textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 0.6rem;
-            margin-bottom: 1.2rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
+      .form-elements input,
+      .form-elements textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.6rem;
+        margin-bottom: 1.2rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+      }
 
-        .form-elements textarea {
-            resize: vertical; /* user can resize vertically */
-            min-height: 80px;
-        }
+      .form-elements textarea {
+        resize: vertical; /* user can resize vertically */
+        min-height: 80px;
+      }
 
-        .form-elements button {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 6px;
-            background: #4a90e2;
-            color: white;
-            font-size: 1rem;
-        }
-        #tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-            padding: 6px 0;
-        }
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: #808080;
-            color: #111727;
-            font-size: 0.9rem;
-            line-height: 1;
-        }
-        .tag .tag-text {
-            display: inline-block;
-            padding: 0 2px;
-        }
-        .tag .tag-remove {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: none;
-            background: transparent;
-            color: #6b7270;
-            font-weight: 600;
-            font-size: 0.95rem;
-            line-height: 1;
-        }
-        .success-error-container {
-            margin-top: 0.45rem;
-        }
-        .error-container {
-            padding: 12px 16px;
-            border-left: 4px solid #d32f2f;
-            background: red;
-            color: #7a0b0b;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
+      .form-elements button {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 6px;
+        background: #4a90e2;
+        color: white;
+        font-size: 1rem;
+      }
+      #tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 0;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #808080;
+        color: #111727;
+        font-size: 0.9rem;
+        line-height: 1;
+      }
+      .tag .tag-text {
+        display: inline-block;
+        padding: 0 2px;
+      }
+      .tag .tag-remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        color: #6b7270;
+        font-weight: 600;
+        font-size: 0.95rem;
+        line-height: 1;
+      }
+      .success-error-container {
+        margin-top: 0.45rem;
+      }
+      .error-container {
+        padding: 12px 16px;
+        border-left: 4px solid #d32f2f;
+        background: red;
+        color: #7a0b0b;
+        border-radius: 6px;
+        font-size: 0.95rem;
+      }
 
-        .error-container span {
-            display: block;
-        }
+      .error-container span {
+        display: block;
+      }
 
-        .success-container {
-            margin: 8px 0;
-            padding: 12px 16px;
-            border-left: 4px solid green;
-            background: green;
-            color: #1b5e20;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
+      .success-container {
+        margin: 8px 0;
+        padding: 12px 16px;
+        border-left: 4px solid green;
+        background: green;
+        color: #1b5e20;
+        border-radius: 6px;
+        font-size: 0.95rem;
+      }
 
-        .available-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 40px;
-            margin-top: 0.45rem;
-        }
+      .available-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        margin-top: 0.45rem;
+      }
 
-        .available-container div {
-            flex: 1;
-        }
+      .available-container ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 5px;
+      }
 
-        .available-container ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 5px;
-        }
+      .available-container ul li {
+        display: inline-block;
+        margin: 4px;
+      }
 
-        .available-container ul li {
-            display: inline-block;
-            background: #808080;
-            padding: 5px 10px;
-            border-radius: 12px;
-            margin: 4px;
-        }
+      .available-container ul li label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #808080;
+        color: white;
+        border-radius: 12px;
+        padding: 8px 14px;
+        width: 100%;
+        height: 100%;
+        transition-duration: 0.2s;
+      }
+
+      .available-container ul li input[type="checkbox"],
+      .available-container ul li input[type="radio"] {
+        display: none;
+      }
+
+      .available-container ul li label:has(input[type="checkbox"]:checked),
+      .available-container ul li label:has(input[type="radio"]:checked) {
+        background: #4caf50;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div layout:fragment="content">
+      <div class="vertical-group">
+        <h2>Create an event</h2>
+
         <div class="form-block">
-            <form th:action="@{/create}" th:object="${event}" method="POST" id="event-form">
-                <div class="form-elements">
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" th:field="*{title}" placeholder="Event Title" />
+          <form
+            th:action="@{/create}"
+            th:object="${event}"
+            method="POST"
+            id="event-form"
+          >
+            <div class="form-elements">
+              <label for="title">Title:</label>
+              <input
+                type="text"
+                id="title"
+                th:field="*{title}"
+                placeholder="Event Title"
+              />
 
-                    <label for="description">Description:</label>
-                    <textarea id="description" th:field="*{description}" placeholder="Event Description"></textarea>
+              <label for="description">Description:</label>
+              <textarea
+                id="description"
+                th:field="*{description}"
+                placeholder="Event Description"
+              ></textarea>
 
-                    <label for="date">Date:</label>
-                    <input type="datetime-local" id="date" th:field="*{date}" placeholder="Event Date" />
+              <label for="date">Date:</label>
+              <input
+                type="datetime-local"
+                id="date"
+                th:field="*{date}"
+                placeholder="Event Date"
+              />
 
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" th:field="*{location}" placeholder="Location" />
+              <label for="location">Location:</label>
+              <input
+                type="text"
+                id="location"
+                th:field="*{location}"
+                placeholder="Location"
+              />
 
-                    <label for="ticketPrice">Ticket Price:</label>
-                    <input type="number" id="ticketPrice" th:field="*{ticketPrice}" placeholder="Ticket Price" />
+              <label for="ticketPrice">Ticket Price:</label>
+              <input
+                type="number"
+                id="ticketPrice"
+                th:field="*{ticketPrice}"
+                placeholder="Ticket Price"
+              />
 
-                    <label for="category">Category:</label>
-                    <input type="text" id="category" th:field="*{category}" placeholder="Category" />
+              <label>Category:</label>
+              <div class="available-container">
+                <ul>
+                  <li th:each="category : ${categories}">
+                    <label>
+                      <input
+                        type="radio"
+                        name="category"
+                        th:value="${category}"
+                      />
+                      <span th:text="${category.name}"></span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
 
-                    <label for="keywords">Keywords:</label>
-                    <input type="text" id="keywords" placeholder="Type Keyword and Press Enter" />
-                    <input type="hidden" th:field="*{keywords}" id="keywords-hidden" />
-                    <div id="keywords-container"></div>
+              <label>Keywords:</label>
+              <div class="available-container">
+                <ul>
+                  <li th:each="keyword : ${keywords}">
+                    <label>
+                      <input
+                        type="checkbox"
+                        th:field="*{keywords}"
+                        th:value="${keyword}"
+                      />
+                      <span th:text="${keyword.name}"></span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
 
-                    <label for="tags">Tags:</label>
-                    <input type="text" id="tags" placeholder="Type Tag and Press Enter" />
-                    <input type="hidden" th:field="*{tags}" id="tags-hidden" />
-                    <div id="tags-container"></div>
+              <label>Tags:</label>
+              <div class="available-container">
+                <ul>
+                  <li th:each="tag : ${tags}">
+                    <label>
+                      <input
+                        type="checkbox"
+                        th:field="*{tags}"
+                        th:value="${tag}"
+                      />
+                      <span th:text="${tag.name}"></span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
 
-                    <div class="available-container">
-                        <div>
-                            <label>Available Keywords:</label>
-                            <ul id="available-keywords">
-                                <li th:each="keyword : ${keywords}" th:text="${keyword}"></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <label>Available Tags:</label>
-                            <ul id="available-tags">
-                                <li th:each="tag : ${tags}" th:text="${tag}"></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <label>Available Categories:</label>
-                            <ul id="available-categories">
-                                <li th:each="category : ${categories}" th:text="${category}"></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <button type="submit">
-                        Submit
-                    </button>
-                    <div class="success-error-container">
-                        <div class="error-container" th:each="error : ${errors}">
-                            <span th:text="${error}"></span>
-                        </div>
-                        <div class="success-container" th:each="s : ${success}">
-                            <span th:text="${s}"></span>
-                        </div>
-                    </div>
+              <button type="submit">Submit</button>
+              <div class="success-error-container">
+                <div class="error-container" th:each="error : ${errors}">
+                  <span th:text="${error}"></span>
                 </div>
-            </form>
+                <div class="success-container" th:each="s : ${success}">
+                  <span th:text="${s}"></span>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-    <div layout:fragment="scripts">
-        <script>
-            console.log(Array.from(document.querySelectorAll('#available-tags li')).map((value) => value.textContent.trim()));
-            console.log(Array.from(document.querySelectorAll('#available-keywords li')).map((value) => value.textContent.trim()))
-
-            function createTagElement(container, array, tagText, updateHidden) {
-                const div = document.createElement('div');
-                div.classList.add('tag');
-
-                const span = document.createElement('span');
-                span.textContent = tagText.trim();
-                span.classList.add('tag-text');
-
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.textContent = 'x';
-                button.classList.add('tag-remove');
-
-                button.addEventListener('click', () => {
-                    const index = array.indexOf(tagText);
-                    if (index > -1) array.splice(index, 1);
-                    updateHidden();
-                    div.remove();
-                });
-
-                div.appendChild(span);
-                div.appendChild(button);
-                container.appendChild(div);
-            }
-
-            const tagsContainer = document.getElementById('tags-container');
-            const tagsInput = document.getElementById('tags');
-            const tagsHidden = document.getElementById('tags-hidden');
-            const tagsArray = [];
-            const tagsAvailable = Array.from(document.querySelectorAll('#available-tags li')).map((value) => value.textContent.trim());
-
-
-            function updateTagsHidden() {
-                tagsHidden.value = tagsArray.join(',');
-            }
-
-            tagsInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const tag = tagsInput.value.trim().toUpperCase();
-                    if (!tag) return;
-
-                    if (!tagsAvailable.includes(tag)) {
-                        alert(`'${tag}' is not a valid tag`);
-                        tagsInput.value = '';
-                        return;
-                    }
-
-                    if (!tagsArray.includes(tag)) {
-                        tagsArray.push(tag);
-                        createTagElement(tagsContainer, tagsArray, tag, updateTagsHidden);
-                        updateTagsHidden();
-                    }
-                    tagsInput.value = '';
-                }
-            });
-
-
-            const keywordsContainer = document.getElementById('keywords-container');
-            const keywordsInput = document.getElementById('keywords');
-            const keywordsHidden = document.getElementById('keywords-hidden');
-            const keywordsArray = [];
-            const keywordsAvailable = Array.from(document.querySelectorAll('#available-keywords li')).map((value) => value.textContent.trim());
-
-            function updateKeywordsHidden() {
-                keywordsHidden.value = keywordsArray.join(',');
-            }
-
-            keywordsInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const keyword = keywordsInput.value.trim().toUpperCase();
-                    if (!keyword) return;
-
-                    if (!keywordsAvailable.includes(keyword)) {
-                        alert(`'${keyword}' is not a valid keyword`);
-                        keywordsInput.value = '';
-                        return;
-                    }
-
-                    if (!keywordsArray.includes(keyword)) {
-                        keywordsArray.push(keyword);
-                        createTagElement(keywordsContainer, keywordsArray, keyword, updateKeywordsHidden);
-                        updateKeywordsHidden();
-                    }
-                    keywordsInput.value = '';
-                }
-            });
-        </script>
-    </div>
-</body>
-
+  </body>
 </html>

@@ -1,72 +1,85 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout.html}">
-
-<head>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
     <style>
-        .events-filter-container {
-            margin: 1rem;
-            border-radius: 10px;
-        }
+      .events-filter-container {
+        margin: 1rem;
+        border-radius: 10px;
+      }
 
-        .events-display-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-        }
-        .rsvp-list {
-            flex-direction: column;
-            width: 30rem;
-            border: 0.2rem solid white;
-            margin: 1rem;
-            padding: 1rem;
-        }
-        .rsvp-list img {
-            /*  change img size later  */
-        }
-        .event-meta {
-            display: flex;
-            justify-content: space-between;
-        }
-        .event-details {
-            padding: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            border: 2px solid #111111;
-        }
+      .events-display-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: flex-start;
+      }
+      .rsvp-list {
+        flex-direction: column;
+        width: 30rem;
+        border: 0.2rem solid white;
+        margin: 1rem;
+        padding: 1rem;
+      }
+      .rsvp-list img {
+        /*  change img size later  */
+      }
+      .event-meta {
+        display: flex;
+        justify-content: space-between;
+      }
+      .event-details {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        border: 2px solid #111111;
+      }
     </style>
     <title>Creator dashboard</title>
     <!-- <script src="content-script.js"></script> -->
-</head>
+  </head>
 
-<body>
-<div layout:fragment="content">
-
-    <h2> Your created events</h2>
-    <div class="events-display-container">
+  <body>
+    <div layout:fragment="content">
+      <h2>Your created events</h2>
+      <p class="vertical-group" th:if="${events.size() == 0}">
+        You have not created any events.
+      </p>
+      <div class="events-display-container">
         <div class="rsvp-list" th:each="event : ${events}">
-            <div class="event-details">
-                <h2 th:text="${event.getTitle()}">Event Title</h2>
-                <p th:text="${event.getDescription()}">Event Description</p>
-                <div class="event-meta">
-              <span th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"
-              >Event Start Time</span
+          <div class="event-details">
+            <h2 th:text="${event.getTitle()}">Event Title</h2>
+            <p th:text="${event.getDescription()}">Event Description</p>
+            <div class="event-meta">
+              <span
+                th:text="${#temporals.format(event.getDate(), 'dd/MM/yyyy')}"
+                >Event Start Time</span
               >
-                    <span th:text="${event.getLocation()}">Event Location</span>
-                </div>
-                <div>
-                <div class="event-meta">
-                    <span th:text="${'Category: ' + event.getCategory()}">Event Category</span>
-                    <span th:text="${'Tags: ' + #strings.listJoin(event.getTags(), ' • ')}">Event Tags</span>
-                </div>
-                <a class="vertical-group" th:href="@{/dashboard/{id}(id=${event.id})}">View RSVP List</a>
-
+              <span th:text="${event.getLocation()}">Event Location</span>
             </div>
+            <div>
+              <div class="event-meta">
+                <span th:text="${'Category: ' + event.getCategory()}"
+                  >Event Category</span
+                >
+                <span
+                  th:text="${'Tags: ' + #strings.listJoin(event.getTags(), ' • ')}"
+                  >Event Tags</span
+                >
+              </div>
+              <a
+                class="vertical-group btn btn-primary"
+                th:href="@{/dashboard/{id}(id=${event.id})}"
+                >View RSVP List</a
+              >
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</body>
-
+  </body>
 </html>
