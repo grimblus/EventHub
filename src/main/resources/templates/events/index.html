@@ -275,6 +275,7 @@
       <div th:if="${loggedIn}" class="events-display-container">
         <div class="event-feed-title" th:if="${recommendedEvents.size() == 0}">
           No events currently match your selected tags or categories.
+          <a href="account/myInterests">Click here to edit your interests</a>
         </div>
         <div class="event-item" th:each="event : ${recommendedEvents}">
           <img
