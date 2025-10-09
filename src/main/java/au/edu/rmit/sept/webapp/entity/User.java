@@ -2,6 +2,7 @@ package au.edu.rmit.sept.webapp.entity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class User {
     public enum permissions {STUDENT, ORGANISER, ADMIN};

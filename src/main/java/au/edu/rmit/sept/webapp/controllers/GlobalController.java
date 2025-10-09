@@ -49,9 +49,9 @@ public class GlobalController {
     public boolean isBanned(HttpSession session) {
         if (session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-            User updateUser = userRepository.findUserByID(user.getId());
-            session.setAttribute("user", updateUser);
-            return updateUser.isBanned();
+            boolean userBanned = userRepository.findUserByID(user.getId()).isBanned();
+            user.setBanned(userBanned);
+            return userBanned;
         }
         else {
             return false;
