@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Event {
     public enum KEYWORDS { JAVA, WORKSHOP, CODING, CHALLENGE }
-    public enum TAGS { ACCESSIBLE, ADULT, TEEN, PARKING, FREE, ALCOHOL }
+    public enum TAGS { ACCESSIBLE, ADULT, TEEN, PARKING, FREE, ALCOHOL, COMPETITION, TEAMWORK, BEGINNER }
     public enum CATEGORIES { GENERAL, CODING, EDUCATION, PARTY, MUSIC, CAREER, SPORT, CULTURAL, FOOD }
 
     private int id;

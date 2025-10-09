@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.services;
 
+import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -77,5 +78,14 @@ public class TestUserServiceImpl {
         when(userRepository.toggleBanned(testId)).thenReturn(testBan);
         boolean result = userService.toggleBanned(testId);
         assertEquals(testBan, result);
+    }
+
+    @Test
+    void testGetSavedEvents() {
+        Event event = new Event();
+        List<Event> events = List.of(event);
+        when(userRepository.getSavedEvents(1)).thenReturn(events);
+        List<Event> result = userService.getSavedEvents(1);
+        assertEquals(result, events);
     }
 }

@@ -16,7 +16,6 @@ class ControllerTests {
     @Autowired private HomeController homeController;
     @Autowired private LoginController loginController;
     @Autowired private MyEventsController myEventsController;
-    @Autowired private MyNotificationsController myNotificationsController;
     @Autowired private PageController pageController;
     @Autowired private PaymentController paymentController;
     @Autowired private RSVPListController rsvpListController;
@@ -33,7 +32,6 @@ class ControllerTests {
             () -> assertThat(homeController).isNotNull(),
             () -> assertThat(loginController).isNotNull(),
             () -> assertThat(myEventsController).isNotNull(),
-            () -> assertThat(myNotificationsController).isNotNull(),
             () -> assertThat(pageController).isNotNull(),
             () -> assertThat(paymentController).isNotNull(),
             () -> assertThat(rsvpListController).isNotNull(),

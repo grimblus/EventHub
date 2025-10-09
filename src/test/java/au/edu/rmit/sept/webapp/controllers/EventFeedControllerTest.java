@@ -1,8 +1,14 @@
 package au.edu.rmit.sept.webapp.controllers;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,16 +16,22 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
 import au.edu.rmit.sept.webapp.services.EventService;
+import au.edu.rmit.sept.webapp.services.UserInterestsService;
+
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.entity.Event;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,6 +56,9 @@ public class EventFeedControllerTest {
 
     @MockBean
     private EventService eventService;
+
+    @MockBean
+    private UserInterestsService userInterestService;
 
     @Test
     void shouldDisplayEventFeedContent() throws Exception {
@@ -200,5 +215,60 @@ public class EventFeedControllerTest {
                 .sessionAttr("user", admin()))
             .andExpect(status().isNotFound());
     }
+
+    @Test
+    void recommendedEventsRender() throws Exception {
+        User testUser = new User("Mark", "Grayson", "IHateOmniman34@", "invincicool@email.com", User.permissions.ORGANISER);
+
+        MvcResult result = mvc.perform(get(URL)
+            .sessionAttr("user", testUser))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("user"))
+            .andExpect(model().attribute("user", testUser))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertTrue(pageContent.contains("Recommended Events"));
+        assertTrue(pageContent.contains("No events currently match your selected tags or categories."));
+        
+    }
+
+    @Test
+    void checkRecommendedEventsAreDisplayed() throws Exception {
+        User testUser = new User(1, "Mark", "Grayson", "IHateOmniman34@", "invincicool@email.com", User.permissions.STUDENT, false);
+
+        Event event1 = new Event(1, "Losing Fights", "Get beat up by omniman", 1, LocalDateTime.of(2000, Month.JANUARY, 1, 0, 0, 0), "Earth", "90", "GENERAL", List.of(""), List.of("ADULT", "ACCESSIBLE"), List.of(""));
+
+        Event event2 = new Event(2, "Writing Tests", "The worst torture method available", 1, LocalDateTime.of(2000, Month.JANUARY, 1, 0, 0, 0), "Earth", "90", "FUN", List.of(""), List.of("ADULT"), List.of(""));
+        List<Event> events = Arrays.asList(event1, event2);
+
+        HashSet<String> interests = new HashSet<>(Set.of("GENERAL", "ACCESSIBLE"));
+
+        Mockito.when(userInterestService.getUserInterests(1)).thenReturn(interests);
+        Mockito.when(eventService.getEventsByFilter(null, null, null, null, null)).thenReturn(events);
+
+        MvcResult result = mvc.perform(get(URL)
+                .sessionAttr("user", testUser))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", testUser))
+                .andReturn();
+
+        String pageContent = result.getResponse().getContentAsString();
+
+        assertFalse(pageContent.contains("No events currently match your selected tags or categories."));
+        assertTrue(pageContent.contains("Losing Fights"));
+
+
+
+
+
+
+
+    }
+
+
 
 }

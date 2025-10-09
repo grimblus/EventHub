@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.repository;
 
+import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -113,5 +114,11 @@ public class TestUserRepositoryImpl {
     @Test
     void testToggleBannedNotFound() {
         assertFalse(userRepository.toggleBanned(0));
+    }
+
+    @Test 
+    void testGetSavedEvents() {
+        List<Event> events = userRepository.getSavedEvents(1);
+        assertEquals(0, events.size());
     }
 }

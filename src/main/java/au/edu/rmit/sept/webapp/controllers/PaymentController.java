@@ -1,14 +1,12 @@
 package au.edu.rmit.sept.webapp.controllers;
 
-import au.edu.rmit.sept.webapp.models.PaymentRequest;
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.Payment;
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventParticipantsService;
 import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.services.PaymentService;
-import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway;
-import au.edu.rmit.sept.webapp.services.SandboxPaymentGateway.Result;
+import io.github.cdimascio.dotenv.Dotenv;
 import au.edu.rmit.sept.webapp.services.UserService;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -19,21 +17,22 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Locale;
+import java.util.UUID;
+
 
 @Controller
 public class PaymentController {
@@ -41,12 +40,10 @@ public class PaymentController {
     private EventService eventService;
     private UserService userService;
     private PaymentService paymentService;
-    private final SandboxPaymentGateway gateway;
     private EventParticipantsService eventParticipantsService;
     DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy @ HH:mm");
 
-    public PaymentController(SandboxPaymentGateway gateway, EventService eventService, UserService userService, PaymentService paymentService, EventParticipantsService eventParticipantsService) {
-        this.gateway = gateway;
+    public PaymentController(EventService eventService, UserService userService, PaymentService paymentService, EventParticipantsService eventParticipantsService) {
         this.eventService = eventService;
         this.userService = userService;
         this.paymentService = paymentService;
@@ -59,15 +56,10 @@ public class PaymentController {
         if(session.getAttribute("user") == null)  { return "redirect:/login"; }
 
         Event curEvent = eventService.getEvent(id, title);
-        PaymentRequest req = new PaymentRequest();
 
-        // we have to set the ticket price on loading so that 
-        // the payment request field is filled
-        req.setAmount(Double.parseDouble(curEvent.getTicketPrice()));
-        model.addAttribute("payment", req);
-
-        // see nextYears helper below
-        model.addAttribute("years", nextYears(12));
+        // valid card 4242424242424242
+        // any 3 digits
+        // any future date
 
         // Getting user when id through user email, stops weird issue
         // where if user creates an account and immediatly goes to buy a ticket the page 
@@ -75,67 +67,63 @@ public class PaymentController {
         String em = (((User)session.getAttribute("user")).getEmail());
         User user = userService.findUserByEmail(em);
         //System.out.println(user.getId());
+        // move to other spot
+        //Dotenv dotenv = Dotenv.configure().filename("compose-vars.env").load();
 
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("event", curEvent);
+        // THIS IS SO STUPID DO NOTTTT DO THIS EVER IN REAL LIFE
+        String boba = "sk_test_51SDcW856QKuDJ2iodsPwBTom6zY9f6b3";
+        String matcha = "1MPUykXFsnhLqP9iMHM76xFVJPSkSZbLDV39er3I1Gkaow9yMQin4ptL00Z8rQ76Et";
 
-        String date = curEvent.getDate().format(f).toString();
-        model.addAttribute("date", date);   
+        Stripe.apiKey = boba + matcha;
 
-        return "payment/checkout";
-    }
+        String returnURL = "http://localhost:8080/events";
+        String imgURL = "https://cdn11.bigcommerce.com/s-042b2/product_images/uploaded_images/man-lecturing-at-university.jpg";
 
-    // once the user has baught a ticket, add it to their rsvp list 
-    private void addToRsvpList(Event event, HttpSession session ) {
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            user.addRsvp(event);
+        StringBuilder receiptURLSB = new StringBuilder("http://localhost:8080/receipt?id=");
+        receiptURLSB.append(curEvent.getId());
+        receiptURLSB.append("&title=");
+        receiptURLSB.append(curEvent.getTitle());
+        receiptURLSB.append("&ref=");
+        receiptURLSB.append("REF-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(Locale.ROOT));
+        receiptURLSB.append("&userId=");
+        receiptURLSB.append(user.getId());
+
+        // defaults to cents, guess they use that instead of a decimal?
+        Long ticketPriceL = Long.parseLong(curEvent.getTicketPrice()) * 100;
+
+        String ticketDesc = curEvent.getDescription() + " located at " + curEvent.getLocation() + " @ " + curEvent.getDate().format(f);
+
+        SessionCreateParams params = SessionCreateParams.builder()
+            .setMode(SessionCreateParams.Mode.PAYMENT)
+            .setSuccessUrl(receiptURLSB.toString())
+            .setCancelUrl(returnURL)
+            .addLineItem(
+                SessionCreateParams.LineItem.builder()
+                    .setQuantity(1L)
+                    .setPriceData(
+                        SessionCreateParams.LineItem.PriceData.builder()
+                            .setCurrency("aud")
+                            .setUnitAmount(ticketPriceL)
+                            .setProductData(
+                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                    .setName(curEvent.getTitle())
+                                    .setDescription(ticketDesc)
+                                    .addImage(imgURL)
+                                    .build()
+                            ).build()
+                    ).build()
+            )
+        .build();
+
+        try {
+            Session paysession = Session.create(params);
+            return "redirect:" + paysession.getUrl();
+        } catch(StripeException e) {
+            e.printStackTrace();
         }
-    } 
 
-    // events also need to know that the user will be attending the event
-    private void addToEventParticipants(Event event, HttpSession session ) {
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            event.addParticipant(user);
-        }
-    } 
-
-    // handles form submission validation check
-    @PostMapping("/pay")
-    public String pay(@Valid @ModelAttribute("payment") PaymentRequest req,
-                      BindingResult errors,
-                      @RequestParam("eventId") int eventID,
-                      @RequestParam("eventTitle") String eventTitle,
-                      @RequestParam("userId") int userId,
-                      Model model, HttpSession session) {
-        
-        // Due to the form reloading the page, we have to reload the event and user objects
-        // to ensure the information in the page is filled out
-        Event event = eventService.getEvent(eventID, eventTitle);
-        model.addAttribute("event", event);
-        model.addAttribute("userId", userId);
-        
-        req.setAmount(Double.parseDouble(event.getTicketPrice()));
-
-        model.addAttribute("date", event.getDate().format(f));
-        model.addAttribute("years", nextYears(12));
-
-        if (errors.hasErrors()) {
-            return "payment/checkout";
-        }
-
-        Result r = gateway.charge(req);
-        // now we check if the user has input valid details, sending them to the receipt page if they have
-        // and returning an error message if they have not/
-        if (r.success()) {
-            addToRsvpList(event, session);
-            addToEventParticipants(event, session);
-            // on succesful payment, redirect us to the reciept page
-            return "redirect:/receipt" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&ref=" + r.reference() + "&userId=" + userId;
-        } else {
-            return "redirect:/checkout" + "?id=" + event.getId() + "&title=" + URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8) + "&failed=1&reason=" + r.message();
-        }
+        // if we get any errors, just redirect to the main page, check console for errors
+        return "redirect:/";
     }
 
     @GetMapping("/receipt")
@@ -161,6 +149,13 @@ public class PaymentController {
         paymentService.AddPayment(payment);
         
         eventParticipantsService.addEventParticipant(event.getId(), user.getId());
+
+        // on reaching the receipt page, add the event to the users RSVP
+        user.addRsvp(event);
+                        
+        // let event know user can come
+        event.addParticipant(user);
+
         return "receipt/receipt";
     }
 
@@ -231,7 +226,6 @@ public class PaymentController {
             e.printStackTrace();
         }
 
-
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=receipt-" + ref + ".pdf");
 
@@ -243,12 +237,5 @@ public class PaymentController {
         } catch(IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // helper that gets the next 12 years (e.g. 2025, 2026, 2027...2036) for the initial empty page
-    private List<Integer> nextYears(int count) {
-        int start = Year.now().getValue();
-        return IntStream.range(0, count).map(i -> start + i).boxed().toList();
-    }
-    
+    }    
 }

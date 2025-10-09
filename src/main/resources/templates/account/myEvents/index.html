@@ -138,7 +138,16 @@
                     ><span th:text="${event.getTicketPrice()}"></span>
                   </p>
                   <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
-                    <!-- <a th:href="@{/events/{id}/feedback(id=${event.id})}" class="btn btn-secondary">Leave Feedback</a> -->
+                    <a
+                      th:href="@{/events/{id}/feedback(id=${event.id})}"
+                      class="btn btn-secondary"
+                      >Leave Feedback</a
+                    >
+                    <a
+                      th:href="@{/checkout(id=${event.id}, title=${event.title})}"
+                      class="btn btn-primary"
+                      >Buy Ticket</a
+                    >
                     <button
                       th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|"
                       class="btn btn-secondary"

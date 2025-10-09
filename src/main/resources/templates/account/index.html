@@ -18,20 +18,25 @@
         </div>
         <div class="badges-box">
           <h2>Badges</h2>
-          <div class="badges">badge</div>
+          <div class="badges">
+            <div th:each="badge : ${allBadges}" class="badge" 
+                  th:classappend="${userBadges != null && #lists.contains(userBadges, badge)} ? 'earned' : 'locked'">
+              <div class="badges-box">
+                <br><strong th:text="${badge.badgeName}"></strong>
+                <p><small th:text="${badge.badgeDescription}"></small></p>
+              </div>
+            </div>
+          </div><br>
         </div>
         <div class="my-things">
           <a href="account/myInterests" class="account-buttons">
             <span>My Interests</span>
           </a>
           <a href="account/myEvents" class="account-buttons">
-            <span>My Events</span>
+            <span>My Saved Events</span>
           </a>
           <a href="account/rsvpList" class="account-buttons">
             <span>RSVP List</span>
-          </a>
-          <a href="account/myNotifications" class="account-buttons">
-            <span>My notifications</span>
           </a>
         </div>
       </div>

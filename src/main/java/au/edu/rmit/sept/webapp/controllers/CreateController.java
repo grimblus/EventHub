@@ -57,6 +57,11 @@ public class CreateController {
             model.addAttribute("errors", errors);
         }
 
+        model.addAttribute("event", new Event());
+        model.addAttribute("keywords", Event.KEYWORDS.values());
+        model.addAttribute("tags", Event.TAGS.values());
+        model.addAttribute("categories", Event.CATEGORIES.values());
+
         return "create/index";
     }
 
