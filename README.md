@@ -22,6 +22,8 @@
 
 ## Test Accounts
 
+- admin@example.com admin ADMIN
+
 - loi.andrew@example.com tDN2l2:.041` STUDENT
 - lay.aaron@example.com 0?04W!RgzEN9 ORGANISER
 - ly.patrick@example.com 7Fig92i3B<z< ADMIN
