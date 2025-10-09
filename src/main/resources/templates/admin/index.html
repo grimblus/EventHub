@@ -7,7 +7,7 @@
 <head>
     <title>Admin</title>
     <!-- <script src="content-script.js"></script> -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- link rel="stylesheet" href="styles.css"-->
 </head>
 
 <body>
@@ -15,15 +15,26 @@
     <div th:if="${isAdmin}">
         <h1>Admin Display</h1>
 
-        <div style="text-align: center; margin-bottom: 20px;">
-            <a th:href="@{/admin/users}"
-               th:classappend="${active == 'users'} ? 'active-tab' : ''">Users</a> |
-            <a th:href="@{/admin/events}"
-               th:classappend="${active == 'events'} ? 'active-tab' : ''">Events</a>
-        </div>
-        <div th:if="${active == 'users'}" class="table-container">
+        <ul class="nav nav-tabs justify-content-center mb-3">
+            <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/admin/users}"
+                   th:classappend="${active == 'users'} ? 'active' : ''">
+                    Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/admin/events}"
+                   th:classappend="${active == 'events'} ? 'active' : ''">
+                    Events
+                </a>
+            </li>
+        </ul>
+
+        <div th:if="${active == 'users'}" class="container my-4">
             <h2>Users</h2>
-            <table>
+            <table class="table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -56,9 +67,9 @@
                 </tbody>
             </table>
         </div>
-        <div th:if="${active == 'events'}" class="table-container">
+        <div th:if="${active == 'events'}" class="container my-4">
             <h2>Events</h2>
-            <table>
+            <table class="table-bordered">
                 <thead>
                 <tr>
                     <th>ID</th>

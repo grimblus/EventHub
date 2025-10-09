@@ -38,10 +38,15 @@
           <a href="/signUp">Sign Up</a>
         </div>
       </nav>
-
-      <!-- child page content -->
-      <div layout:fragment="content">
-        <p>Page content goes here</p>
+      <div th:if="${!isBanned}">
+          <!-- child page content -->
+          <div layout:fragment="content">
+            <p>Page content goes here</p>
+          </div>
+      </div>
+      <div th:if="${isBanned}">
+          <!-- banned page content -->
+          <h1>This User is Banned</h1>
       </div>
     </div>
 
