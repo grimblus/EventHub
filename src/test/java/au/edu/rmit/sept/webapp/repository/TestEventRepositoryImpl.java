@@ -34,7 +34,7 @@ public class TestEventRepositoryImpl {
     @Test
     void testGetEvents() {
         List<Event> events = eventRepository.getEvents();
-        assertTrue(events.size() >= 0);
+        assertFalse(events.isEmpty());
     }
 
     @Test
