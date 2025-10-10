@@ -30,19 +30,27 @@ public class GlobalController {
 
     @ModelAttribute("isOrganiser")
     public boolean isOrganiser(HttpSession session) {
+        User user = (User) session.getAttribute("user"); 
         if (session.getAttribute("user") != null) {
-            User user =  (User) session.getAttribute("user");
+            if (user.getPermissionLevel() == User.permissions.ORGANISER) { 
+                return true; 
+            } 
+        }
+        return false;
 
-            if (user.getPermissionLevel() == User.permissions.ORGANISER) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            return false;
-        }
+        // made it simpler
+        //     if (session.getAttribute("user") != null) {
+        //         User user =  (User) session.getAttribute("user");
+        //         if (user.getPermissionLevel() == User.permissions.ORGANISER) {
+        //             return true;
+        //         }
+        //         else {
+        //             return false;
+        //         }
+        //     }
+        //     else {
+        //         return false;
+        //     }
     }
 
     @ModelAttribute("isBanned")
