@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -49,7 +48,7 @@ public class TestFeedBackRepositoryImpl {
         feedbackRepository.add(feedback);
 
         List<Feedback> feedbackList = feedbackRepository.findByUserId(1);
-        assertTrue(feedbackList.size() >= 1);
+        assertFalse(feedbackList.isEmpty());
     }
 
     @Test
