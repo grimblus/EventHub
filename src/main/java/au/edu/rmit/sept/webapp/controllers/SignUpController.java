@@ -46,7 +46,7 @@ public class SignUpController {
         
         //regexes
 
-        Pattern symbolsPattern = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]\\- ]");
+        Pattern symbolsPattern = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]]");
         Pattern numbersPattern = Pattern.compile("[0-9]");
         Pattern emailPattern = Pattern.compile("[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.+com");
         Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[A-Z]).+$");
@@ -60,7 +60,7 @@ public class SignUpController {
         }
 
         if (symbolsPattern.matcher(firstName).find()) {
-            errors.add("First name must not contain symbols or spaces");
+            errors.add("First name must not contain symbols (dashes and apostrophes allowed)");
             foundError = true;
         }
 
@@ -77,7 +77,7 @@ public class SignUpController {
         }
 
         if (symbolsPattern.matcher(lastName).find()) {
-            errors.add("Last name must not contain symbols or spaces");
+            errors.add("Last name must not contain symbols (dashes and apostrophes allowed)");
             foundError = true;
         }
 
@@ -114,10 +114,7 @@ public class SignUpController {
         user.setFirstName(Character.toUpperCase(user.getFirstName().charAt(0)) + user.getFirstName().substring(1));
         user.setLastName(Character.toUpperCase(user.getLastName().charAt(0)) + user.getLastName().substring(1));
         
-        //remove spaces
-        user.setFirstName(user.getFirstName().replace(" ", ""));
-        user.setLastName(user.getLastName().replace(" ", ""));
-
+       
         return user;
     }
     

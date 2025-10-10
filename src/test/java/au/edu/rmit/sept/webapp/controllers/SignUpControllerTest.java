@@ -119,28 +119,12 @@ public class SignUpControllerTest {
 
         String pageContent = result.getResponse().getContentAsString();
 
-        assertTrue(pageContent.contains("First name must not contain symbols or spaces"));
+        assertTrue(pageContent.contains("First name must not contain symbols (dashes and apostrophes allowed)"));
 
     }
 
 
-    @Test
-    void invalidFirstNameSpaces() throws Exception {
-
-        MvcResult result = mvc.perform(post("/signUp")
-                        .param("firstName", "    ")
-                        .param("lastName", "Grayson")
-                        .param("password", "Invincible53@")
-                        .param("email", "omniman@email.com")
-                        .param("permissionLevel", "STUDENT"))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String pageContent = result.getResponse().getContentAsString();
-
-        assertTrue(pageContent.contains("First name must not contain symbols or spaces"));
-
-    }
+   
 
     @Test
     void invalidFirstNameLength() throws Exception {
@@ -192,27 +176,11 @@ public class SignUpControllerTest {
 
         String pageContent = result.getResponse().getContentAsString();
 
-        assertTrue(pageContent.contains("Last name must not contain symbols or spaces"));
+        assertTrue(pageContent.contains("Last name must not contain symbols (dashes and apostrophes allowed)"));
 
     }
 
-    @Test
-    void invalidLastNameSpaces() throws Exception {
-
-        MvcResult result = mvc.perform(post("/signUp")
-                        .param("firstName", "Nolan")
-                        .param("lastName", "    ")
-                        .param("password", "Invincible53@")
-                        .param("email", "omniman@email.com")
-                        .param("permissionLevel", "STUDENT"))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String pageContent = result.getResponse().getContentAsString();
-
-        assertTrue(pageContent.contains("Last name must not contain symbols or spaces"));
-
-    }
+   
 
     @Test
     void invalidLastNameLength() throws Exception {
