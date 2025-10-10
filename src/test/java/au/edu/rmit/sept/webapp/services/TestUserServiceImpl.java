@@ -81,11 +81,27 @@ public class TestUserServiceImpl {
     }
 
     @Test
+    void testSaveEvent() {
+        int testUserId = 1;
+        int testEventId = 1;
+        userService.saveEvent(testUserId, testEventId);
+        verify(userRepository).saveEvent(testUserId, testEventId);
+    }
+
+    @Test
     void testGetSavedEvents() {
         Event event = new Event();
         List<Event> events = List.of(event);
         when(userRepository.getSavedEvents(1)).thenReturn(events);
         List<Event> result = userService.getSavedEvents(1);
         assertEquals(result, events);
+    }
+
+    @Test
+    void testUnsaveEvent() {
+        int testUserId = 1;
+        int testEventId = 1;
+        userService.unsaveEvent(testUserId, testEventId);
+        verify(userRepository).unsaveEvent(testUserId, testEventId);
     }
 }
