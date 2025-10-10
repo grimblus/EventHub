@@ -27,7 +27,9 @@
 - lay.aaron@example.com 0?04W!RgzEN9 ORGANISER
 - ly.patrick@example.com 7Fig92i3B<z< ADMIN
 
-## Sprint 2 status
-
-We have planned to push some tasks to sprint 2 due to a lack of time.
-These tasks can be viewed in the github project board in the Todo section.
+image-1 shows the successful docker push along with the repo URI link.
+image-2 shows the same URI link in my ECR private registry.
+image-3 shows the docker images within that repository.
+![alt text](ecr-image-1.png)
+![alt text](ecr-image-2.png)
+![alt text](ecr-image-3.png)
