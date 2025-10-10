@@ -11,6 +11,28 @@ public class Feedback {
     private String  comment;
     private LocalDateTime createdAt;
 
+    //Default Constructor
+    public Feedback() {
+        this.id = 0;
+        this.userId = 0;
+        this.eventId = 0;
+        this.eventTitle = "";
+        this.rating = 0;
+        this.comment = "";
+        this.createdAt = LocalDateTime.MIN;
+    }
+
+    //Full Constructor
+    public Feedback(Integer id, Integer userId, Integer eventId, String eventTitle, Integer rating, String comment, LocalDateTime createdAt) {
+        this.id = id;
+        this.userId = userId;
+        this.eventId = eventId;
+        this.eventTitle = eventTitle;
+        this.rating = rating;
+        this.comment = comment;
+        this.createdAt = createdAt;
+    }
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
