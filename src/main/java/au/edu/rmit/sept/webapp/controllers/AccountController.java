@@ -29,7 +29,6 @@ public class AccountController {
         }
         else {
             //otherwise set get the logged in user and pass their details to the html
-            System.out.println("found stored user");
             model.addAttribute("user", session.getAttribute("user"));
 
             badgeService.assignPaymentBadge(user.getId());

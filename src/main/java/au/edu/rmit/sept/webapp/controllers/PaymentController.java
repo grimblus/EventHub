@@ -173,8 +173,7 @@ public class PaymentController {
 
         Event event = eventService.getEvent(id, title);
 
-        System.out.println(id + title + ref);
-            
+
         receipt.addPage(receiptPage);
 
         int offsetX = 170;

@@ -88,7 +88,6 @@ public class EventRepositoryImpl implements EventRepository {
                 ps.setString(2, name.toLowerCase());
 
                 try (ResultSet rs = ps.executeQuery()) {
-                    System.out.println("Getting");
                     if(rs.next()) {
                         event = new Event(
                             rs.getInt("id"),

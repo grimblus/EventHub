@@ -32,7 +32,6 @@ public class RSVPListController {
     public String account(Model model, HttpSession session) {
         //get the logged in user
         User user = (User) session.getAttribute("user");
-        System.out.println("id: " + user.getId());
 
         List<Integer> eventIds = eventParticipantsService.getRSVPList(user.getId());
         ArrayList<Event> rsvpList = new ArrayList<>();

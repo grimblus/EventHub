@@ -44,7 +44,6 @@ public class CreateController {
             return "redirect:/login";
         }
         String now = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.MINUTES).toString();
-        System.out.println(now);
         String max = LocalDateTime.now().plusYears(5).truncatedTo(ChronoUnit.MINUTES).toString();
 
         model.addAttribute("minDate", now);
