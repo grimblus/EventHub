@@ -198,6 +198,7 @@
                 type="datetime-local"
                 id="date"
                 th:field="*{date}"
+                th:attr="min=${minDate}, max=${maxDate}"
                 placeholder="Event Date"
               />
 
@@ -279,5 +280,7 @@
         </div>
       </div>
     </div>
+
+
   </body>
 </html>

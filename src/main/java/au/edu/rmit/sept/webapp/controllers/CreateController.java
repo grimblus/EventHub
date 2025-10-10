@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 @Controller
@@ -41,7 +43,12 @@ public class CreateController {
         if (user.getPermissionLevel() != User.permissions.ADMIN && user.getPermissionLevel() != User.permissions.ORGANISER) {
             return "redirect:/login";
         }
+        String now = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.MINUTES).toString();
+        System.out.println(now);
+        String max = LocalDateTime.now().plusYears(5).truncatedTo(ChronoUnit.MINUTES).toString();
 
+        model.addAttribute("minDate", now);
+        model.addAttribute("maxDate", max);
         model.addAttribute("event", new Event());
         model.addAttribute("keywords", Event.KEYWORDS.values());
         model.addAttribute("tags", Event.TAGS.values());
