@@ -116,9 +116,27 @@ public class TestUserRepositoryImpl {
         assertFalse(userRepository.toggleBanned(0));
     }
 
+    @Test
+    void testSaveAndGetEvent() {
+        int userId = 1;
+        int eventId = 1;
+        userRepository.saveEvent(userId, eventId);
+        List<Event> savedEvents = userRepository.getSavedEvents(userId);
+        assertFalse(savedEvents.isEmpty());
+    }
+
     @Test 
-    void testGetSavedEvents() {
-        List<Event> events = userRepository.getSavedEvents(1);
+    void testGetSavedEventsEmpty() {
+        List<Event> events = userRepository.getSavedEvents(2);
         assertEquals(0, events.size());
+    }
+
+    @Test
+    void testUnsaveEvent() {
+        int userId = 1;
+        int eventId = 1;
+        userRepository.unsaveEvent(userId, eventId);
+        List<Event> savedEvents = userRepository.getSavedEvents(userId);
+        assertTrue(savedEvents.isEmpty());
     }
 }
