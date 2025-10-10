@@ -9,6 +9,7 @@ import au.edu.rmit.sept.webapp.services.PaymentService;
 import io.github.cdimascio.dotenv.Dotenv;
 import au.edu.rmit.sept.webapp.services.UserService;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -137,6 +138,10 @@ public class PaymentController {
         // the user to confirm the payment, along with a reference number they can use
         // to enquire about the payment
         Event event = eventService.getEvent(id, title);
+        if(event == null) {
+            System.out.println("Error processing payment");
+            return "redirect:/";
+        }
         User user = userService.findUserByID(user_id);
 
         model.addAttribute("event", event);
