@@ -90,4 +90,11 @@ public class TestUser {
 
         assertTrue(user.getRsvpList().contains(testEvent));
     }
+
+    @Test
+    void testAddAndGetInterests() {
+        String testInterest = "Interest";
+        user.addInterest(testInterest);
+        assertTrue(user.getInterests().contains(testInterest));
+    }
 }
