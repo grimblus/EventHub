@@ -316,7 +316,7 @@
           <!-- Modal which will pop up when user clicks "View details", listing all the important aspects of the event  -->
           <div class="horizontal-group">
             <button
-              th:attr="onclick=|showModal('infoModal' + ${event.id}, ${event.id})|"
+              th:attr="onclick=|showModal('recInfoModal' + ${event.id}, ${event.id})|"
               class="btn btn-secondary"
             >
               View Details
@@ -378,7 +378,7 @@
                     >
                     <!-- <a th:href="@{/events/{id}/feedback(id=${event.id})}" class="btn btn-secondary">Leave Feedback</a> -->
                     <button
-                      th:attr="onclick=|hideModal('infoModal' + ${event.getId()})|"
+                      th:attr="onclick=|hideModal('recInfoModal' + ${event.getId()})|"
                       class="btn btn-secondary"
                     >
                       Close
@@ -438,7 +438,11 @@
                 </div>
 
                 <div class="gallery-grid" th:attr="data-event-id=${event.id}">
-                  <div class="gallery-item" th:each="img : ${event.images}">
+                  <div
+                    class="gallery-item"
+                    th:each="img : ${event.images}"
+                    th:if="${img != null and !#strings.isEmpty(img)}"
+                  >
                     <button
                       type="button"
                       class="delete-btn"
@@ -446,10 +450,8 @@
                     >
                       X
                     </button>
-
-                    <!-- !!! TODO: prepends to welcome folder, change as necessary -->
                     <img
-                      th:src="@{'/images/welcome/' + ${img}}"
+                      th:src="@{'/uploads/events/' + ${event.id} + '/' + ${img}}"
                       alt="Event photo"
                       loading="lazy"
                     />
@@ -647,7 +649,11 @@
                 </div>
 
                 <div class="gallery-grid" th:attr="data-event-id=${event.id}">
-                  <div class="gallery-item" th:each="img : ${event.images}">
+                  <div
+                    class="gallery-item"
+                    th:each="img : ${event.images}"
+                    th:if="${img != null and !#strings.isEmpty(img)}"
+                  >
                     <button
                       type="button"
                       class="delete-btn"
