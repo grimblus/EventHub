@@ -22,11 +22,11 @@ import java.sql.PreparedStatement;
 public class TestEventParticipantsRepositoryImpl {
     @Autowired
     private EventParticipantsRepositoryImpl eventParticipantsRepository;
-/*
+
     @Test
     void testGetEventParticipants() {
         int testEventId = 1;
-        assertTrue(eventParticipantsRepository.getEventParticipants(testEventId).isEmpty());
+        assertNotNull(eventParticipantsRepository.getEventParticipants(testEventId));
     }
 
     @Test
@@ -34,7 +34,17 @@ public class TestEventParticipantsRepositoryImpl {
         int testEventId = 1;
         int testUserId = 1;
         eventParticipantsRepository.addEventParticipant(testEventId, testUserId);
-        assertTrue(eventParticipantsRepository.getEventParticipants(testEventId).size() >= 0);
+        assertFalse(eventParticipantsRepository.getEventParticipants(testEventId).isEmpty());
     }
- */
+
+    @Test
+    void testGetRSVPList() {
+        int testUserId = 2;
+        assertNotNull(eventParticipantsRepository.getRSVPList(testUserId));
+    }
+
+    @Test
+    void testPrintAttendeeCSV() {
+        assertTrue(eventParticipantsRepository.PrintAttendeeCSV(1));
+    }
 }
