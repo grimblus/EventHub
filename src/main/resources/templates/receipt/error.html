@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  >
+
+  <head>
+    <title>Checkout - Receipt</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 60vh;
+        }
+
+        .page h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <div class="payment-banner">
+        <img src="/images/welcome/img3.png" alt="Payment Banner" />
+      </div>
+
+      <div class="page">
+        <h1>There was an error with your purchase!</h1>
+        <p>You have not been charged.</p>
+
+        <a th:href="@{/}" class="btn-dark text-decoration-none">Return to Main Page</a>
+      </div>
+    </div>
+  </body>
+</html>

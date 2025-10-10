@@ -140,7 +140,7 @@ public class PaymentController {
         Event event = eventService.getEvent(id, title);
         if(event == null) {
             System.out.println("Error processing payment");
-            return "redirect:/";
+            return "redirect:/error";
         }
         User user = userService.findUserByID(user_id);
 
@@ -162,6 +162,11 @@ public class PaymentController {
         event.addParticipant(user);
 
         return "receipt/receipt";
+    }
+
+    @GetMapping("/receipt/error")
+    public String showReceiptError() {
+        return "receipt/error"; // 
     }
 
     @PostMapping("/print")
