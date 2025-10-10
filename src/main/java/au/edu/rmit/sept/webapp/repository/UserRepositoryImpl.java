@@ -28,10 +28,10 @@ public class UserRepositoryImpl implements UserRepository {
         this.dataSource = dataSource;
     }
 
-    public void addUser(User user) {
+    public User addUser(User user) {
         try (Connection connection = this.dataSource.getConnection()) {
             String insertSQL = "INSERT INTO users (firstName, lastName, password, email, permissionLevel, banned) VALUES (?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
+            try (PreparedStatement ps = connection.prepareStatement(insertSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, user.getFirstName());
                 ps.setString(2, user.getLastName());
                 ps.setString(3, user.getPassword());
@@ -39,10 +39,20 @@ public class UserRepositoryImpl implements UserRepository {
                 ps.setString(5, user.getPermissionLevel().name());
                 ps.setBoolean(6, user.isBanned());
                 ps.executeUpdate();
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    System.out.println(rs);
+                    if (rs.next()) {
+                        int generatedId = rs.getInt(1);
+                        user.setId(generatedId);
+                    }
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return user;
     }
 
     public  List<User> getUsers() {

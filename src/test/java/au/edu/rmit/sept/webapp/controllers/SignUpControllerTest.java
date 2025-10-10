@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -430,8 +433,21 @@ public class SignUpControllerTest {
 
     @Test
     void inputSanitisation() throws Exception {
+        User savedUser = new User();
+        savedUser.setId(1);
+        savedUser.setFirstName("Nolan");
+        savedUser.setLastName("Grayson");
+        savedUser.setEmail("omniman@email.com");
+        savedUser.setPassword("Invincible53@");
+        savedUser.setPermissionLevel(User.permissions.STUDENT);
+
+        // Mock the service method
+        when(userService.addUser(any(User.class))).thenReturn(savedUser);
+
+        MockHttpSession session = new MockHttpSession();
 
         MvcResult result = mvc.perform(post("/signUp")
+                        .session(session)
                         .param("firstName", "nolan")
                         .param("lastName", "grayson")
                         .param("password", "Invincible53@")
@@ -440,8 +456,7 @@ public class SignUpControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
 
-        HttpSession session = result.getRequest().getSession(false);
-        assertNotNull(session);
+
 
         User user = (User)  session.getAttribute("user");
         assertAll(

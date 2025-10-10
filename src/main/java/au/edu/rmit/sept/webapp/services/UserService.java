@@ -6,7 +6,7 @@ import au.edu.rmit.sept.webapp.entity.User;
 import java.util.List;
 
 public interface UserService {
-    public void addUser(User user);
+    public User addUser(User user);
     public List<User> getUsers();
     public User findUserByID(Integer id);
     public User findUserByFirstName(String firstName);

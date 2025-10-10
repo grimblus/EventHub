@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     //adds user to db
-    public void addUser(User user) {
-         repository.addUser(user);
+    public User addUser(User user) {
+         return repository.addUser(user);
     }
 
 

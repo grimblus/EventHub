@@ -140,9 +140,10 @@ public class SignUpController {
         user = inputSanitisation(user);
 
         //add the user to the database
-        userService.addUser(user);
+        User createdUser = userService.addUser(user);
+
         //set the logged in user
-        session.setAttribute("user", user);
+        session.setAttribute("user", createdUser);
 
         return "redirect:/";
     }
