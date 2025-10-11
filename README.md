@@ -27,6 +27,11 @@
 - lay.aaron@example.com 0?04W!RgzEN9 ORGANISER
 - ly.patrick@example.com 7Fig92i3B<z< ADMIN
 
+## Docker Commands
+
+Build: docker-compose -f docker-compose-mysql.yml build
+Run: docker-compose -f docker-compose-mysql.yml --env-file compose-vars.env up
+
 image-1 shows the successful docker push along with the repo URI link.
 image-2 shows the same URI link in my ECR private registry.
 image-3 shows the docker images within that repository.

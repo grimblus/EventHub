@@ -13,7 +13,10 @@
 
 We have marked the features user notifications and event ticket QR codes as undeliverable due to a lack of time. This is reflected in the project board and SRS document.
 
+## Docker Commands
 
+Build: docker-compose -f docker-compose-mysql.yml build
+Run: docker-compose -f docker-compose-mysql.yml --env-file compose-vars.env up
 
 ## Docker images deployed to AWS ECR
 
