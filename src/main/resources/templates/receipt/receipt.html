@@ -9,6 +9,34 @@
   <head>
     <title>Checkout - Receipt</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 60vh;
+        }
+
+        .page h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .button-row {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px; 
+          margin-top: 1.5rem;
+        }
+
+        .button-row a,
+        .button-row button {
+          display: inline-block;
+        }
+    </style>
   </head>
 
   <body>
@@ -26,16 +54,16 @@
         <h2 th:inline="text">[[${boughtTime}]]</h2>
         <h2 th:inline="text">Reference Number: [[${ref}]]</h2>
 
-        <a th:href="@{/}" class="btn-dark text-decoration-none">Return to Main Page</a>
-
-        
-        <form th:action="@{/print}" method="post" novalidate>
-          <input type="hidden" name="eventId" th:value="${event.getId()}">
-          <input type="hidden" name="eventTitle" th:value="${event.getTitle()}">
-          <input type="hidden" name="bought" th:value="${boughtTime}">
-          <input type="hidden" name="refVal" th:value="${ref}">
-          <button class="btn-dark" type="submit">Print Receipt</button>
-        </form>
+        <div class="button-row">
+          <a th:href="@{/}" class="btn-dark text-decoration-none">Return to Main Page</a>
+          <form th:action="@{/print}" method="post"  novalidate >
+            <input type="hidden" name="eventId" th:value="${event.getId()}">
+            <input type="hidden" name="eventTitle" th:value="${event.getTitle()}">
+            <input type="hidden" name="bought" th:value="${boughtTime}">
+            <input type="hidden" name="refVal" th:value="${ref}">
+            <button class="btn-dark" type="submit">Print Receipt</button>
+          </form>
+        </div>
       </div>
     </div>
   </body>
