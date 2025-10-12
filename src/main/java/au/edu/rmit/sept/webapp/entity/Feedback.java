@@ -10,6 +10,7 @@ public class Feedback {
     private Integer rating;
     private String  comment;
     private LocalDateTime createdAt;
+    private User user;
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -31,4 +32,7 @@ public class Feedback {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout.html}"
+>
+  <head>
+    <style>
+      .events-filter-container {
+        margin: 1rem;
+        border-radius: 10px;
+      }
+
+      .events-display-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: flex-start;
+      }
+      .rsvp-list {
+        flex-direction: column;
+        width: 30rem;
+        border: 0.2rem solid white;
+        margin: 1rem;
+        padding: 1rem;
+      }
+      .rsvp-list img {
+        /*  change img size later  */
+      }
+      .event-meta {
+        display: flex;
+        justify-content: space-between;
+      }
+      .event-details {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        border: 2px solid #111111;
+      }
+    </style>
+    <title>Event Feedback</title>
+    <!-- <script src="content-script.js"></script> -->
+  </head>
+
+  <body>
+    <div layout:fragment="content">
+      <div class="vertical-group">
+        <h2>Event Feedback</h2>
+        <a class="btn btn-primary" href="/dashboard">Back</a>
+      </div>
+      <p class="vertical-group" th:if="${feedback.size() == 0}">
+        No users have provided feedback.
+      </p>
+      <table th:if="${feedback.size() > 0}">
+        <thead>
+          <tr>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Date</th>
+            <th>User Firstname</th>
+            <th>User Lastname</th>
+            <th>User Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="fb : ${feedback}">
+            <td th:text="${fb.getRating()}">rating</td>
+            <td th:text="${fb.getComment()}">comment</td>
+            <td th:text="${fb.getCreatedAt()}">date</td>
+            <td th:text="${fb.getUser().getFirstName()}">name</td>
+            <td th:text="${fb.getUser().getLastName()}">lastname</td>
+            <td th:text="${fb.getUser().getEmail()}">email</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
