@@ -6,4 +6,6 @@ import java.util.List;
 public interface FeedbackRepository {
     boolean add(Feedback feedback);
     List<Feedback> findByUserId(int userId);
+    List<Feedback> findByEventId(int eventId);
+
 }

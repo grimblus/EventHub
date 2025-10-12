@@ -34,4 +34,10 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<Feedback> findByUserId(int userId) {
         return repo.findByUserId(userId);
     }
+
+    @Override
+    public List<Feedback> findByEventId(int eventId) {
+        return repo.findByEventId(eventId);
+    }
+
 }
