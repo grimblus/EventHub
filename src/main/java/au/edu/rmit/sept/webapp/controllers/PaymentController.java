@@ -6,10 +6,8 @@ import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventParticipantsService;
 import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.services.PaymentService;
-import io.github.cdimascio.dotenv.Dotenv;
 import au.edu.rmit.sept.webapp.services.UserService;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

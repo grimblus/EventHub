@@ -6,8 +6,6 @@ import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.EventParticipantsService;
 import au.edu.rmit.sept.webapp.services.EventService;
 import au.edu.rmit.sept.webapp.services.FeedbackService;
-import au.edu.rmit.sept.webapp.services.UserInterestsService;
-import au.edu.rmit.sept.webapp.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +19,11 @@ public class DashboardController {
 
     private EventService eventService;
     private EventParticipantsService eventParticipantsService;
-    private UserService userService;
     private FeedbackService feedbackService;
 
-    public DashboardController(EventService eventService, EventParticipantsService eventParticipantsService, UserService userService, FeedbackService feedbackService) {
+    public DashboardController(EventService eventService, EventParticipantsService eventParticipantsService,  FeedbackService feedbackService) {
         this.eventService = eventService;
         this.eventParticipantsService = eventParticipantsService;
-        this.userService = userService;
         this.feedbackService = feedbackService;
     }
     @GetMapping("/dashboard")

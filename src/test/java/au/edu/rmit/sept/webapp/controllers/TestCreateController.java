@@ -30,6 +30,7 @@ public class TestCreateController {
     @BeforeAll
     public static void setup() {
         mockUser = new User();
+        mockUser.setId(1);
         mockUser.setPermissionLevel(User.permissions.ORGANISER);
     }
 

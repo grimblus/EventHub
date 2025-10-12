@@ -2,9 +2,7 @@ package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
-import au.edu.rmit.sept.webapp.repository.UserRepositoryImpl;
 import au.edu.rmit.sept.webapp.services.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

@@ -32,6 +32,18 @@
 Build: docker-compose -f docker-compose-mysql.yml build
 Run: docker-compose -f docker-compose-mysql.yml --env-file compose-vars.env up
 
+## Tests
+
+To run tests: ./mvnw test or mvn test depending on your device
+
+
+## Payment
+
+For a successful payment: set card number as 4242 4242 4242 4242
+For an unsuccessful payment: set card number as 4000 0000 0000 2685  
+CVC and card holder can be anything
+
+
 image-1 shows the successful docker push along with the repo URI link.
 image-2 shows the same URI link in my ECR private registry.
 image-3 shows the docker images within that repository.

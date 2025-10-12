@@ -2,7 +2,6 @@ package au.edu.rmit.sept.webapp.controllers;
 
 import au.edu.rmit.sept.webapp.entity.User;
 import au.edu.rmit.sept.webapp.services.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -414,15 +413,14 @@ public class SignUpControllerTest {
 
         MockHttpSession session = new MockHttpSession();
 
-        MvcResult result = mvc.perform(post("/signUp")
+        mvc.perform(post("/signUp")
                         .session(session)
                         .param("firstName", "nolan")
                         .param("lastName", "grayson")
                         .param("password", "Invincible53@")
                         .param("email", "omniman@email.com")
                         .param("permissionLevel", "STUDENT"))
-                .andExpect(status().is3xxRedirection())
-                .andReturn();
+                .andExpect(status().is3xxRedirection());
 
 
 

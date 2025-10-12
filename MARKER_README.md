@@ -18,6 +18,18 @@ We have marked the features user notifications and event ticket QR codes as unde
 Build: docker-compose -f docker-compose-mysql.yml build
 Run: docker-compose -f docker-compose-mysql.yml --env-file compose-vars.env up
 
+## Tests
+
+To run tests: ./mvnw test or mvn test depending on your device
+
+
+## Payment
+
+For a successful payment: set card number as 4242 4242 4242 4242
+For an unsuccessful payment: set card number as 4000 0000 0000 2685  
+CVC and card holder can be anything
+
+
 ## Docker images deployed to AWS ECR
 
 As part of the optional advanced features, we have pushed our docker images to AWS ECR. Here is the proof:

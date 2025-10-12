@@ -67,7 +67,7 @@ public class TestPaymentController {
         // need to have logged in user to buy ticket
         session = new MockHttpSession();
         testUser = new User();
-        testUser.setId(99);
+        testUser.setId(1);
         testUser.setFirstName("Test");
         testUser.setLastName("user");
         testUser.setPassword("12345");
@@ -76,7 +76,7 @@ public class TestPaymentController {
         session.setAttribute("user", testUser);
 
         testEvent = new Event();
-        testEvent.setId(99);
+        testEvent.setId(1);
         testEvent.setTitle("Test Event");
         testEvent.setTicketPrice("50");
         testEvent.setDate(LocalDateTime.now());

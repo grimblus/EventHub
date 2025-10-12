@@ -1,7 +1,6 @@
 package au.edu.rmit.sept.webapp.repository;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
 
 import au.edu.rmit.sept.webapp.entity.Event;
 import au.edu.rmit.sept.webapp.entity.User;
