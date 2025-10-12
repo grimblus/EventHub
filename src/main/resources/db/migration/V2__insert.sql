@@ -7,10 +7,10 @@ VALUES   ('Aaron', 'Lay', '0?04W!RgzEN9', 'lay.aaron@example.com', 'ORGANISER', 
          ('Brody', 'Watson', 'E8T9&68Ck/W2', 'watson.brody@example.com', 'STUDENT', FALSE);
 
 INSERT INTO events (title, description, ownerID, date, location, ticketPrice, category, keywords, tags, images)
-VALUES  ('Workshop', 'Learn Basics', 5, '2025-09-01 10:00:00',
+VALUES  ('Workshop', 'Learn Basics', 5, '2025-12-01 10:00:00',
          'Old Melbourne Gaol, 377 Russell St', '54', 'General',
          'java,workshop', 'education,beginner', 'temp1.jpg,temp2.jpg'),
-        ('Hackathon', 'Coding Challenge', 1, '2025-10-10 09:00:00',
+        ('Hackathon', 'Coding Challenge', 1, '2025-12-10 09:00:00',
          '1 Hacker Wy, Menlo Park', '43', 'Coding',
          'coding,challenge', 'competition,teamwork', 'temp3.jpg,temp4.jpg');
 
